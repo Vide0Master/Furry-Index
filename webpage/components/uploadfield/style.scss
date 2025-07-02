@@ -1,0 +1,27 @@
+.upload-field {
+
+    .upload-drop-zone {
+        border: 3px solid;
+        border-color: var(--outline);
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+        user-select: none;
+        border-radius: 10px;
+
+        &.hover,
+        &:hover {
+            border-color: var(--outline-highlight);
+        }
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    input[type=file] {
+        display: none;
+    }
+}

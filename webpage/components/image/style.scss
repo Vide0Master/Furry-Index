@@ -1,0 +1,73 @@
+.internal-image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+    }
+
+    .internal-image-loading-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+
+        .paw-container {
+            overflow: visible;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            .paw-icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(var(--rotation-pos)) translateX(-40px);
+
+                animation: paw-loading-animation var(--global-timing) var(--time-shift) linear infinite;
+
+                background-color: #fff;
+
+                @keyframes paw-loading-animation {
+                    0% {
+                        opacity: 0;
+                    }
+
+                    5% {
+                        opacity: 1;
+                    }
+
+                    10% {
+                        opacity: 1;
+                    }
+
+                    60% {
+                        opacity: 0;
+                    }
+
+                    100% {
+                        opacity: 0;
+                    }
+                }
+            }
+        }
+    }
+}

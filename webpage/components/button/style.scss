@@ -1,0 +1,15 @@
+button {
+    background-color: var(--background-s);
+    border-radius: 100vh;
+    border: solid 3px var(--interactible-passive);
+    transition: 0.2s;
+    color: var(--font-main);
+    padding: 3px 9px;
+    font-size: 16px;
+    font-family: 'bahnscrift';
+    width: fit-content;
+
+    &:hover {
+        border-color: var(--interactible-hover);
+    }
+}

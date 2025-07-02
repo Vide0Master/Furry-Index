@@ -1,0 +1,38 @@
+.VMTech-logo {
+    background-color: #000000;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    align-items: stretch;
+    height: fit-content;
+    width: fit-content;
+    color: #fff;
+
+    .text {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .gradient-line {
+        height: 4px;
+        background: linear-gradient(45deg, #c62020, #208fc6, #ffffff, #c62020, #208fc6, #ffffff, #c62020);
+        background-size: 200% 100%;
+        background-repeat: repeat-x;
+        animation: moveGradient 5s linear infinite;
+        border-radius: 2em;
+    }
+
+    @keyframes moveGradient {
+        0% {
+            background-position: 0% 0%;
+        }
+
+        100% {
+            background-position: 100% 0%;
+        }
+    }
+}

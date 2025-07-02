@@ -1,0 +1,22 @@
+.tag-element {
+    width: fit-content;
+    padding: 3px 6px;
+    border: solid 2px var(--tag-color);
+    color: var(--tag-color);
+    border-radius: 100vh;
+    font-size: 14px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+
+    .tag-name {
+        width: fit-content;
+    }
+
+    .icon-elem{
+        background-color: var(--tag-color);
+    }
+}

@@ -1,0 +1,24 @@
+a {
+    color: var(--font-main);
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+
+
+    .link-text,
+    .icon-elem {
+        transition: 0.1s;
+    }
+
+    &:hover {
+        .link-text {
+            color: var(--font-hover);
+        }
+
+        .icon-elem {
+            background-color: var(--font-hover);
+        }
+    }
+}

@@ -1,0 +1,12 @@
+.label-elem {
+    border: 1px solid var(--internal-label-color, var(--outline));
+    background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, black 40%);
+    padding: 2px 4px;
+    border-radius: 100vh;
+    color: #ffffff;
+
+    &.transparent-bg {
+        background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, transparent 40%);
+        backdrop-filter: blur(2px);
+    }
+}

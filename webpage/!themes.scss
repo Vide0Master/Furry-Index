@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.theme-default {
+    --font-main: #ffee95;
+    --font-hover: #f68b00;
+
+    --background: #101010;
+    --background-s: #202020;
+
+    --outline: var(--font-main);
+    --outline-highlight: var(--font-hover);
+
+    --interactible-passive: var(--font-main);
+    --interactible-hover: var(--font-hover);
+
+    --icon-color: var(--font-main);
+
+    --alert-timer-color: #50e423;
+}
+
+body {
+    color: var(--font-main);
+    --font-size: 16px;
+    font-size: var(--font-size);
+}

@@ -1,0 +1,20 @@
+.internal-dropdown {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--background-s);
+    color: var(--font-main);
+    font-size: 16px;
+    font-family: 'bahnscrift';
+    padding: 6px 12px;
+    border-radius: 100vh;
+    border: 3px solid var(--interactible-passive);
+    transition: 0.2s;
+    width: fit-content;
+
+    &:focus,
+    &:hover {
+        outline: none;
+        border-color: var(--interactible-hover);
+    }
+}

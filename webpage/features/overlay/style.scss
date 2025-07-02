@@ -1,0 +1,39 @@
+.internal-overlay {
+    z-index: 8888;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    animation: overlay-in 0.2s linear forwards;
+
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+
+    overflow: auto;
+
+    @keyframes overlay-in {
+        from {
+            background-color: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+        }
+
+        to {
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(7px);
+        }
+    }
+
+    @media (max-width:600px) {
+        justify-content: start;
+    }
+}
+
+.disable-scroll {
+    overflow: hidden;
+}

@@ -1,0 +1,121 @@
+.file-card {
+    border: 3px solid var(--outline);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    width: fit-content;
+
+    .file-name,
+    .file-id {
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-name {
+        cursor: help;
+    }
+
+    .file-size {
+        cursor: help;
+    }
+
+    .uploaded-on {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .tags-list{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 10px;
+    }
+
+    .file-container {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 10px;
+        position: relative;
+
+        .upload-segments-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            display: flex;
+            flex-direction: row;
+            justify-content: stretch;
+
+            width: 150px;
+            height: 150px;
+
+            border: 0px solid transparent;
+            transition: 0.2s;
+            border-radius: 10px;
+
+            .upload-segment {
+                flex: 1 1;
+                background-color: #000;
+                transition: 0.1s;
+                opacity: 0.7;
+
+                &.ok {
+                    opacity: 0;
+                }
+
+                &.err {
+                    background-color: red;
+                }
+            }
+
+            &.complete {
+                border: 3px solid greenyellow;
+            }
+
+            &.err {
+                border: 3px solid red;
+            }
+
+            &.processing {
+                border: 3px solid;
+                animation: internal-file-card-processing-blinking 0.5s linear infinite;
+
+                @keyframes internal-file-card-processing-blinking {
+                    0% {
+                        border-color: transparent;
+                    }
+
+                    50% {
+                        border-color: yellow;
+                    }
+
+                    100% {
+                        border-color: transparent;
+                    }
+                }
+            }
+
+            &.complete,
+            &.err,
+            &.processing {
+                flex-direction: column;
+                align-items: start;
+                justify-content: start;
+                gap: 5px;
+                padding: 5px;
+            }
+        }
+    }
+}

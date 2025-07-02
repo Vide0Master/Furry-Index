@@ -1,0 +1,29 @@
+{
+    "name": "furdex",
+    "version": "1.0.0",
+    "description": "special place to post and store your art",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "prisma migrate dev && node index.js"
+    },
+    "author": "VideoMaster",
+    "license": "internal",
+    "dependencies": {
+        "@prisma/client": "^6.10.1",
+        "bcrypt": "^6.0.0",
+        "cookie-parser": "^1.4.7",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "fluent-ffmpeg": "^2.1.3",
+        "formidable": "^3.5.4",
+        "mime-types": "^3.0.1",
+        "sass": "^1.89.2",
+        "sharp": "^0.34.2",
+        "ua-parser-js": "^2.0.3",
+        "ws": "^8.18.2"
+    },
+    "devDependencies": {
+        "prisma": "^6.10.1"
+    }
+}
