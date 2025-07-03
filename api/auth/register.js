@@ -32,7 +32,7 @@ exports.POST = async (req, res) => {
             }
         });
 
-        return res.status(201).json({ user: newUser });
+        return res.status(200).json({ user: newUser });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal server error' });

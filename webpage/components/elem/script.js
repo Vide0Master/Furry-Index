@@ -21,13 +21,16 @@ export default class Elem {
 
         if (parent) this.append(parent)
 
+        this.moveAfter = (elem) => {
+            elem.insertAdjacentElement('afterend', this.element);
+        }
     }
 
-    get text(){
+    get text() {
         return this.element.innerText
     }
 
-    set text(text){
+    set text(text) {
         this.element.innerText = text
     }
 }

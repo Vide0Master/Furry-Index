@@ -1,10 +1,15 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import PasswordInput from "../../components/passwordinput/script.js";
+import SwitchInput from "../../components/switchinput/script.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
+import Router from "../../scripts/router.js";
+import User from "../../scripts/userdata.js";
+import UserLabel from "../../elements/userLabel/script.js";
+import Header from "../../components/header/script.js";
 
 export const tag = "register";
 export const tagLimit = 1;
@@ -116,7 +121,17 @@ export async function render(params) {
             passSecond.removeError()
             registerData.password = pass
         })
-    const regButton = new Button('Register', container.element, null,
+
+    const rememberMe = new SwitchInput('Remember me', container.element, null, false, 'hidden')
+
+    const autologin = new SwitchInput('Login after register', container.element, (value) => {
+        rememberMe.element.element.classList.toggle('hidden', !value)
+        if (!value) rememberMe.change(false)
+    }, false)
+
+    rememberMe.element.moveAfter(autologin.element.element)
+
+    new Button('Register', container.element, null,
         async () => {
             if (registerData.error) {
                 new Alert.SimpleAlert('Fix errors in register form', 'Regiter error', 5000, "#ff0000")
@@ -124,8 +139,30 @@ export async function render(params) {
             }
 
             const registerResult = await API('POST', '/api/register', registerData)
-            //implement alert
-            //implement auto login
+
+            if (registerResult.HTTPCODE == 200) {
+                if (autologin.checkbox.element.value) {
+                    const loginResult = await API('POST', '/api/login', {
+                        login: registerData.username,
+                        password: registerData.password,
+                        remember: rememberMe.checkbox.element.value,
+                    })
+
+                    if (loginResult.HTTPCODE == 200) {
+                        new Alert.SimpleAlert(`${Language.lang.login.success[0]} ${loginData.login}`, Language.lang.login.success[1], 5000, '#109f10')
+                        await User.updateUserData()
+                        UserLabel.checkUserData()
+                        Header.checkUserLoginState()
+                        Router.navigate('/profile')
+                    } else {
+                        new Alert.SimpleAlert('Login error', 'Error', 5000, null, 'loginerr')
+                    }
+                } else {
+                    new Alert.SimpleAlert('Profile registered', 'Success', 5000, null, 'registersucc')
+                }
+            } else {
+                new Alert.SimpleAlert('Register error', 'Error', 5000, null, 'registererror')
+            }
         })
 
     return container.element;

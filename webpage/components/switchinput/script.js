@@ -20,6 +20,15 @@ export default class SwitchInput {
             })
         }
 
+        if (cname) {
+            if (typeof cname === 'object') {
+                for (const cn of cname)
+                    this.element.element.classList.add(cn)
+            } else {
+                this.element.element.classList.add(cname)
+            }
+        }
+
         this.change = (state) => {
             if (typeof state == 'boolean') {
                 this.checkbox.element.checked = state
