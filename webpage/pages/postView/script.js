@@ -1,5 +1,6 @@
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
+import Video from "../../components/video/script.js";
 import Tag from "../../elements/tag/script.js";
 import API from "../../scripts/api.js";
 import formatDate from "../../scripts/formatDate.js";
@@ -101,6 +102,13 @@ export async function render(params) {
 
             new Elem(null, fileDataContainer.element).text = `Resolution: ~${Math.floor(avgData.x)}x${Math.floor(avgData.y)}px`
             new Elem(null, fileDataContainer.element).text = `Size: ~${formatFileSize(avgData.s)}`
+        }; break;
+        case 'video': {
+            const file = PData.files[0]
+            new Video(`/api/posts/${params.postID}/file/${file.fileid}`, postimgContainer.element)
+            
+            new Elem(null, fileDataContainer.element).text = `Resolution: ${file.fileparams.height}x${file.fileparams.width}px`
+            new Elem(null, fileDataContainer.element).text = `Size: ${formatFileSize(file.fileparams.size)}`
         }; break;
     }
 

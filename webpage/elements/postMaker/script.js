@@ -20,7 +20,7 @@ export default async function makePostMaker(postData, editedCB) {
         description: postData?.description || '',
         type: postData?.type || '',
         rating: postData?.rating || '',
-        files: postData?.files || []
+        files: postData?.files.map(file=>file.fileid) || []
     }
 
     const postname = new TextInputLine('Post name', container.element, null, null, (value) => {
@@ -43,11 +43,11 @@ export default async function makePostMaker(postData, editedCB) {
         container.element, 'Post type', getFiles
     )
     postType.element.value = PostData.type != '' ? PostData.type : 'placeholder'
-    
+
     const filesField = new Elem(['files-list', 'hidden'], container.element)
 
-    async function getFiles(type) {
-        PostData.files = []
+    async function getFiles(type, presentFiles) {
+        PostData.files = presentFiles ? presentFiles : []
         PostData.type = type
         filesField.element.innerHTML = ''
 
@@ -58,7 +58,7 @@ export default async function makePostMaker(postData, editedCB) {
             tags.push('animated')
         }
 
-        const files = await API('GET', `/api/file-manager?inuse=false&t=10${tags.length > 0 ? '&tags=' + tags.join('+') : ''}`)
+        const files = await API('GET', `/api/files?inuse=${postData ? `postID:${postData.id}` : 'false'}&t=10${tags.length > 0 ? '&tags=' + tags.join('+') : ''}`)
         if (files.files.length == 0) {
             filesField.element.classList.toggle('hidden', true)
             return
@@ -68,8 +68,11 @@ export default async function makePostMaker(postData, editedCB) {
 
         const switches = {}
 
+        console.log(PostData.files)
+
         for (const file of files.files) {
             const fcard = new FileCard(file, false, filesField.element, { remove: false })
+
             switches[file.fileid] = new SwitchInput('Include', fcard.element.element, (state) => {
                 if (['image', 'video'].includes(type)) {
                     for (const fileid in switches) {
@@ -93,17 +96,28 @@ export default async function makePostMaker(postData, editedCB) {
                     }
                 }
             })
+
+            if (PostData.files.includes(file.fileid)) switches[file.fileid].change(true)
         }
     }
 
-    if (PostData.files.length != 0) getFiles(postType.element.value)
+    if (PostData.files.length != 0) getFiles(postType.element.value, PostData.files)
 
     const submitBtn = new Button('Submit', container.element, null, async () => {
-        const postResult = await API('POST', '/api/posts', PostData, true)
-        if (postResult.HTTPCODE == 200) {
-            new Alert.SimpleAlert(`Post "${postResult.postID}" created!`, 'Success', 5000, null, postResult.postID)
-            overlay.element.click()
-            editedCB()
+        if (postData) {
+            const postResult = await API('PUT', `/api/posts/${postData.id}`, PostData, true)
+            if (postResult.HTTPCODE == 200) {
+                new Alert.SimpleAlert(`Post "${postData.id}" updates!`, 'Success', 5000, null, postResult.postID)
+                overlay.element.click()
+                await editedCB()
+            }
+        } else {
+            const postResult = await API('POST', `/api/posts`, PostData, true)
+            if (postResult.HTTPCODE == 200) {
+                new Alert.SimpleAlert(`Post "${postResult.postID}" created!`, 'Success', 5000, null, postResult.postID)
+                overlay.element.click()
+                await editedCB()
+            }
         }
     })
 }

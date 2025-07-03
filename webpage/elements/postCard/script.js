@@ -9,7 +9,7 @@ import makePostMaker from "../postMaker/script.js";
 import Tag from "../tag/script.js";
 
 export default class PostCard {
-    constructor(postData, parent, isInEditor = false) {
+    constructor(postData, parent, isInEditor = false, updateEditorCB) {
         this.element = new Elem('post-card', parent)
 
         const previewContainer = new Elem('preview-container', this.element.element)
@@ -46,10 +46,8 @@ export default class PostCard {
                 if (!result.updated) visSwitch.change()
             }, postData.visible)
 
-            const editButton = new Button('Edit', this.element.element,null,()=>{
-                makePostMaker(postData,()=>{
-                    
-                })
+            const editButton = new Button('Edit', this.element.element, null, () => {
+                makePostMaker(postData, updateEditorCB)
             })
 
             const removeBtn = new Button('Remove', this.element.element, null, async () => {

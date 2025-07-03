@@ -2,7 +2,7 @@ const getUserBySessionCookie = require("../../systemServices/getUserBySessionCoo
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
 
-exports.ROUTE = '/api/file-manager'
+exports.ROUTE = '/api/files'
 
 exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
 
@@ -16,21 +16,39 @@ exports.GET = async (req, res) => {
         ? req.query.tags.split('+').map(tag => tag.trim())
         : null
 
+    const inUse = req.query.inuse
+    const baseWhere = {
+        ownerid: user.id,
+        ...(tagFilter && {
+            tags: {
+                some: { name: { in: tagFilter } }
+            }
+        })
+    }
+
+    let postFilter
+    if (inUse === 'false') {
+        postFilter = { post: { none: {} } }
+
+    } else if (inUse?.startsWith('postID:')) {
+        const postID = inUse.split(':', 2)[1]
+        postFilter = {
+            OR: [
+                { post: { some: { id: postID } } },
+                { post: { none: {} } }
+            ]
+        }
+
+    } else {
+        postFilter = {}
+    }
+
     const userFiles = await prisma.file.findMany({
         skip: page * take,
         take,
         where: {
-            post: req.query.inuse == 'false' ? {
-                none: {}
-            } : undefined,
-            ownerid: user.id,
-            ...(tagFilter && {
-                tags: {
-                    some: {
-                        name: { in: tagFilter }
-                    }
-                }
-            })
+            ...baseWhere,
+            ...postFilter
         },
         orderBy: { createdAt: 'desc' },
         select: {
@@ -40,23 +58,18 @@ exports.GET = async (req, res) => {
             createdAt: true,
             updatedAt: true,
             tags: {
-                orderBy: {
-                    name: 'asc'
-                },
+                orderBy: { name: 'asc' },
                 select: {
                     name: true,
                     icon: true,
                     group: {
-                        select: {
-                            basename: true,
-                            color: true,
-                            name: true
-                        }
+                        select: { basename: true, color: true, name: true }
                     }
                 }
             },
             post: true
         }
     })
+
     return res.status(200).json({ files: userFiles })
 }

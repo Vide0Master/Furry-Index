@@ -3,8 +3,9 @@ const fs = require('fs')
 const mime = require('mime-types')
 const ffmpeg = require('fluent-ffmpeg')
 const sharp = require('sharp')
+const prisma = require('./prisma')
 
-const blurPower = 15
+const blurMult = 0.075
 
 module.exports = async function sendFileByName(res, filename, blur) {
     const req = res.req;
@@ -17,6 +18,15 @@ module.exports = async function sendFileByName(res, filename, blur) {
         return res.status(404).send('File not found');
     }
 
+    const filestats = (await prisma.file.findUnique({
+        where: {
+            file: filename
+        },
+        select: {
+            fileparams: true
+        }
+    })).fileparams
+
     const fileSize = stat.size;
     const range = req.headers.range;
     const contentType = mime.lookup(filePath) || 'application/octet-stream';
@@ -27,6 +37,8 @@ module.exports = async function sendFileByName(res, filename, blur) {
     const shouldBlur =
         blur === true ||
         blurParam === 'true' || blurParam === '1' || blurParam === 'yes';
+
+    const blurPower = Math.min(200, Math.max(0.3, Math.min(filestats.width || 1000, filestats.height || 1000, thumbnailHeight||1000) * blurMult))
 
     if (thumbnailHeight && !isNaN(thumbnailHeight)) {
         if (contentType.startsWith('video/') || contentType === 'application/mp4') {

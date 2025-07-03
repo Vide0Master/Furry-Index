@@ -9,6 +9,7 @@ export default class AppInfo {
     static async getAppInfo() {
         const appinf = await API('GET', '/api/whatisthisbuild')
         delete appinf.HTTPCODE
+        delete appinf.TEXT
         this.appData = appinf
 
         if (this.appData.isDev) {

@@ -13,7 +13,6 @@ export default async function API(method, route, body, credentials = false) {
             }
         }
 
-
         const response = await fetch(route, {
             method,
             headers,
@@ -32,8 +31,12 @@ export default async function API(method, route, body, credentials = false) {
             for (const key in responseData) {
                 data[key] = responseData[key]
             }
-        } catch (err) {
-        }
+        } catch (err) { }
+
+        try {
+            const responseData = await response.text()
+            data.TEXT = responseData
+        } catch (err) { }
 
         data.HTTPCODE = response.status
 

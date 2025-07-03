@@ -11,9 +11,10 @@ export async function render(params) {
     const container = new Elem('file-manager-container')
 
     const searchBar = new Elem('search-bar', container.element)
+    searchBar.text='This will be search/control field'
 
     const fileField = new Elem('files-container', container.element)
-    const userFiles = await API('GET', '/api/file-manager', null, true)
+    const userFiles = await API('GET', '/api/files', null, true)
 
     if (userFiles.files.length == 0) {
         new Elem('label', fileField.element).text = Language.lang.fileManager.noFilesLabel

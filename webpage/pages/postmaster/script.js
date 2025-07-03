@@ -9,10 +9,6 @@ export async function render(params) {
 
     const headBar = new Elem('head-bar', container.element)
 
-    const newPostButton = new Button('Create post', headBar.element, null, async () => {
-        makePostMaker(null,loadPosts)
-    })
-
     const postsField = new Elem('posts-field', container.element)
 
     async function loadPosts() {
@@ -21,9 +17,13 @@ export async function render(params) {
         const posts = await API('GET', '/api/myposts', null, true)
 
         for (const post of posts.posts) {
-            new PostCard(post, postsField.element, true)
+            new PostCard(post, postsField.element, true, loadPosts)
         }
     }
+
+    const newPostButton = new Button('Create post', headBar.element, null, async () => {
+        makePostMaker(null, loadPosts)
+    })
 
     loadPosts()
 

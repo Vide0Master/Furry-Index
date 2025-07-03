@@ -65,16 +65,23 @@ exports.PUT = async (req, res) => {
         return res.status(403).send('Cant edit restricted fields');
     }
 
+    if (req.body.files) {
+        req.body.files = { set: req.body.files.map((fileid) => ({ fileid })) }
+    }
 
-    const updateResult = await prisma.post.updateMany({
-        where: {
-            id: postID,
-            ownerid: user.id
-        },
-        data: req.body
-    })
-
-    return res.status(200).json({ updated: updateResult.count > 0 })
+    try {
+        await prisma.post.update({
+            where: {
+                id: postID,
+                ownerid: user.id
+            },
+            data: req.body
+        })
+        return res.status(200).json({ updated: true })
+    } catch(err) {
+        console.error(err)
+        return res.status(500).json({ updated: false })
+    }
 }
 
 exports.DELETE = async (req, res) => {
