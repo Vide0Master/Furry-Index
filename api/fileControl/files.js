@@ -28,14 +28,14 @@ exports.GET = async (req, res) => {
 
     let postFilter
     if (inUse === 'false') {
-        postFilter = { post: { none: {} } }
+        postFilter = { post: { is: null } }
 
     } else if (inUse?.startsWith('postID:')) {
         const postID = inUse.split(':', 2)[1]
         postFilter = {
             OR: [
-                { post: { some: { id: postID } } },
-                { post: { none: {} } }
+                { post: { id: postID } },
+                { post: null }
             ]
         }
 
@@ -52,7 +52,7 @@ exports.GET = async (req, res) => {
         },
         orderBy: { createdAt: 'desc' },
         select: {
-            fileid: true,
+            id: true,
             filetype: true,
             fileparams: true,
             createdAt: true,

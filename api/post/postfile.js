@@ -9,7 +9,7 @@ exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
 
     const postID = req.params.postID
-    const fileid = req.params.fileID
+    const fileID = req.params.fileID
 
     const post = await prisma.post.findUnique({
         where: {
@@ -22,7 +22,7 @@ exports.GET = async (req, res) => {
 
     const file = await prisma.file.findUnique({
         where: {
-            fileid
+            id: fileID
         },
         select: {
             file: true
@@ -30,6 +30,6 @@ exports.GET = async (req, res) => {
     })
 
     const bypassCheck = req.query.bypass == 'true'
-    
+
     sendFileByName(res, file.file, !user && post.rating == 'mature' && !bypassCheck)
 }

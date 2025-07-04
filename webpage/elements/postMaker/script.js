@@ -7,40 +7,39 @@ import FileCard from "../../elements/fileCard/script.js";
 import Alert from "../../features/alert/script.js";
 import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
+import Language from "../../scripts/language.js";
 
 export default async function makePostMaker(postData, editedCB) {
     const overlay = new Overlay()
 
     const container = new Elem('postmaster-create-post-container', overlay.element)
 
-    console.log(postData)
-
     const PostData = {
         name: postData?.name || '',
         description: postData?.description || '',
         type: postData?.type || '',
         rating: postData?.rating || '',
-        files: postData?.files.map(file=>file.fileid) || []
+        files: postData?.files.map(file => file.id) || []
     }
 
-    const postname = new TextInputLine('Post name', container.element, null, null, (value) => {
+    const postname = new TextInputLine(Language.lang.elements.postMaker.postName, container.element, null, null, (value) => {
         PostData.name = value
     })
     postname.input.value = PostData.name != '' ? PostData.name : ''
 
-    const postdesc = new TextInputLine('Post desctiption', container.element, null, null, (value) => {
+    const postdesc = new TextInputLine(Language.lang.elements.postMaker.postDesc, container.element, null, null, (value) => {
         PostData.description = value
     })
     postdesc.input.value = PostData.description != '' ? PostData.description : ''
 
     new DropdownList(
         (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: val, value: val })),
-        container.element, 'Post rating', (val) => { PostData.rating = val }
+        container.element, Language.lang.elements.postMaker.postRating, (val) => { PostData.rating = val }
     ).element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
 
     const postType = new DropdownList(
         (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: val, value: val })),
-        container.element, 'Post type', getFiles
+        container.element, Language.lang.elements.postMaker.postType, getFiles
     )
     postType.element.value = PostData.type != '' ? PostData.type : 'placeholder'
 
@@ -68,28 +67,26 @@ export default async function makePostMaker(postData, editedCB) {
 
         const switches = {}
 
-        console.log(PostData.files)
-
         for (const file of files.files) {
             const fcard = new FileCard(file, false, filesField.element, { remove: false })
 
-            switches[file.fileid] = new SwitchInput('Include', fcard.element.element, (state) => {
+            switches[file.id] = new SwitchInput('Include', fcard.element.element, (state) => {
                 if (['image', 'video'].includes(type)) {
-                    for (const fileid in switches) {
-                        if (fileid == file.fileid) continue
-                        switches[fileid].change(false)
+                    for (const id in switches) {
+                        if (id == file.id) continue
+                        switches[id].change(false)
                     }
 
                     if (state) {
-                        PostData.files = [file.fileid]
+                        PostData.files = [file.id]
                     } else {
                         PostData.files = []
                     }
                 } else {
-                    const idindex = PostData.files.indexOf(file.fileid)
+                    const idindex = PostData.files.indexOf(file.id)
                     if (state) {
                         if (idindex != -1) return
-                        PostData.files.push(file.fileid)
+                        PostData.files.push(file.id)
                     } else {
                         if (idindex == -1) return
                         PostData.files.splice(idindex, 1)
@@ -97,24 +94,24 @@ export default async function makePostMaker(postData, editedCB) {
                 }
             })
 
-            if (PostData.files.includes(file.fileid)) switches[file.fileid].change(true)
+            if (PostData.files.includes(file.id)) switches[file.id].change(true)
         }
     }
 
     if (PostData.files.length != 0) getFiles(postType.element.value, PostData.files)
 
-    const submitBtn = new Button('Submit', container.element, null, async () => {
+    const submitBtn = new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
         if (postData) {
             const postResult = await API('PUT', `/api/posts/${postData.id}`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.SimpleAlert(`Post "${postData.id}" updates!`, 'Success', 5000, null, postResult.postID)
+                new Alert.SimpleAlert(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, 'Success', 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }
         } else {
             const postResult = await API('POST', `/api/posts`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.SimpleAlert(`Post "${postResult.postID}" created!`, 'Success', 5000, null, postResult.postID)
+                new Alert.SimpleAlert(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, 'Success', 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }

@@ -34,7 +34,7 @@ model Session {
 }
 
 model File {
-    fileid     String   @id @unique @default(uuid())
+    id     String   @id @unique @default(uuid())
     file       String   @unique
     filetype   String
     fileparams Json?
@@ -43,10 +43,11 @@ model File {
     createdAt  DateTime @default(now())
     updatedAt  DateTime @default(now()) @updatedAt
     tags       Tag[]    @relation("File-Tags")
-    post       Post[]   @relation("Post-Files")
+    postid     String?
+    post       Post?    @relation(fields: [postid], references: [id])
     locked     Boolean  @default(false)
 
-    @@index([fileid])
+    @@index([id])
 }
 
 model Tag {
@@ -89,7 +90,7 @@ model Post {
     type        PostType
     name        String
     tags        Tag[]      @relation("Post-Tags")
-    files       File[]     @relation("Post-Files")
+    files       File[]
     description String
     ownerid     String
     owner       User       @relation(fields: [ownerid], references: [id])

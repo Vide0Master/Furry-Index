@@ -4,8 +4,8 @@ const fs = require('fs/promises')
 const ffmpeg = require('fluent-ffmpeg')
 const sharp = require('sharp')
 
-module.exports = async function processFileStats(fileid, onFinish, resultFlags = { convertedFromGif: false, videoReencoded: false, audioReencoded: false }, tags = []) {
-    const filedata = await prisma.file.findUnique({ where: { fileid } })
+module.exports = async function processFileStats(id, onFinish, resultFlags = { convertedFromGif: false, videoReencoded: false, audioReencoded: false }, tags = []) {
+    const filedata = await prisma.file.findUnique({ where: { id } })
     if (!filedata) {
         return
     }
@@ -23,7 +23,7 @@ module.exports = async function processFileStats(fileid, onFinish, resultFlags =
     }
 
     const markLocked = async (value) => {
-        await prisma.file.update({ where: { fileid }, data: { locked: value } })
+        await prisma.file.update({ where: { id }, data: { locked: value } })
     }
 
     if (['mp4', 'webm', 'mkv'].includes(fileExt)) {
@@ -80,7 +80,7 @@ module.exports = async function processFileStats(fileid, onFinish, resultFlags =
             }
 
             await markLocked(false)
-            return await processFileStats(fileid, onFinish)
+            return await processFileStats(id, onFinish)
         }
         tags.push({ name: 'animated' })
     } else if (fileExt === 'gif') {
@@ -103,7 +103,7 @@ module.exports = async function processFileStats(fileid, onFinish, resultFlags =
             await fs.rename(tempPath, finalPath)
 
             await prisma.file.update({
-                where: { fileid },
+                where: { id },
                 data: {
                     filetype: 'mp4',
                     file: path.basename(finalPath)
@@ -115,7 +115,7 @@ module.exports = async function processFileStats(fileid, onFinish, resultFlags =
         }
 
         await markLocked(false)
-        return await processFileStats(fileid, onFinish, resultFlags, tags)
+        return await processFileStats(id, onFinish, resultFlags, tags)
     } else {
         tags.push({ name: 'image' })
         try {
@@ -153,7 +153,7 @@ module.exports = async function processFileStats(fileid, onFinish, resultFlags =
     }
 
     await prisma.file.update({
-        where: { fileid },
+        where: { id },
         data: {
             fileparams: stats,
             tags: {

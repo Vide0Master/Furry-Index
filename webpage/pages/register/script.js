@@ -73,21 +73,21 @@ export async function render(params) {
         async (pass) => {
             if (pass.length < 8) {
                 registerData.error = true
-                passFirst.displayError('Need at least 8 symbols')
+                passFirst.displayError(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.char)
                 return
             }
 
             const letters = /[A-Za-z]/
             if (!letters.test(pass)) {
                 registerData.error = true
-                passFirst.displayError('Needs letters')
+                passFirst.displayError(Language.lang.register.passFirst.error.characters)
                 return
             }
 
             const capitals = /[A-Z]/
             if (!capitals.test(pass)) {
                 registerData.error = true
-                passFirst.displayError('Needs uppercase symbol')
+                passFirst.displayError(Language.lang.register.passFirst.error.uppercase)
                 return
             }
 
@@ -95,25 +95,25 @@ export async function render(params) {
             const numbers = /[0-9]/
             if (!numbers.test(pass)) {
                 registerData.error = true
-                passFirst.displayError('Needs numbers')
+                passFirst.displayError(Language.lang.register.passFirst.error.numbers)
                 return
             }
 
             const restrictedSymbols = /^[A-Za-z0-9-_+~!@#$%^&*]+$/
             if (!restrictedSymbols.test(pass)) {
                 registerData.error = true
-                passFirst.displayError('Restricted symbols')
+                passFirst.displayError(Language.lang.register.passFirst.error.restrictedSymbols)
                 return
             }
 
             registerData.error = false
             passFirst.removeError()
         })
-    const passSecond = new PasswordInput('Repeat password', container.element, null,
+    const passSecond = new PasswordInput(Language.lang.register.passSecond.label, container.element, null,
         async (pass) => {
             if (passFirst.input.value != pass) {
                 registerData.error = true
-                passSecond.displayError('Passwords should match')
+                passSecond.displayError(Language.lang.register.passSecond.error.notMatch)
                 return
             }
 
@@ -122,19 +122,19 @@ export async function render(params) {
             registerData.password = pass
         })
 
-    const rememberMe = new SwitchInput('Remember me', container.element, null, false, 'hidden')
+    const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, 'hidden')
 
-    const autologin = new SwitchInput('Login after register', container.element, (value) => {
+    const autologin = new SwitchInput(Language.lang.register.autologin.label, container.element, (value) => {
         rememberMe.element.element.classList.toggle('hidden', !value)
         if (!value) rememberMe.change(false)
     }, false)
 
     rememberMe.element.moveAfter(autologin.element.element)
 
-    new Button('Register', container.element, null,
+    new Button(Language.lang.register.label, container.element, null,
         async () => {
             if (registerData.error) {
-                new Alert.SimpleAlert('Fix errors in register form', 'Regiter error', 5000, "#ff0000")
+                new Alert.SimpleAlert(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
                 return
             }
 
@@ -149,19 +149,19 @@ export async function render(params) {
                     })
 
                     if (loginResult.HTTPCODE == 200) {
-                        new Alert.SimpleAlert(`${Language.lang.login.success[0]} ${loginData.login}`, Language.lang.login.success[1], 5000, '#109f10')
+                        new Alert.SimpleAlert(`${Language.lang.login.success[0]} ${registerData.login}`, Language.lang.login.success[1], 5000, '#109f10')
                         await User.updateUserData()
                         UserLabel.checkUserData()
                         Header.checkUserLoginState()
                         Router.navigate('/profile')
                     } else {
-                        new Alert.SimpleAlert('Login error', 'Error', 5000, null, 'loginerr')
+                        new Alert.SimpleAlert(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, 'loginerr')
                     }
                 } else {
-                    new Alert.SimpleAlert('Profile registered', 'Success', 5000, null, 'registersucc')
+                    new Alert.SimpleAlert(Language.lang.register.success[0], Language.lang.register.success[1], 5000, null, 'registersucc')
                 }
             } else {
-                new Alert.SimpleAlert('Register error', 'Error', 5000, null, 'registererror')
+                new Alert.SimpleAlert(Language.lang.register.error.title, Language.lang.register.error.message, 5000, null, 'registererror')
             }
         })
 

@@ -32,7 +32,7 @@ exports.GET = async (req, res) => {
 `\n<meta property="og:type" content="website" />
 <meta property="og:title" content="${post.name}" />
 ${post.description ? `<meta property="og:description" content="${post.description}" />` : ''}
-<meta property="og:image" content="https://${constants.serverLink}/api/posts/${post.id}/file/${post.files[0].fileid}?thumbnail=600" />
+<meta property="og:image" content="https://${constants.serverLink}/api/posts/${post.id}/file/${post.files[0].id}?thumbnail=600" />
 <meta property="og:url" content="https://${constants.serverLink}/posts/${post.id}" />`
     }
     //${req.query.bypass == 'true' ? '&bypass=true' : ''}

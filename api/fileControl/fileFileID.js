@@ -16,7 +16,7 @@ exports.GET = async (req, res) => {
 
     const file = await prisma.file.findUnique({
         where: {
-            fileid: fileID
+            id: fileID
         },
         select: {
             file: true,
@@ -40,7 +40,7 @@ exports.DELETE = async (req, res) => {
 
     const file = await prisma.file.findUnique({
         where: {
-            fileid: fileID
+            id: fileID
         },
         include: {
             owner: {
@@ -64,7 +64,7 @@ exports.DELETE = async (req, res) => {
 
     const DBRemove = await prisma.file.delete({
         where: {
-            fileid: fileID
+            id: fileID
         }
     })
 

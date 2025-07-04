@@ -27,7 +27,7 @@ exports.GET = async (req, res) => {
             },
             files: {
                 select: {
-                    fileid: true
+                    id: true
                 }
             }
         },
@@ -50,7 +50,7 @@ exports.POST = async (req, res) => {
 
     const filesTags = await prisma.file.findMany({
         where: {
-            OR: [...(postData.files.map((fileid) => { return { fileid } }))]
+            OR: [...(postData.files.map((id) => { return { id } }))]
         },
         select: {
             tags: {
@@ -86,7 +86,7 @@ exports.POST = async (req, res) => {
             type: postData.type,
             rating: postData.rating,
             files: {
-                connect: postData.files.map((fileid) => { return { fileid } })
+                connect: postData.files.map((id) => { return { id } })
             },
             tags: { connectOrCreate: postTags },
             ownerid: user.id

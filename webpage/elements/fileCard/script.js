@@ -2,6 +2,7 @@ import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Icon from "../../components/icon/script.js";
 import Image from "../../components/image/script.js";
+import Link from "../../components/link/script.js";
 import Video from "../../components/video/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
@@ -10,6 +11,9 @@ import formatFileSize from "../../scripts/formatFileSize.js";
 import getFileHash from "../../scripts/getFileHash.js";
 import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
+import Language from "../../scripts/language.js";
+
+
 
 export default class FileCard {
     constructor(file, isUploadable, parent, options = { remove: true }) {
@@ -18,7 +22,7 @@ export default class FileCard {
         if (isUploadable) {
             this.filename = new Elem('file-name', this.element.element)
             this.filename.element.innerText = file.name
-            this.filename.element.title = "Filename will not be saved on server"
+            this.filename.element.title = Language.lang.elements.fileCard.fnameNotBeSaved
             this.fileContainer = new Elem('file-container', this.element.element)
 
             switch (true) {
@@ -31,12 +35,12 @@ export default class FileCard {
             }
 
             this.filesize = new Elem('file-size', this.element.element)
-            this.filesize.element.innerText = 'Filesize: ' + formatFileSize(file.size)
+            this.filesize.element.innerText = `${Language.lang.elements.fileCard.fsize}: ` + formatFileSize(file.size)
             const segments = Math.ceil(file.size / (1024 * 1024))
             this.filesize.element.title = `${file.size} Bytes\n${segments} Segments`
 
             this.filetype = new Elem('file-type', this.element.element)
-            this.filetype.element.innerText = 'Filetype: ' + file.type
+            this.filetype.element.innerText = `${Language.lang.elements.fileCard.ftype}: ` + file.type
 
             this.uploadFile = async () => {
                 this.uploadButton.element.remove()
@@ -97,7 +101,7 @@ export default class FileCard {
 
                 for (let i = 0; i < segments; i++) {
                     const uploadSegment = new Elem('upload-segment', uploadSegmentsContainer.element)
-                    uploadSegment.element.title = (i != segments - 1) ? `Segment: ${i + 1}\nWeight: ${formatFileSize(1024 * 1024)}` : `Segment: ${i + 1}\nWeight: ${formatFileSize(file.size - (1024 * 1024 * i))}`
+                    uploadSegment.element.title = (i != segments - 1) ? `${Language.lang.elements.fileCard.segment[0]}: ${i + 1}\n${Language.lang.elements.fileCard.segment[1]}: ${formatFileSize(1024 * 1024)}` : `${Language.lang.elements.fileCard.segment[0]}: ${i + 1}\n${Language.lang.elements.fileCard.segment[1]}: ${formatFileSize(file.size - (1024 * 1024 * i))}`
 
                     const start = i * (1024 * 1024);
                     const end = Math.min(file.size, start + (1024 * 1024));
@@ -115,11 +119,11 @@ export default class FileCard {
             this.uploadButton = new Button('Upload', this.element.element, null, this.uploadFile)
         } else {
             this.fileid = new Elem('file-id', this.element.element)
-            this.fileid.text = file.fileid
+            this.fileid.text = file.id
 
             this.fileContainer = new Elem('file-container', this.element.element)
 
-            this.image = new Image(`/file/${file.fileid}?thumbnail=150`, 'file image', this.fileContainer.element)
+            this.image = new Image(`/file/${file.id}?thumbnail=150`, 'file image', this.fileContainer.element)
 
             this.uploaded = new Elem('uploaded-on', this.element.element)
 
@@ -133,17 +137,24 @@ export default class FileCard {
                 new Tag(tag, tagsList.element)
             }
 
-            if (options.remove && file.post.length == 0) {
+            if (file.post) {
+                const txtLbl = new TextLabel(null, this.element.element, 'green', true)
+
+                new Elem(null, txtLbl.element.element).text = `${Language.lang.elements.fileCard.linked.label}`
+                new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, txtLbl.element.element, true)
+            }
+
+            if (options.remove && !file.post) {
                 this.delete = async (e) => {
-                    const removeResult = await API('DELETE', `/file/${file.fileid}${e.shiftKey ? "&force=true" : ""}`, null, true)
+                    const removeResult = await API('DELETE', `/file/${file.id}${e.shiftKey ? "&force=true" : ""}`, null, true)
 
                     if (removeResult.HTTPCODE == 200) {
-                        new Alert.SimpleAlert(`ID: ${file.fileid}`, 'Removed file', 5000, null, file.fileid)
+                        new Alert.SimpleAlert(`ID: ${file.id}`, Language.lang.elements.fileCard.delete.alert, 5000, null, file.id)
                         this.element.element.remove()
                     }
                 }
 
-                this.removeButton = new Button('Remove file', this.element.element, null, this.delete)
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element.element, null, this.delete)
             }
         }
     }

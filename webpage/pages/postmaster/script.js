@@ -3,6 +3,7 @@ import Elem from "../../components/elem/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import makePostMaker from "../../elements/postMaker/script.js";
 import API from "../../scripts/api.js";
+import Language from "../../scripts/language.js";
 
 export async function render(params) {
     const container = new Elem('postmaster-container')
@@ -21,7 +22,7 @@ export async function render(params) {
         }
     }
 
-    const newPostButton = new Button('Create post', headBar.element, null, async () => {
+    const newPostButton = new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
         makePostMaker(null, loadPosts)
     })
 

@@ -37,7 +37,7 @@ exports.GET = async (req, res) => {
             clearTimeout(uploadHandle.timeout)
         }
 
-        fileDataProcessor(uploadHandle.fileid, (result) => {
+        fileDataProcessor(uploadHandle.id, (result) => {
             res.status(200).json(result)
             delete chunkStorage[internalHash]
         })
@@ -120,17 +120,17 @@ exports.POST = async (req, res) => {
                             locked: true
                         },
                         select: {
-                            fileid: true
+                            id: true
                         }
                     })
 
                     res.status(200).send('Builded!')
 
                     chunkStorage[handle].timeout = setTimeout(() => {
-                        fileDataProcessor(filedata.fileid)
+                        fileDataProcessor(filedata.id)
                     }, 1000);
 
-                    chunkStorage[handle].fileid = filedata.fileid
+                    chunkStorage[handle].id = filedata.id
                 } catch { }
             })
 

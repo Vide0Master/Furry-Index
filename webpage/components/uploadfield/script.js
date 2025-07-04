@@ -60,7 +60,7 @@ export default class UploadField {
             const isVideo = type.startsWith('video/');
 
             if (!isImage && !isVideo) {
-                new Alert.SimpleAlert(`File "${file.name}" has unsupported type: ${type}`)
+                new Alert.SimpleAlert(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.unsupportedType}: ${type}`)
                 continue;
             }
 
@@ -68,7 +68,7 @@ export default class UploadField {
             if (file.size > sizeLimit) {
                 const sizeMB = (file.size / 1024 / 1024).toFixed(1);
                 const maxMB = isImage ? 500 : 3072;
-                new Alert.SimpleAlert(`File "${file.name}" is too large: ${sizeMB}MB (Max ${maxMB}MB)`);
+                new Alert.SimpleAlert(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.tooLarge}: ${sizeMB}MB (${Language.lang.components.upload.errors.maxSize} ${maxMB}MB)`);
                 continue;
             }
 

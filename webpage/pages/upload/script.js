@@ -3,6 +3,7 @@ import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import UploadField from "../../components/uploadfield/script.js";
 import FileCard from "../../elements/fileCard/script.js";
+import Language from "../../scripts/language.js";
 
 export const tag = "upload";
 export const tagLimit = 1;
@@ -16,11 +17,11 @@ export async function render(params) {
 
     let fileList = []
 
-    const groupUploadBtn = new Button('Upload all', container.element, 'hidden', async () => {
-        for(const fCard of fileList){
+    const groupUploadBtn = new Button(Language.lang.upload.groupUpload, container.element, 'hidden', async () => {
+        for (const fCard of fileList) {
             fCard.uploadFile()
         }
-        
+
     })
 
     upload.onFileChange((files) => {

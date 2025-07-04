@@ -16,7 +16,7 @@ exports.GET = async (req, res) => {
         include: {
             files: {
                 select: {
-                    fileid: true,
+                    id: true,
                     fileparams: true
                 }
             },
@@ -43,7 +43,7 @@ exports.GET = async (req, res) => {
         }
     })
 
-    if (!post.visible) return res.status(403).send('Post is not available')
+    if (!post.visible && user?.id != post.ownerid) return res.status(403).send('Post is not available')
 
     res.status(200).json({ post })
 }
@@ -66,7 +66,7 @@ exports.PUT = async (req, res) => {
     }
 
     if (req.body.files) {
-        req.body.files = { set: req.body.files.map((fileid) => ({ fileid })) }
+        req.body.files = { set: req.body.files.map((id) => ({ id })) }
     }
 
     try {
@@ -78,7 +78,7 @@ exports.PUT = async (req, res) => {
             data: req.body
         })
         return res.status(200).json({ updated: true })
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         return res.status(500).json({ updated: false })
     }

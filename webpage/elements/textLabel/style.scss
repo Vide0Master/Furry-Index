@@ -1,11 +1,15 @@
 .label-elem {
     border: 1px solid var(--internal-label-color, var(--outline));
     background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, black 40%);
-    padding: 2px 4px;
+    padding: 3px 6px;
     border-radius: 100vh;
     color: #ffffff;
     width: fit-content;
     font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
 
     &.transparent-bg {
         background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, transparent 40%);

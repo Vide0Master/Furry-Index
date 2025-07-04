@@ -19,11 +19,11 @@ module.exports = async () => {
             ]
         },
         select: {
-            fileid: true
+            id: true
         }
     })
 
     for (const file of errorFiles) {
-        processFileStats(file.fileid)
+        processFileStats(file.id)
     }
 }
