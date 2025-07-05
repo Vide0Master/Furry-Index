@@ -11,10 +11,11 @@ new Link(Language.lang.header.userCard.login, '/login', regNloginCont.element)
 new Link(Language.lang.header.userCard.register, '/register', regNloginCont.element)
 
 
-const userCont = new Elem(['user-cont', 'hidden'], container.element)
+const userCont = new Link(null, '/profile', container.element, true, ['user-cont', 'hidden'])
+userCont.textElem.element.remove()
 const avatarContainer = new Elem('user-avatar-container', userCont.element)
 const userAvatar = new Image('', 'user-avatar', avatarContainer.element)
-const userName = new Link('', '/profile', userCont.element, true)
+const userName = new Elem('', userCont.element)
 
 class UserLabel {
     static append(parent) {
@@ -26,7 +27,7 @@ class UserLabel {
         if (User.data) {
             this.updateUserData()
             this.showUserData()
-            userName.element.href = '/profile/' + User.data.username
+            userCont.element.href = '/profile/' + User.data.username
         } else {
             this.showLoginRegisterLinks()
         }
@@ -50,7 +51,7 @@ class UserLabel {
             avatarContainer.element.classList.toggle('hidden', true)
         }
 
-        userName.textElem.text = User.data.visiblename != null ? User.data.visiblename : User.data.username
+        userName.text = User.data.visiblename != null ? User.data.visiblename : User.data.username
     }
 }
 

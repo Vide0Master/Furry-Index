@@ -10,6 +10,7 @@ import Language from "../../scripts/language.js";
 import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import FileCard from "../../elements/fileCard/script.js";
+import LANG from "../../languages/ENG.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -66,13 +67,13 @@ export async function render(params) {
                 UserLabel.checkUserData()
                 Header.checkUserLoginState()
             })
-            new Alert.Simple(`${Language.lang.profile.loggedOut[0]} ${username} ${Language.lang.profile.loggedOut[1]}`, null, 5000)
+            new Alert.Simple(`${Language.lang.settings.user.loggedOut[0]} ${username} ${Language.lang.settings.user.loggedOut[1]}`, null, 5000)
         })
 
         const avatarLine = new Elem('avatar-line', pages.user.element)
 
-        const rmAvatar = new Button('Rm avatar', avatarLine.element, null, async () => {
-            new Alert.Confirm('Are you sure you want to remove your avatar?', null, async () => {
+        const rmAvatar = new Button(LANG.settings.user.removeAvatar, avatarLine.element, null, async () => {
+            new Alert.Confirm(LANG.settings.user.removeAvatarAlert, null, async () => {
                 const rmResult = await API('DELETE', `/api/profile/${User.data.username}/avatar`)
                 if (rmResult.HTTPCODE == 200) {
                     await User.updateUserData()

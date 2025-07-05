@@ -1,7 +1,4 @@
-header{
-    background-color: var(--background-s);
-    padding: 10px;
-    border-radius: 10px;
+header {
 
     display: flex;
     flex-direction: row;
@@ -9,22 +6,28 @@ header{
     gap: 10px;
     justify-content: start;
 
-    img{
+    img {
         height: 30px;
     }
 
-    nav{
+    nav {
         display: flex;
         flex-direction: row;
         gap: 10px;
         align-items: center;
         width: 100%;
 
-        .user-label{
+        &>* {
+            background-color: var(--background-s);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .user-label {
             margin-left: auto;
         }
 
-        .hidden{
+        .hidden {
             display: none;
         }
     }

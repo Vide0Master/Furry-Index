@@ -13,11 +13,32 @@ exports.GET = async (req, res) => {
         ? req.query.tags.split('+').map(tag => tag.trim())
         : []
 
+    const processedTags = []
+
+    for (let tag of tagFilter) {
+        let negative = false
+
+        if (tag.startsWith('-')) {
+            negative = true
+            tag = tag.slice(1)
+        }
+
+        switch (true) {
+            case tag.startsWith('author:'): {
+                const authorName = tag.split(':')[1]
+                processedTags.push({ owner: { username: authorName } })
+            }; break;
+        }
+    }
+    
     const posts = await prisma.post.findMany({
         skip: page * take,
         take,
         where: {
-            visible: true
+            AND: [
+                { visible: true },
+                ...processedTags
+            ]
         },
         include: {
             tags: {

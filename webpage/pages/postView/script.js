@@ -20,7 +20,7 @@ function renderTags(tags, parent) {
 function renderUploadData(owner, createdOn, parent) {
     const postUploadData = new Elem('post-upload-data', parent);
     const uploadedBy = new Elem('owner', postUploadData.element);
-    uploadedBy.text = `${Language.lang.postView.file.linkedTo}: ${owner.visiblename || owner.username}`;
+    uploadedBy.text = `${Language.lang.postView.file.uploadedBy}: ${owner.visiblename || owner.username}`;
     const uploadedOn = new Elem('when', postUploadData.element);
     uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(createdOn)}`;
 }

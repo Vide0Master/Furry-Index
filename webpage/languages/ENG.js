@@ -97,7 +97,7 @@ const LANG = {
         file: {
             size: 'File size',
             type: 'File type',
-            linkedTo: 'Linked to',
+            uploadedBy: 'Uploaded by',
             linkedToPost: 'Post',
             resolution: 'Resolution',
             uploadedOn: 'Uploaded on',
@@ -107,12 +107,10 @@ const LANG = {
         rating: 'Rating'
     },
     profile: {
-        logout: 'Logout',
-        notImplemented: 'Not implemented',
-        loggedOut: [
-            'Logged out from',
-            'successfully'
-        ]
+        noUsername: 'No username specified in page route',
+        noProfile: 'Profile not found',
+        regsitered: 'Registered on',
+        latestPosts: 'Latest posts'
     },
     upload: {
         groupUpload: 'Upload all',
@@ -134,7 +132,14 @@ const LANG = {
         },
         user: {
             logout: 'Log out from',
-            selectAvatar: 'Select avatar'
+            selectAvatar: 'Select avatar',
+            selectBtn: 'Select',
+            removeAvatar: 'Remove avatar',
+            removeAvatarAlert: 'Are you sure you want to remove your avatar?',
+            loggedOut: [
+                'Logged out from',
+                'successfully'
+            ]
         }
     },
     components: {
