@@ -1,9 +1,10 @@
-export default class Video {
-    constructor(src, parent, options = {}) {
-        this.element = document.createElement('div')
-        this.element.className = 'internal-video-container'
+import Elem from "../elem/script.js"
 
-        this.video = document.createElement('video')
+export default class Video extends Elem {
+    constructor(src, parent, options = {}) {
+        super('internal-video-container', parent, 'div')
+
+        this.video = new Elem(null, this.element, 'video').element
         this.video.src = src
         this.video.controls = true
         this.video.autoplay = options.autoplay || false

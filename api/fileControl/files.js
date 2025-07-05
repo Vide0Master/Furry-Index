@@ -28,8 +28,10 @@ exports.GET = async (req, res) => {
 
     let postFilter
     if (inUse === 'false') {
-        postFilter = { post: { is: null } }
-
+        postFilter = {
+            post: null,
+            avatarfor: null
+        }
     } else if (inUse?.startsWith('postID:')) {
         const postID = inUse.split(':', 2)[1]
         postFilter = {
@@ -38,7 +40,13 @@ exports.GET = async (req, res) => {
                 { post: null }
             ]
         }
-
+    } else if (inUse?.startsWith('avatarID')) {
+        postFilter = {
+            OR: [
+                { avatarfor: { id: user.id } },
+                { avatarfor: null }
+            ]
+        }
     } else {
         postFilter = {}
     }
@@ -47,8 +55,10 @@ exports.GET = async (req, res) => {
         skip: page * take,
         take,
         where: {
-            ...baseWhere,
-            ...postFilter
+            AND: [
+                baseWhere,
+                postFilter
+            ]
         },
         orderBy: { createdAt: 'desc' },
         select: {
@@ -67,7 +77,12 @@ exports.GET = async (req, res) => {
                     }
                 }
             },
-            post: true
+            post: true,
+            avatarfor: {
+                select: {
+                    username: true
+                }
+            }
         }
     })
 

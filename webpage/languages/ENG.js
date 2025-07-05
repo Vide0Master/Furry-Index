@@ -103,7 +103,8 @@ const LANG = {
             uploadedOn: 'Uploaded on',
             resolution: 'Resolution',
             size: 'Size'
-        }
+        },
+        rating: 'Rating'
     },
     profile: {
         logout: 'Logout',
@@ -116,14 +117,31 @@ const LANG = {
     upload: {
         groupUpload: 'Upload all',
     },
-    postMaster:{
+    postMaster: {
         newPost: 'New post',
+    },
+    settings: {
+        label: 'Settings',
+        typeSwitch: {
+            webpage: 'Webpage',
+            user: 'User',
+            placeholder: 'Select type',
+        },
+        webpage: {
+            language: {
+                ENG: 'English'
+            }
+        },
+        user: {
+            logout: 'Log out from',
+            selectAvatar: 'Select avatar'
+        }
     },
     components: {
         upload: {
             field: 'Click or drag your files here',
-            errors:{
-                file:"File",
+            errors: {
+                file: "File",
                 unsupportedType: 'has unsupported type',
                 tooLarge: 'is too large',
                 maxSize: 'Max size',
@@ -142,7 +160,8 @@ const LANG = {
             linked: {
                 label: 'Linked to',
                 to: {
-                    post: 'Post'
+                    post: 'post',
+                    pfavatar: 'avatar'
                 }
             },
             delete: {
@@ -183,6 +202,14 @@ const LANG = {
                 'Post',
                 'edited successfully'
             ]
+        }
+    },
+    features: {
+        alert: {
+            confirm: {
+                confirmButton: 'Yes',
+                cancelButton: 'No'
+            }
         }
     }
 }

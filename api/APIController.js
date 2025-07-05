@@ -35,12 +35,12 @@ const localRoutes = []
 for (let i = 0; i < apiFiles.length; i++) {
     const module = require(apiFiles[i])
     let route
-    
+
     if (module.ROUTE) {
         route = module.ROUTE
     } else {
-        route = '/'
-        cmd.warn(`Route file ${path.basename(apiFiles[i])} noes not have ${cmd.colorize('ROUTE', 'cyan')} export specified, fallback to default "/" route`, [cmd.preps.API])
+        route = '/api/' + path.basename(apiFiles[i]).split('.')[0]
+        cmd.warn(`Route file ${path.basename(apiFiles[i])} noes not have ${cmd.colorize('ROUTE', 'cyan')} export specified, fallback to default "${route}" route`, [cmd.preps.API])
     }
 
     let routeCounter = 0
@@ -60,7 +60,7 @@ for (let i = 0; i < apiFiles.length; i++) {
         routeCounter++
     }
     if (routeCounter == 0) {
-        cmd.warn(`${path.basename(apiFiles[i])} does not contain any usable routes`, [cmd.preps.API])
+        cmd.bad(`${path.basename(apiFiles[i])} does not contain any usable routes`, [cmd.preps.API])
     }
 }
 

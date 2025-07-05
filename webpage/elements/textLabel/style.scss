@@ -11,6 +11,10 @@
     align-items: center;
     gap: 5px;
 
+    .text {
+        text-align: center;
+    }
+
     &.transparent-bg {
         background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, transparent 40%);
         backdrop-filter: blur(2px);

@@ -90,9 +90,8 @@ exports.DELETE = async (req, res) => {
 
     const postID = req.params.postID
 
-    if (!postID) {
-        return res.status(400).send('No postID in route')
-    }
+    if (!postID) return res.status(400).send('No postID in route')
+
 
     const rm = await prisma.post.deleteMany({
         where: {
@@ -101,9 +100,7 @@ exports.DELETE = async (req, res) => {
         }
     })
 
-    if (rm.count == 0) {
-        return res.send(403).send('Removal denied')
-    }
+    if (rm.count == 0) return res.status(403).send('Removal denied')
 
-    return res.send(200).send('Post removed successfully')
+    return res.status(200).send('Post removed successfully')
 }

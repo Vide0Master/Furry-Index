@@ -10,7 +10,19 @@
         gap: 10px;
     }
 
-    .user-cont {}
+    .user-cont {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+
+        .user-avatar-container{
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid var(--outline);
+        }
+    }
 
     .hidden {
         display: none;

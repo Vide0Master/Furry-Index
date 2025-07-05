@@ -1,17 +1,13 @@
 export default class Elem {
-    constructor(cname, parent, tag) {
-        this.element = document.createElement('div')
-
-        if (tag) {
-            this.element.remove()
-            this.element = document.createElement(tag)
-        }
+    constructor(cname, parent, tag= 'div') {
+        this.element = document.createElement(tag)
 
         if (cname) {
             if (typeof cname === 'object') {
-                this.element.className = cname.join(' ')
+                for (const cn of cname)
+                    this.element.classList.add(cn)
             } else {
-                this.element.className = cname
+                this.element.classList.add(cname)
             }
         }
 

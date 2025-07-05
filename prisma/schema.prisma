@@ -9,15 +9,18 @@ datasource db {
 }
 
 model User {
-    id          String    @id @unique @default(uuid())
-    username    String    @unique
-    visiblename String?
-    password    String
-    createdAt   DateTime  @default(now())
-    avatarID    String?
-    sessions    Session[]
-    files       File[]
-    posts       Post[]
+    id                   String    @id @unique @default(uuid())
+    username             String    @unique
+    visiblename          String?
+    password             String
+    createdAt            DateTime  @default(now())
+    avatarID             String?   @unique
+    avatar               File?     @relation("User-Avatar", fields: [avatarID], references: [id])
+    sessions             Session[]
+    files                File[]    @relation("User-Files")
+    posts                Post[]
+    globalprofileparams  Json?
+    privateprofileparams Json?
 
     @@index([username, id])
 }
@@ -34,18 +37,19 @@ model Session {
 }
 
 model File {
-    id     String   @id @unique @default(uuid())
+    id         String   @id @unique @default(uuid())
     file       String   @unique
     filetype   String
     fileparams Json?
     ownerid    String
-    owner      User     @relation(fields: [ownerid], references: [id], onDelete: Cascade)
+    owner      User     @relation("User-Files", fields: [ownerid], references: [id], onDelete: Cascade)
     createdAt  DateTime @default(now())
     updatedAt  DateTime @default(now()) @updatedAt
     tags       Tag[]    @relation("File-Tags")
     postid     String?
     post       Post?    @relation(fields: [postid], references: [id])
     locked     Boolean  @default(false)
+    avatarfor  User?    @relation("User-Avatar")
 
     @@index([id])
 }

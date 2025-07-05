@@ -21,7 +21,6 @@ export async function render(params) {
         for (const fCard of fileList) {
             fCard.uploadFile()
         }
-
     })
 
     upload.onFileChange((files) => {

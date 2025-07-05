@@ -3,13 +3,13 @@ import Language from "../../scripts/language.js";
 import Elem from "../elem/script.js";
 import Icon from "../icon/script.js";
 
-export default class UploadField {
+export default class UploadField extends Elem  {
     constructor(parent, accept = ['.png', '.jpg', '.gif', '.mp4']) {
-        this.element = document.createElement('div');
-        this.element.className = 'upload-field';
+        super('upload-field', parent, 'div');
 
-        this.input = document.createElement('input');
+        this.input =new Elem(null, this.element, 'input').element;
         this.input.type = 'file';
+
         if (accept) this.input.accept = accept.join(', ')
         this.input.multiple = true;
         this.input.style.display = 'none';
@@ -60,7 +60,7 @@ export default class UploadField {
             const isVideo = type.startsWith('video/');
 
             if (!isImage && !isVideo) {
-                new Alert.SimpleAlert(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.unsupportedType}: ${type}`)
+                new Alert.Simple(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.unsupportedType}: ${type}`)
                 continue;
             }
 
@@ -68,7 +68,7 @@ export default class UploadField {
             if (file.size > sizeLimit) {
                 const sizeMB = (file.size / 1024 / 1024).toFixed(1);
                 const maxMB = isImage ? 500 : 3072;
-                new Alert.SimpleAlert(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.tooLarge}: ${sizeMB}MB (${Language.lang.components.upload.errors.maxSize} ${maxMB}MB)`);
+                new Alert.Simple(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.tooLarge}: ${sizeMB}MB (${Language.lang.components.upload.errors.maxSize} ${maxMB}MB)`);
                 continue;
             }
 

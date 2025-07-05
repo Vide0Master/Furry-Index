@@ -13,17 +13,15 @@ import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 
-
-
-export default class FileCard {
+export default class FileCard extends Elem{
     constructor(file, isUploadable, parent, options = { remove: true }) {
-        this.element = new Elem('file-card', parent)
+        super('file-card', parent)
 
         if (isUploadable) {
-            this.filename = new Elem('file-name', this.element.element)
+            this.filename = new Elem('file-name', this.element)
             this.filename.element.innerText = file.name
             this.filename.element.title = Language.lang.elements.fileCard.fnameNotBeSaved
-            this.fileContainer = new Elem('file-container', this.element.element)
+            this.fileContainer = new Elem('file-container', this.element)
 
             switch (true) {
                 case file.type.startsWith('image'): {
@@ -34,12 +32,12 @@ export default class FileCard {
                 }; break;
             }
 
-            this.filesize = new Elem('file-size', this.element.element)
+            this.filesize = new Elem('file-size', this.element)
             this.filesize.element.innerText = `${Language.lang.elements.fileCard.fsize}: ` + formatFileSize(file.size)
             const segments = Math.ceil(file.size / (1024 * 1024))
             this.filesize.element.title = `${file.size} Bytes\n${segments} Segments`
 
-            this.filetype = new Elem('file-type', this.element.element)
+            this.filetype = new Elem('file-type', this.element)
             this.filetype.element.innerText = `${Language.lang.elements.fileCard.ftype}: ` + file.type
 
             this.uploadFile = async () => {
@@ -116,45 +114,51 @@ export default class FileCard {
                 }
             }
 
-            this.uploadButton = new Button('Upload', this.element.element, null, this.uploadFile)
+            this.uploadButton = new Button('Upload', this.element, null, this.uploadFile)
         } else {
-            this.fileid = new Elem('file-id', this.element.element)
+            this.fileid = new Elem('file-id', this.element)
             this.fileid.text = file.id
 
-            this.fileContainer = new Elem('file-container', this.element.element)
+            this.fileContainer = new Elem('file-container', this.element)
 
             this.image = new Image(`/file/${file.id}?thumbnail=150`, 'file image', this.fileContainer.element)
 
-            this.uploaded = new Elem('uploaded-on', this.element.element)
+            this.uploaded = new Elem('uploaded-on', this.element)
 
             new Icon('upload', this.uploaded.element)
 
             new Elem('uploaded-on-text', this.uploaded.element).text = formatDate(file.createdAt)
 
-            const tagsList = new Elem('tags-list', this.element.element)
+            const tagsList = new Elem('tags-list', this.element)
 
             for (const tag of file.tags) {
                 new Tag(tag, tagsList.element)
             }
 
-            if (file.post) {
-                const txtLbl = new TextLabel(null, this.element.element, 'green', true)
+            if (file.post || file.avatarfor) {
+                const txtLbl = new TextLabel(null, this.element, 'green', true)
+                new Elem(null, txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
 
-                new Elem(null, txtLbl.element.element).text = `${Language.lang.elements.fileCard.linked.label}`
-                new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, txtLbl.element.element, true)
+                if (file.post) {
+                    new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, txtLbl.element, true)
+                }
+
+                if (file.avatarfor) {
+                    new Link(Language.lang.elements.fileCard.linked.to.pfavatar, `/profile/${file.avatarfor.username}`, txtLbl.element, true)
+                }
             }
 
-            if (options.remove && !file.post) {
+            if (options.remove && !file.post && !file.avatarfor) {
                 this.delete = async (e) => {
                     const removeResult = await API('DELETE', `/file/${file.id}${e.shiftKey ? "&force=true" : ""}`, null, true)
 
                     if (removeResult.HTTPCODE == 200) {
-                        new Alert.SimpleAlert(`ID: ${file.id}`, Language.lang.elements.fileCard.delete.alert, 5000, null, file.id)
-                        this.element.element.remove()
+                        new Alert.Simple(`ID: ${file.id}`, Language.lang.elements.fileCard.delete.alert, 5000, null, file.id)
+                        this.element.remove()
                     }
                 }
 
-                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element.element, null, this.delete)
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, this.delete)
             }
         }
     }

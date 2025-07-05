@@ -2,6 +2,7 @@ import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
 import Video from "../../components/video/script.js";
 import Tag from "../../elements/tag/script.js";
+import TextLabel from "../../elements/textLabel/script.js";
 import API from "../../scripts/api.js";
 import formatDate from "../../scripts/formatDate.js";
 import formatFileSize from "../../scripts/formatFileSize.js";
@@ -57,6 +58,29 @@ function renderFileData(files, type, parent, postID, postimgContainer) {
     new Elem(null, parent.element).text = `${Language.lang.postView.file.size}: ${size}`;
 }
 
+function renderRating(ratingNm, dataBlock) {
+    const rating = { txt: ratingNm, clr: '' }
+    switch (ratingNm) {
+        case 'safe': {
+            rating.clr = 'greenyellow'
+            rating.txt = Language.lang.elements.postCard.rating.safe;
+        }; break;
+        case 'questionable': {
+            rating.clr = 'gold'
+            rating.txt = Language.lang.elements.postCard.rating.questionable;
+        }; break;
+        case 'mature': {
+            rating.clr = 'red'
+            rating.txt = Language.lang.elements.postCard.rating.mature;
+        }; break;
+    }
+
+    const ratingBlock = new Elem('rating-label-cont', dataBlock)
+    new Elem('label', ratingBlock.element).text = Language.lang.postView.rating
+
+    new TextLabel(rating.txt, ratingBlock.element, rating.clr, true)
+}
+
 export async function render(params) {
     const container = new Elem('post-view-container');
     const postData = await API('GET', `/api/posts/${params.postID}`);
@@ -74,6 +98,7 @@ export async function render(params) {
 
     renderTags(PData.tags, postDataBlock.element);
     renderUploadData(PData.owner, PData.createdOn, postDataBlock.element);
+    renderRating(PData.rating, postDataBlock.element)
 
     const fileDataContainer = new Elem('file-data-container', postDataBlock.element);
     const postimgContainer = new Elem('post-conatiner', container.element);

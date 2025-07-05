@@ -1,12 +1,11 @@
 import Elem from "../elem/script.js"
 
-export default class TextInputLine {
+export default class TextInputLine extends Elem {
     constructor(desc, parent, cname, type, chcb) {
-        this.element = document.createElement('div')
+        super('input-container', parent, 'div')
 
-        this.input = document.createElement('input')
+        this.input = new Elem(null, this.element, 'input').element
         this.input.placeholder = ' '
-        this.element.appendChild(this.input)
 
         if (type) {
             this.input.type = type
@@ -15,24 +14,10 @@ export default class TextInputLine {
         }
 
         if (desc) {
-            this.label = document.createElement('label')
-            this.element.appendChild(this.label)
-            this.label.innerText = desc
-            this.label.setAttribute('for', desc)
+            this.label = new Elem(null,this.element,'label')
+            this.label.text = desc
+            this.label.element.setAttribute('for', desc)
             this.input.id = desc
-        }
-
-        if (parent) parent.appendChild(this.element)
-
-        this.element.className = 'input-container'
-
-        if (cname) {
-            if (typeof cname === 'object') {
-                for (const cn of cname)
-                    this.input.className += cn
-            } else {
-                this.input.className += cn
-            }
         }
 
         this.input.addEventListener('keydown', (e) => {

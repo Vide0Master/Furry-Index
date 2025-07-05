@@ -1,7 +1,8 @@
-export default class Icon {
+import Elem from "../elem/script.js";
+
+export default class Icon extends Elem {
     constructor(iconName, parent, cname, size) {
-        this.element = document.createElement('div')
-        this.element.classList.add('icon-elem')
+        super('icon-elem', parent, 'div')
 
         this.size = { x: 16, y: 16 }
         if (size) {

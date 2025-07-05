@@ -20,6 +20,11 @@ exports.GET = async (req, res) => {
         }
     })
 
+    if(!post) {
+        res.status(404).send('Post not found')
+        return
+    }
+
     const file = await prisma.file.findUnique({
         where: {
             id: fileID
@@ -28,6 +33,11 @@ exports.GET = async (req, res) => {
             file: true
         }
     })
+
+    if(!file) {
+        res.status(404).send('File not found')
+        return
+    }
 
     const bypassCheck = req.query.bypass == 'true'
 

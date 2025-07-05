@@ -51,7 +51,7 @@ export async function render(params) {
                 pass.displayError(Language.lang.login.errors.wrondPassword)
             }; break;
             case 200: {
-                new Alert.SimpleAlert(`${Language.lang.login.success[0]} ${loginData.login}`, Language.lang.login.success[1], 5000, '#109f10')
+                new Alert.Simple(`${Language.lang.login.success[0]} ${loginData.login}`, Language.lang.login.success[1], 5000, '#109f10')
                 await User.updateUserData()
                 UserLabel.checkUserData()
                 Header.checkUserLoginState()

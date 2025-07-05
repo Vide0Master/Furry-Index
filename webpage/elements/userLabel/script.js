@@ -1,4 +1,5 @@
 import Elem from "../../components/elem/script.js";
+import Image from "../../components/image/script.js";
 import Link from "../../components/link/script.js";
 import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
@@ -9,7 +10,10 @@ const regNloginCont = new Elem(['register-n-login-cont', 'hidden'], container.el
 new Link(Language.lang.header.userCard.login, '/login', regNloginCont.element)
 new Link(Language.lang.header.userCard.register, '/register', regNloginCont.element)
 
+
 const userCont = new Elem(['user-cont', 'hidden'], container.element)
+const avatarContainer = new Elem('user-avatar-container', userCont.element)
+const userAvatar = new Image('', 'user-avatar', avatarContainer.element)
 const userName = new Link('', '/profile', userCont.element, true)
 
 class UserLabel {
@@ -39,6 +43,13 @@ class UserLabel {
     }
 
     static updateUserData() {
+        if (User.data.avatar) {
+            userAvatar.image.src = `/api/profile/${User.data.username}/avatar?thumbnail=100`
+            avatarContainer.element.classList.toggle('hidden', false)
+        } else {
+            avatarContainer.element.classList.toggle('hidden', true)
+        }
+
         userName.textElem.text = User.data.visiblename != null ? User.data.visiblename : User.data.username
     }
 }

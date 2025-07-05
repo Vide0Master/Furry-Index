@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_avatarID_fkey" FOREIGN KEY ("avatarID") REFERENCES "File"("id") ON DELETE SET NULL ON UPDATE CASCADE;

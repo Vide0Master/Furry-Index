@@ -125,16 +125,16 @@ export async function render(params) {
     const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, 'hidden')
 
     const autologin = new SwitchInput(Language.lang.register.autologin.label, container.element, (value) => {
-        rememberMe.element.element.classList.toggle('hidden', !value)
+        rememberMe.element.classList.toggle('hidden', !value)
         if (!value) rememberMe.change(false)
     }, false)
 
-    rememberMe.element.moveAfter(autologin.element.element)
+    rememberMe.moveAfter(autologin.element)
 
     new Button(Language.lang.register.label, container.element, null,
         async () => {
             if (registerData.error) {
-                new Alert.SimpleAlert(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
+                new Alert.Simple(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
                 return
             }
 
@@ -149,19 +149,19 @@ export async function render(params) {
                     })
 
                     if (loginResult.HTTPCODE == 200) {
-                        new Alert.SimpleAlert(`${Language.lang.login.success[0]} ${registerData.login}`, Language.lang.login.success[1], 5000, '#109f10')
+                        new Alert.Simple(`${Language.lang.login.success[0]} ${registerData.login}`, Language.lang.login.success[1], 5000, '#109f10')
                         await User.updateUserData()
                         UserLabel.checkUserData()
                         Header.checkUserLoginState()
                         Router.navigate('/profile')
                     } else {
-                        new Alert.SimpleAlert(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, 'loginerr')
+                        new Alert.Simple(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, 'loginerr')
                     }
                 } else {
-                    new Alert.SimpleAlert(Language.lang.register.success[0], Language.lang.register.success[1], 5000, null, 'registersucc')
+                    new Alert.Simple(Language.lang.register.success[0], Language.lang.register.success[1], 5000, null, 'registersucc')
                 }
             } else {
-                new Alert.SimpleAlert(Language.lang.register.error.title, Language.lang.register.error.message, 5000, null, 'registererror')
+                new Alert.Simple(Language.lang.register.error.title, Language.lang.register.error.message, 5000, null, 'registererror')
             }
         })
 

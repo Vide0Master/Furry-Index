@@ -70,7 +70,7 @@ export default async function makePostMaker(postData, editedCB) {
         for (const file of files.files) {
             const fcard = new FileCard(file, false, filesField.element, { remove: false })
 
-            switches[file.id] = new SwitchInput('Include', fcard.element.element, (state) => {
+            switches[file.id] = new SwitchInput('Include', fcard.element, (state) => {
                 if (['image', 'video'].includes(type)) {
                     for (const id in switches) {
                         if (id == file.id) continue
@@ -104,14 +104,14 @@ export default async function makePostMaker(postData, editedCB) {
         if (postData) {
             const postResult = await API('PUT', `/api/posts/${postData.id}`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.SimpleAlert(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, 'Success', 5000, null, postResult.postID)
+                new Alert.Simple(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, 'Success', 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }
         } else {
             const postResult = await API('POST', `/api/posts`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.SimpleAlert(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, 'Success', 5000, null, postResult.postID)
+                new Alert.Simple(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, 'Success', 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }

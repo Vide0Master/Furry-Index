@@ -1,5 +1,6 @@
 import Button from "../../components/button/script.js"
 import Elem from "../../components/elem/script.js"
+import Language from "../../scripts/language.js"
 
 const alertsContainer = new Elem('alerts-container', document.body)
 
@@ -22,12 +23,12 @@ class AlertComponent {
 
         if (label) {
             this.alertLabel = new Elem('label', this.alertCont.element)
-            this.alertLabel.element.innerText = label
+            this.alertLabel.text = label
         }
 
         if (text) {
             this.alertText = new Elem('text', this.alertCont.element)
-            this.alertText.element.innerText = text
+            this.alertText.text = text
         }
 
         let style = ''
@@ -58,7 +59,7 @@ class AlertComponent {
             alert: this
         }
 
-        new Button('OK', this.alertCont.element, null, this.removeAlert)
+        this.okButton = new Button('OK', this.alertCont.element, null, this.removeAlert)
 
         if (timeout) {
             this.timeoutBar = new Elem('timeout-bar', this.alertCont.element)
@@ -72,14 +73,37 @@ class AlertComponent {
     }
 }
 
-class SimpleAlert extends AlertComponent {
+class Simple extends AlertComponent {
     constructor(text, label, timeout, outlineColor, id) {
         super(text, label, timeout, outlineColor, id)
     }
 }
 
+class Confirm extends AlertComponent {
+    constructor(text, label, confirmCallback, cancelCallback, timeout, outlineColor, id) {
+        super(text, label, timeout, outlineColor, id)
+
+        this.confirmCallback = confirmCallback
+        this.cancelCallback = cancelCallback
+
+        const buttonsRow = new Elem('buttons-row', this.alertCont.element)
+
+        this.okButton.element.remove()
+
+        new Button(Language.lang.features.alert.confirm.confirmButton, buttonsRow.element, null, () => {
+            if (typeof this.confirmCallback === "function") this.confirmCallback()
+            this.removeAlert()
+        })
+        new Button(Language.lang.features.alert.confirm.cancelButton, buttonsRow.element, null, () => {
+            if (typeof this.cancelCallback === "function") this.cancelCallback()
+            this.removeAlert()
+        })
+    }
+}
+
 class Alert {
-    static SimpleAlert = SimpleAlert
+    static Simple = Simple
+    static Confirm = Confirm
 }
 
 export default Alert

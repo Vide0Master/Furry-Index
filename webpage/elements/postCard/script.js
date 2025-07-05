@@ -10,11 +10,11 @@ import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 
-export default class PostCard {
+export default class PostCard extends Elem {
     constructor(postData, parent, isInEditor = false, updateEditorCB) {
-        this.element = new Elem('post-card', parent)
+        super('post-card', parent)
 
-        const previewContainer = new Elem('preview-container', this.element.element)
+        const previewContainer = new Elem('preview-container', this.element)
 
         switch (postData.type) {
             case 'imageGroup': {
@@ -34,10 +34,10 @@ export default class PostCard {
             }; break;
         }
 
-        this.name = new Elem('post-name', this.element.element)
+        this.name = new Elem('post-name', this.element)
         this.name.text = postData.name
 
-        this.tagrow = new Elem('tag-row', this.element.element)
+        this.tagrow = new Elem('tag-row', this.element)
         for (const tag of postData.tags) {
             new Tag(tag, this.tagrow.element)
         }
@@ -58,10 +58,10 @@ export default class PostCard {
             }; break;
         }
 
-        new TextLabel(rating.txt, this.element.element, rating.clr, true)
+        new TextLabel(rating.txt, this.element, rating.clr, true)
 
         if (isInEditor) {
-            const buttonCont = new Elem('edit-buttons-row', this.element.element)
+            const buttonCont = new Elem('edit-buttons-row', this.element)
 
             const visSwitch = new SwitchInput(Language.lang.elements.postCard.editButtons.visible, buttonCont.element, async (state) => {
                 const result = await API('PUT', `/api/posts/${postData.id}`, { visible: state })
@@ -69,11 +69,13 @@ export default class PostCard {
             }, postData.visible)
 
             new Button(Language.lang.elements.postCard.editButtons.remove, buttonCont.element, null, async () => {
-                const rmresult = await API('DELETE', `/api/posts/${postData.id}`, null, true)
-                if (rmresult.HTTPCODE == 200) {
-                    new Alert.SimpleAlert(`${Language.lang.elements.postCard.editButtons.successRM[0]} "${postData.id}" ${Language.lang.elements.postCard.editButtons.successRM[1]}`, null, 5000, null, 'removed' + postData.id)
-                    this.element.element.remove()
-                }
+                new Alert.Confirm('Are you sure you want to remove this post?', 'Remove post', async () => {
+                    const rmresult = await API('DELETE', `/api/posts/${postData.id}`, null, true)
+                    if (rmresult.HTTPCODE == 200) {
+                        new Alert.Simple(`${Language.lang.elements.postCard.editButtons.successRM[0]} "${postData.id}" ${Language.lang.elements.postCard.editButtons.successRM[1]}`, null, 5000, null, 'removed' + postData.id)
+                        this.element.remove()
+                    }
+                }, null, null, null, 'remove-post-confirm-' + postData.id)
             })
 
             new Button(Language.lang.elements.postCard.editButtons.edit, buttonCont.element, null, () => {
@@ -85,7 +87,7 @@ export default class PostCard {
             const postlink = new Link(null, `/post/${postData.id}`, null, true, 'post-link')
             postlink.textElem.element.remove()
 
-            this.element.element.addEventListener('click', () => {
+            this.element.addEventListener('click', () => {
                 postlink.element.click()
             })
         }
