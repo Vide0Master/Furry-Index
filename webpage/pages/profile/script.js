@@ -34,7 +34,7 @@ export async function render(params) {
 
     const userdatElem = new Elem('user-data', fdataBlock.element, 'div')
 
-    if (Pdata.visiblename) new Elem('visible-name', userdatElem.element, 'div').text = Pdata.username
+    if (Pdata.visiblename) new Elem('visible-name', userdatElem.element).text = Pdata.visiblename
     new Elem('user-name', userdatElem.element, 'div').text = '@' + Pdata.username
     new Elem('registered-at', userdatElem.element, 'div').text = `${Language.lang.profile.regsitered} ${formatDate(Pdata.createdAt, ['time'])}`
 

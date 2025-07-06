@@ -56,7 +56,7 @@ class Router {
     }
 
     static addRoute(path, modulePath) {
-        this.init(); // автоматически запускаем при добавлении маршрута
+        this.init();
 
         const index = this.routes.findIndex(route => route.path === path);
         if (index >= 0) {
@@ -67,7 +67,7 @@ class Router {
     }
 
     static async navigate(path) {
-        this.init(); // на случай, если вызывается напрямую
+        this.init();
         if (window.location.pathname + window.location.search !== path) {
             window.history.pushState({}, '', path);
             await this._loadRoute(path);

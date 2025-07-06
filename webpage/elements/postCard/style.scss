@@ -5,13 +5,13 @@
     border-radius: 20px;
     width: fit-content;
     height: fit-content;
-max-width: 220px;
+    max-width: 180px;
     display: flex;
     flex-direction: column;
     gap: 5px;
 
     .preview-container {
-        height: 200px;
+        height: 150px;
 
         border-radius: 10px;
         overflow: hidden;
@@ -27,8 +27,8 @@ max-width: 220px;
 
             .internal-image-container {
                 position: absolute;
-                width: 200px;
-                height: 200px;
+                width: 160px;
+                height: 160px;
                 left: 0;
                 top: 0;
                 transition: 0.2s ease;
@@ -59,7 +59,7 @@ max-width: 220px;
         height: 100%;
     }
 
-    .edit-buttons-row{
+    .edit-buttons-row {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;

@@ -11,9 +11,13 @@
         align-items: center;
         gap: 10px;
 
+        @media (max-width:700px) {
+            flex-direction: column;
+        }
+
         .avatar-wrapper {
-            height: 200px;
-            width: 200px;
+            height: 150px;
+            width: 150px;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 30px;
@@ -29,11 +33,19 @@
             gap: 5px;
             font-size: 25px;
 
+            @media (max-width:700px) {
+                align-items: center;
+            }
+
             &>* {
                 background-color: rgba(0, 0, 0, 0.5);
-                padding: 5px;
-                border-radius: 10px;
+                padding: 6px 12px;
+                border-radius: 20px;
                 width: fit-content;
+            }
+
+            .visible-name {
+                font-size: 30px;
             }
         }
     }
@@ -44,13 +56,16 @@
         align-items: center;
         gap: 10px;
 
-        .latest-posts-title{
+        .latest-posts-title {
             font-size: 20px;
         }
 
-        .latest-posts{
+        .latest-posts {
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
         }
     }

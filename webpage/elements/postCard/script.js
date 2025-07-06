@@ -9,6 +9,7 @@ import makePostMaker from "../postMaker/script.js";
 import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
+import Router from "../../scripts/router.js";
 
 export default class PostCard extends Elem {
     constructor(postData, parent, isInEditor = false, updateEditorCB) {
@@ -25,8 +26,8 @@ export default class PostCard extends Elem {
                 const filesCount = postData.files.length <= 5 ? postData.files.length : 5
                 for (let i = 0; i < filesCount; i++) {
                     const img = new Image(`/api/posts/${postData.id}/file/${postData.files[i].id}?thumbnail=500`, 'post-image', slidingCont.element)
-
-                    img.element.style = `--shift: ${200 - (200 / filesCount) - (200 / filesCount * i)}px; --width-shift: ${(200 / filesCount)}px;`
+                    const width = 160
+                    img.element.style = `--shift: ${width - (width / filesCount) - (width / filesCount * i)}px; --width-shift: ${(width / filesCount)}px;`
                 }
             }; break;
             default: {
@@ -89,6 +90,10 @@ export default class PostCard extends Elem {
 
             this.element.addEventListener('click', () => {
                 postlink.element.click()
+            })
+
+            this.element.addEventListener('mouseenter', () => {
+                Router.preload(`/post/${postData.id}`)
             })
         }
     }

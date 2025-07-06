@@ -136,10 +136,21 @@ const LANG = {
             selectBtn: 'Select',
             removeAvatar: 'Remove avatar',
             removeAvatarAlert: 'Are you sure you want to remove your avatar?',
+            noAvatarFiles: 'No files for avatar found',
+            uploadFile: 'Upload new file',
             loggedOut: [
                 'Logged out from',
                 'successfully'
-            ]
+            ],
+            visibleName: {
+                label: 'Visible name',
+                setBtn: 'Set',
+                rmBtn: 'Remove',
+                result: {
+                    setsucc: 'Successfully set visible name',
+                    rmsucc: 'Successfully removed visible name',
+                }
+            }
         }
     },
     components: {

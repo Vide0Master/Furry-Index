@@ -28,5 +28,14 @@ export async function render(params) {
 
     loadPosts()
 
+    async function loadPost(postid) {
+        const postdata = await API('GET', `/api/posts/${postid}`)
+
+        makePostMaker(postdata.post, loadPosts)
+    }
+
+    if (params.postID) loadPost(params.postID)
+
+
     return container.element;
 }

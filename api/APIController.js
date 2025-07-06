@@ -47,7 +47,7 @@ for (let i = 0; i < apiFiles.length; i++) {
 
     for (const method in module) {
         if (['ROUTE', 'PERMISSIONS'].includes(method)) continue
-        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'SET'].includes(method)) {
             cmd.bad(`Method ${method} is not allowed, skipping`, [cmd.preps.API])
             continue
         }

@@ -15,12 +15,22 @@
         flex-direction: row;
         align-items: center;
         gap: 5px;
+        transition: 0.2s;
 
-        .user-avatar-container{
-            width: 20px;
-            height: 20px;
+        .user-avatar-container {
+            width: 18px;
+            height: 18px;
             border-radius: 3px;
             border: 1px solid var(--outline);
+            transition: 0.2s;
+        }
+
+        &:hover {
+            color: var(--font-hover);
+
+            .user-avatar-container {
+                border-color: var(--font-hover);
+            }
         }
     }
 

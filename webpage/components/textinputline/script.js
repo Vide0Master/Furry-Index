@@ -42,4 +42,12 @@ export default class TextInputLine extends Elem {
             if (this.errorElem) this.errorElem.element.remove()
         }
     }
+
+    get value() {
+        return this.input.value;
+    }
+
+    set value(val){
+        this.input.value = val;
+    }
 }

@@ -13,11 +13,16 @@
         border-radius: 100vh;
         background-color: var(--background-s);
         caret-color: var(--font-main);
+        transition: 0.2s;
 
         min-width: 300px;
 
         &:focus {
             outline: none;
+            border-color: var(--border-clr-internal, var(--interactible-hover));
+        }
+
+        &:hover {
             border-color: var(--border-clr-internal, var(--interactible-hover));
         }
 

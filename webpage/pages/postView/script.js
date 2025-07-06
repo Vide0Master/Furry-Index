@@ -1,5 +1,6 @@
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
+import Link from "../../components/link/script.js";
 import Video from "../../components/video/script.js";
 import Tag from "../../elements/tag/script.js";
 import TextLabel from "../../elements/textLabel/script.js";
@@ -20,7 +21,8 @@ function renderTags(tags, parent) {
 function renderUploadData(owner, createdOn, parent) {
     const postUploadData = new Elem('post-upload-data', parent);
     const uploadedBy = new Elem('owner', postUploadData.element);
-    uploadedBy.text = `${Language.lang.postView.file.uploadedBy}: ${owner.visiblename || owner.username}`;
+    new Elem('text', uploadedBy.element).text = Language.lang.postView.file.uploadedBy + ':'
+    new Link(owner.visiblename ? owner.visiblename : '@' + owner.username, `/profile/${owner.username}`, uploadedBy.element, true)
     const uploadedOn = new Elem('when', postUploadData.element);
     uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(createdOn)}`;
 }

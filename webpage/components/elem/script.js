@@ -1,5 +1,5 @@
 export default class Elem {
-    constructor(cname, parent, tag= 'div') {
+    constructor(cname, parent, tag = 'div') {
         this.element = document.createElement(tag)
 
         if (cname) {
@@ -19,6 +19,10 @@ export default class Elem {
 
         this.moveAfter = (elem) => {
             elem.insertAdjacentElement('afterend', this.element);
+        }
+
+        this.switchVisible = (state) =>{
+            this.element.classList.toggle('hidden', !state)
         }
     }
 

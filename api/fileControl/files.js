@@ -38,14 +38,16 @@ exports.GET = async (req, res) => {
             OR: [
                 { post: { id: postID } },
                 { post: null }
-            ]
+            ],
+            avatarfor: null
         }
     } else if (inUse?.startsWith('avatarID')) {
         postFilter = {
             OR: [
                 { avatarfor: { id: user.id } },
                 { avatarfor: null }
-            ]
+            ],
+            post: null
         }
     } else {
         postFilter = {}
