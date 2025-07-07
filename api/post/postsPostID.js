@@ -49,25 +49,53 @@ exports.GET = async (req, res) => {
 }
 
 exports.PUT = async (req, res) => {
-    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
-    if (!user) return res.status(401).send()
+    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
+    if (!user) return res.status(401).send();
 
-    const postID = req.params.postID
-
-    if (!postID)
-        return res.status(400).send('No postID in route')
-
-    if (!req.body)
-        return res.status(400), send('No body request')
+    const postID = req.params.postID;
+    if (!postID) return res.status(400).send('No postID in route');
+    if (!req.body) return res.status(400).send('No body request');
 
     const restricted = ['id', 'ownerid', 'owner', 'createdOn'];
     if (Object.keys(req.body).some(key => restricted.includes(key))) {
         return res.status(403).send('Cant edit restricted fields');
     }
 
+    let fileIds = [];
     if (req.body.files) {
-        req.body.files = { set: req.body.files.map((id) => ({ id })) }
+        fileIds = req.body.files;
+        req.body.files = {
+            set: fileIds.map(id => ({ id }))
+        };
     }
+
+    let postTagsMap = new Map();
+    if (req.body.tags) {
+        for (const name of req.body.tags) {
+            postTagsMap.set(name, { where: { name }, create: { name } });
+        }
+    }
+
+    if (fileIds.length) {
+        const filesTags = await prisma.file.findMany({
+            where: { id: { in: fileIds } },
+            select: {
+                tags: { select: { name: true } }
+            }
+        });
+        for (const file of filesTags) {
+            for (const { name } of file.tags) {
+                if (!postTagsMap.has(name)) {
+                    postTagsMap.set(name, { where: { name }, create: { name } });
+                }
+            }
+        }
+    }
+
+    req.body.tags = {
+        set: [],
+        connectOrCreate: Array.from(postTagsMap.values())
+    };
 
     try {
         await prisma.post.update({
@@ -75,14 +103,16 @@ exports.PUT = async (req, res) => {
                 id: postID,
                 ownerid: user.id
             },
-            data: req.body
-        })
-        return res.status(200).json({ updated: true })
+            data: {
+                ...req.body
+            }
+        });
+        return res.status(200).json({ updated: true });
     } catch (err) {
-        console.error(err)
-        return res.status(500).json({ updated: false })
+        console.error(err);
+        return res.status(500).json({ updated: false });
     }
-}
+};
 
 exports.DELETE = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)

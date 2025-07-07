@@ -9,6 +9,7 @@ const LANG = {
     },
     header: {
         main: 'Main',
+        search: 'Search',
         settings: 'Settings',
         upload: 'Upload',
         fileManager: 'File manager',
@@ -86,6 +87,7 @@ const LANG = {
     },
     main: {
         welcome: 'Welcome to',
+        featured: 'Feautured posts',
     },
     postView: {
         hiddenLabel: 'This post is not visible',

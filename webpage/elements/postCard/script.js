@@ -38,10 +38,10 @@ export default class PostCard extends Elem {
         this.name = new Elem('post-name', this.element)
         this.name.text = postData.name
 
-        this.tagrow = new Elem('tag-row', this.element)
-        for (const tag of postData.tags) {
-            new Tag(tag, this.tagrow.element)
-        }
+        // this.tagrow = new Elem('tag-row', this.element)
+        // for (const tag of postData.tags) {
+        //     new Tag(tag, this.tagrow.element)
+        // }
 
         const rating = { txt: postData.rating, clr: '' }
         switch (postData.rating) {

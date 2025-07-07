@@ -1,0 +1,22 @@
+.postmaker-post-container {
+    border: 3px solid var(--outline);
+    padding: 10px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible;
+    backdrop-filter: blur(10px);
+
+    .files-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+
+        &.hidden {
+            display: none;
+        }
+    }
+}

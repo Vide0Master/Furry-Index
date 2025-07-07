@@ -23,8 +23,15 @@ footer {
         gap: 5px;
 
         .internal-image-container {
-            width: 24px;
-            height: 24px;
+            width: fit-content;
+            height: fit-content;
+            overflow: auto;
+
+            img {
+                width: 24px;
+                height: 24px;
+                display: block;
+            }
         }
 
     }

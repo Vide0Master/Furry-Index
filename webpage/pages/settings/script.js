@@ -113,7 +113,6 @@ export async function render(params) {
                 const noFilesLabel = new Elem('no-files-label', avatarSelector.element)
                 new Elem(null, noFilesLabel.element).text = Language.lang.settings.user.noAvatarFiles
                 new Link(Language.lang.settings.user.uploadFile, '/upload', noFilesLabel.element, true, null, 'upload')
-                    .element.addEventListener('click', () => (overlay.element.remove()))
             }
         })
         rmAvatar.moveAfter(selAvatar.element)

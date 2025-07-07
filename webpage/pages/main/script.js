@@ -15,10 +15,10 @@ export async function render(params) {
 
     new Elem('FI-text', fiCont).text = 'Furry Index'
 
-    new Elem('bigLabel', container.element).text = 'Featured posts'
+    new Elem('bigLabel', container.element).text = Language.lang.main.featured
 
     const latestPosts = new Elem('latest-posts', container.element)
-    const postsData = await API('GET', '/api/posts?t=10', null, true)
+    const postsData = await API('GET', '/api/posts?t=30', null, true)
     for (const postData of postsData.posts) {
         new PostCard(postData, latestPosts.element)
     }

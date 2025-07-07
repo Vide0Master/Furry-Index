@@ -1,9 +1,13 @@
 import Elem from "../../components/elem/script.js";
 
-export default class Overlay {
+const overlays = []
+
+export default class Overlay extends Elem {
     constructor() {
-        this.element = new Elem('internal-overlay', document.body).element
+        super('internal-overlay', document.body)
         this.disablePageScroll()
+
+        overlays.push(this)
 
         this.element.addEventListener('click', (e) => {
             if (e.target != this.element) return
@@ -18,5 +22,11 @@ export default class Overlay {
 
     enablePageScroll() {
         document.body.classList.remove('disable-scroll')
+    }
+
+    static clearOverlays(){
+        for(const overlay of overlays){
+            overlay.kill()
+        }
     }
 }

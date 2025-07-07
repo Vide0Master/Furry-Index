@@ -30,7 +30,7 @@ exports.GET = async (req, res) => {
             }; break;
         }
     }
-    
+
     const posts = await prisma.post.findMany({
         skip: page * take,
         take,
@@ -44,6 +44,9 @@ exports.GET = async (req, res) => {
             tags: {
                 include: {
                     group: true
+                },
+                orderBy: {
+                    name: 'desc'
                 }
             },
             files: {

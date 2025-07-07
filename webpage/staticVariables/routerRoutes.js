@@ -11,6 +11,7 @@ const routes = [
     { path: '/post-master', module: '/pages/postmaster/script.js' },
     { path: '/post-master/:postID', module: '/pages/postmaster/script.js' },
     { path: '/post/:postID', module: '/pages/postView/script.js' },
+    { path: '/search', module: '/pages/search/script.js' },
 ]
 
 export default routes

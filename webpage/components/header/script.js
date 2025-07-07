@@ -14,6 +14,7 @@ export default class Header {
         const navRow = new Elem('nav-row', this.element, 'nav')
 
         this.main = new Link(Language.lang.header.main, '/', navRow.element)
+        this.settings = new Link(Language.lang.header.search, '/search', navRow.element, true)
         this.settings = new Link(Language.lang.header.settings, '/settings', navRow.element, true, null, 'settings')
         this.upload = new Link(Language.lang.header.upload, '/upload', navRow.element, true, 'hidden', 'upload')
         this.fileManager = new Link(Language.lang.header.fileManager, '/file-manager', navRow.element, true, 'hidden')

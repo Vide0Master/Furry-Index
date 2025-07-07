@@ -1,0 +1,61 @@
+.big-text-field {
+    position: relative;
+    width: fit-content;
+    overflow: visible;
+
+    textarea {
+        border: 3px solid var(--outline);
+        padding: 12px;
+        border-radius: 10px;
+        resize: none;
+        font-size: 16px;
+        color: var(--font-main);
+        background-color: var(--background-s);
+        font-family: 'bahnscrift';
+        transition: 0.2s;
+        overflow: hidden;
+
+        min-width: 300px;
+
+        &:focus,
+        &:hover {
+            border-color: var(--font-hover);
+            outline: none;
+        }
+
+        &:focus+label,
+        &:not(:placeholder-shown)+label {
+            left: 100%;
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+    }
+
+    label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: var(--font-main);
+        cursor: text;
+        background-color: var(--background-s);
+        transition: 0.25s;
+        padding: 12px 12px;
+        user-select: none;
+        pointer-events: none;
+        background-color: transparent;
+        white-space: nowrap;
+    }
+
+    .limit-elem {
+        position: absolute;
+        left: 12px;
+        bottom: 3px;
+        transform: translateY(50%);
+        background-color: var(--background-s);
+        font-size: 14px;
+        padding: 3px 10px;
+        border-radius: 10px;
+
+        border: 3px solid var(--outline);
+    }
+}

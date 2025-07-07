@@ -11,7 +11,13 @@ export default class Tag extends Elem {
 
         text.text = tagData.name
 
-        this.element.title = tagData?.group.name[Language.currentLang] ? tagData.group.name[Language.currentLang] : tagData.group.basename
-        if (tagData.group) this.element.style = `--tag-color: ${tagData.group.color};`
+        if (tagData.group) {
+            this.element.title = tagData?.group.name[Language.currentLang] ? tagData.group.name[Language.currentLang] : tagData.group.basename
+        }
+        if (tagData.group) {
+            this.element.style = `--tag-color: ${tagData.group.color};`
+        } else {
+            this.element.style = `--tag-color: #5b34eb;`
+        }
     }
 }

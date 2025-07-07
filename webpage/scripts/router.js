@@ -1,3 +1,4 @@
+import Overlay from '../features/overlay/script.js';
 import staticRoutes from '../staticVariables/routerRoutes.js';
 
 class Router {
@@ -67,6 +68,7 @@ class Router {
     }
 
     static async navigate(path) {
+        Overlay.clearOverlays()
         this.init();
         if (window.location.pathname + window.location.search !== path) {
             window.history.pushState({}, '', path);
