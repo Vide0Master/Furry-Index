@@ -70,31 +70,32 @@ exports.POST = async (req, res) => {
     if (!user) return res.status(401).send()
 
     const postData = req.body
-    if (!postData) res.status(400).send('No body provided!')
+    if (!postData) return res.status(400).send('No body provided!')
 
     const filesTags = await prisma.file.findMany({
         where: {
-            OR: [...(postData.files.map((id) => { return { id } }))]
+            OR: postData.files.map(id => ({ id }))
         },
         select: {
             tags: {
-                select: {
-                    name: true
-                }
+                select: { name: true }
             }
         }
     })
 
-    const postTags = postData.tags ? postData.tags.map(tagname => ({
+    const inputTags = Array.isArray(postData.tags)
+        ? postData.tags.map(tag => typeof tag === 'string' ? tag : tag?.name)
+        : []
+
+    let postTags = inputTags.map(tagname => ({
         where: { name: tagname },
         create: { name: tagname }
-    })) : []
+    }))
 
     for (const file of filesTags) {
         for (const tag of file.tags) {
-            const indx = postTags.indexOf(tag.name)
-
-            if (indx == -1) {
+            const exists = postTags.some(t => t.where.name === tag.name)
+            if (!exists) {
                 postTags.push({
                     where: { name: tag.name },
                     create: { name: tag.name }
@@ -110,14 +111,14 @@ exports.POST = async (req, res) => {
             type: postData.type,
             rating: postData.rating,
             files: {
-                connect: postData.files.map((id) => { return { id } })
+                connect: postData.files.map(id => ({ id }))
             },
             tags: { connectOrCreate: postTags },
             ownerid: user.id
         }
     })
 
-    if (!newPost) res.send(500).send('Error creating post!')
+    if (!newPost) return res.status(500).send('Error creating post!')
 
     res.status(200).json({ postID: newPost.id })
 }

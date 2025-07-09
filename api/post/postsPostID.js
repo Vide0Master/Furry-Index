@@ -61,41 +61,47 @@ exports.PUT = async (req, res) => {
         return res.status(403).send('Cant edit restricted fields');
     }
 
-    let fileIds = [];
+    const updateData = {};
+
     if (req.body.files) {
-        fileIds = req.body.files;
-        req.body.files = {
-            set: fileIds.map(id => ({ id }))
+        updateData.files = {
+            set: req.body.files.map(id => ({ id }))
         };
     }
 
-    let postTagsMap = new Map();
     if (req.body.tags) {
+        let postTagsMap = new Map();
         for (const name of req.body.tags) {
             postTagsMap.set(name, { where: { name }, create: { name } });
         }
-    }
 
-    if (fileIds.length) {
-        const filesTags = await prisma.file.findMany({
-            where: { id: { in: fileIds } },
-            select: {
-                tags: { select: { name: true } }
-            }
-        });
-        for (const file of filesTags) {
-            for (const { name } of file.tags) {
-                if (!postTagsMap.has(name)) {
-                    postTagsMap.set(name, { where: { name }, create: { name } });
+        if (req.body.files && req.body.files.length) {
+            const filesTags = await prisma.file.findMany({
+                where: { id: { in: req.body.files } },
+                select: {
+                    tags: { select: { name: true } }
+                }
+            });
+            for (const file of filesTags) {
+                for (const { name } of file.tags) {
+                    if (!postTagsMap.has(name)) {
+                        postTagsMap.set(name, { where: { name }, create: { name } });
+                    }
                 }
             }
         }
+
+        updateData.tags = {
+            set: [],
+            connectOrCreate: Array.from(postTagsMap.values())
+        };
     }
 
-    req.body.tags = {
-        set: [],
-        connectOrCreate: Array.from(postTagsMap.values())
-    };
+    for (const key of Object.keys(req.body)) {
+        if (key !== 'files' && key !== 'tags') {
+            updateData[key] = req.body[key];
+        }
+    }
 
     try {
         await prisma.post.update({
@@ -103,9 +109,7 @@ exports.PUT = async (req, res) => {
                 id: postID,
                 ownerid: user.id
             },
-            data: {
-                ...req.body
-            }
+            data: updateData
         });
         return res.status(200).json({ updated: true });
     } catch (err) {
