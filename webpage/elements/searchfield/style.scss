@@ -1,0 +1,28 @@
+.internal-search-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    background-color: #fff;
+    border-radius: 100vh;
+
+    input {
+        font-size: 16px;
+        background-color: transparent;
+        border: none;
+        outline: 1px black;
+
+        padding: 7px 14px;
+        min-width: 300px;
+
+        &:focus {
+            outline: none;
+            border: none;
+        }
+    }
+
+    .icon-elem {
+        --icon-color: #000;
+        margin-right: 7px;
+    }
+}

@@ -28,6 +28,10 @@ export default class Elem {
         this.kill = () => {
             this.element.remove()
         }
+
+        this.wipe = () => {
+            this.element.innerHTML = ''
+        }
     }
 
     get text() {

@@ -5,30 +5,67 @@ const prisma = require('../../systemServices/prisma')
 exports.ROUTE = '/api/posts'
 
 exports.GET = async (req, res) => {
-    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
+    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    const page = req.query.p ? parseInt(req.query.p) : 0
-    const take = req.query.t ? parseInt(req.query.t) : 50
+    const page = req.query.p ? parseInt(req.query.p) : 0;
+    const take = req.query.t ? parseInt(req.query.t) : 10;
     const tagFilter = req.query.tags
-        ? req.query.tags.split('+').map(tag => tag.trim())
-        : []
+        ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
+        : [];
 
-    const processedTags = []
+    const filterHandlers = {
+        'author': (value, negative) => {
+            const clause = { owner: { username: value } };
+            return negative ? { NOT: clause } : clause;
+        },
+    };
+
+    const positiveTagNames = [];
+    const negativeTagNames = [];
+    const processedFilters = [];
 
     for (let tag of tagFilter) {
-        let negative = false
-
+        let negative = false;
         if (tag.startsWith('-')) {
-            negative = true
-            tag = tag.slice(1)
+            negative = true;
+            tag = tag.slice(1);
         }
 
-        switch (true) {
-            case tag.startsWith('author:'): {
-                const authorName = tag.split(':')[1]
-                processedTags.push({ owner: { username: authorName } })
-            }; break;
+        const fieldMatch = tag.match(/^([a-zA-Z]+):(.+)$/);
+        if (fieldMatch) {
+            const [, field, value] = fieldMatch;
+            if (filterHandlers[field]) {
+                processedFilters.push(filterHandlers[field](value, negative));
+            }
+            continue;
         }
+
+        if (negative) {
+            negativeTagNames.push(tag);
+        } else {
+            positiveTagNames.push(tag);
+        }
+    }
+
+    if (positiveTagNames.length > 0) {
+        processedFilters.push({
+            tags: {
+                some: {
+                    name: { in: positiveTagNames }
+                }
+            }
+        });
+    }
+    if (negativeTagNames.length > 0) {
+        processedFilters.push({
+            NOT: {
+                tags: {
+                    some: {
+                        name: { in: negativeTagNames }
+                    }
+                }
+            }
+        });
     }
 
     const posts = await prisma.post.findMany({
@@ -37,7 +74,7 @@ exports.GET = async (req, res) => {
         where: {
             AND: [
                 { visible: true },
-                ...processedTags
+                ...processedFilters
             ]
         },
         include: {
@@ -58,10 +95,10 @@ exports.GET = async (req, res) => {
         orderBy: {
             createdOn: 'desc'
         }
-    })
+    });
 
-    return res.status(200).json({ posts })
-}
+    return res.status(200).json({ posts });
+};
 
 exports.POST = async (req, res) => {
     const userToken = req.cookies[mainAuthTokenKey]
