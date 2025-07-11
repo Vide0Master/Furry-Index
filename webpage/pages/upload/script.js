@@ -23,6 +23,8 @@ export async function render(params) {
         }
     })
 
+    groupUploadBtn.switchVisible(false)
+
     upload.onFileChange((files) => {
         fileList = []
         fileManagerField.element.innerHTML = ''

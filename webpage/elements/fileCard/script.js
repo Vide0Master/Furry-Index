@@ -150,6 +150,7 @@ export default class FileCard extends Elem{
 
             if (options.remove && !file.post && !file.avatarfor) {
                 this.delete = async (e) => {
+                    this.removeButton.switchVisible(false)
                     const removeResult = await API('DELETE', `/file/${file.id}${e.shiftKey ? "&force=true" : ""}`, null, true)
 
                     if (removeResult.HTTPCODE == 200) {

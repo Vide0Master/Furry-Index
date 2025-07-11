@@ -93,7 +93,7 @@ class Confirm extends AlertComponent {
         new Button(Language.lang.features.alert.confirm.confirmButton, buttonsRow.element, null, () => {
             if (typeof this.confirmCallback === "function") this.confirmCallback()
             this.removeAlert()
-        })
+        }).element.focus()
         new Button(Language.lang.features.alert.confirm.cancelButton, buttonsRow.element, null, () => {
             if (typeof this.cancelCallback === "function") this.cancelCallback()
             this.removeAlert()

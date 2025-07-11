@@ -7,8 +7,8 @@ exports.ROUTE = '/api/posts'
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    const page = req.query.p ? parseInt(req.query.p) : 0;
-    const take = req.query.t ? parseInt(req.query.t) : 10;
+    const page = req.query.p ? parseInt(req.query.p, 10) : 0;
+    const take = req.query.t ? parseInt(req.query.t, 10) : 10;
     const tagFilter = req.query.tags
         ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
         : [];
@@ -24,8 +24,10 @@ exports.GET = async (req, res) => {
     const negativeTagNames = [];
     const processedFilters = [];
 
-    for (let tag of tagFilter) {
+    for (let rawTag of tagFilter) {
         let negative = false;
+        let tag = rawTag;
+
         if (tag.startsWith('-')) {
             negative = true;
             tag = tag.slice(1);
@@ -68,28 +70,29 @@ exports.GET = async (req, res) => {
         });
     }
 
+    const where = {
+        AND: [
+            { visible: true },
+            ...processedFilters
+        ]
+    };
+
+    if (req.query.count === 'true') {
+        const count = await prisma.post.count({ where });
+        return res.status(200).json({ count });
+    }
+
     const posts = await prisma.post.findMany({
         skip: page * take,
         take,
-        where: {
-            AND: [
-                { visible: true },
-                ...processedFilters
-            ]
-        },
+        where,
         include: {
             tags: {
-                include: {
-                    group: true
-                },
-                orderBy: {
-                    name: 'desc'
-                }
+                include: { group: true },
+                orderBy: { name: 'desc' }
             },
             files: {
-                select: {
-                    id: true
-                }
+                select: { id: true }
             }
         },
         orderBy: {

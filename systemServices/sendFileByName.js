@@ -29,16 +29,15 @@ module.exports = async function sendFileByName(res, filename, blur) {
 
     const fileSize = stat.size;
     const range = req.headers.range;
-    const contentType = mime.lookup(filePath) || 'application/octet-stream';
+    const contentType = mime.lookup(filePath);
     const thumbnailHeight = parseInt(req.query?.thumbnail, 10);
 
-    // Определяем, нужно ли применять блюр
     const blurParam = typeof req.query.blur === 'string' ? req.query.blur.toLowerCase() : '';
     const shouldBlur =
         blur === true ||
         blurParam === 'true' || blurParam === '1' || blurParam === 'yes';
 
-    const blurPower = Math.min(200, Math.max(0.3, Math.min(filestats.width || 1000, filestats.height || 1000, thumbnailHeight||1000) * blurMult))
+    const blurPower = Math.min(200, Math.max(0.3, Math.min(filestats.width || 1000, filestats.height || 1000, thumbnailHeight || 1000) * blurMult))
 
     if (thumbnailHeight && !isNaN(thumbnailHeight)) {
         if (contentType.startsWith('video/') || contentType === 'application/mp4') {
@@ -126,6 +125,10 @@ module.exports = async function sendFileByName(res, filename, blur) {
             console.error('Full image blur error:', err);
             return res.status(500).send('Error processing image');
         }
+    }
+
+    if (contentType.endsWith('mp4') && shouldBlur) {
+        return res.status(403).send('Video is not available in blur')
     }
 
     if (range) {

@@ -13,9 +13,11 @@ const itemsPerPage = 10
 export async function render(params) {
     const container = new Elem('search-container')
 
+    let currentTags = []
+
     const posts = new Elem('posts-field', container.element)
 
-    async function renderPosts(tags, page, take) {
+    async function renderPosts(tags, page = 0, take = itemsPerPage) {
         posts.wipe()
         const req = []
 
@@ -23,20 +25,39 @@ export async function render(params) {
         if (page) req.push(`p=${page}`)
         if (take) req.push(`t=${take}`)
 
-        const postsResp = await API('GET', `/api/posts${req.length > 0 ? `?${req.join('&')}` : ''}`)
+        const query = req.length > 0 ? `?${req.join('&')}` : ''
+
+        const postsResp = await API('GET', `/api/posts${query}`)
 
         for (const post of postsResp.posts) {
             new PostCard(post, posts.element)
         }
     }
 
-    renderPosts([], 0, itemsPerPage)
+    async function getPostsCount(tags) {
+        const pagesCount = await API('GET', `/api/posts?count=true${tags.length > 0 ? `&tags=${tags.join('+')}` : ''}`)
+        return pagesCount.count
+    }
 
-    const searchField = new SearchField(container.element, renderPosts)
+    renderPosts(currentTags, 0, itemsPerPage)
+
+    const searchField = new SearchField(container.element)
+
+    const pagesCount = Math.ceil((await getPostsCount(currentTags)) / itemsPerPage)
+    const pageNav = new PageNavigator(pagesCount, 1, container.element)
 
     posts.moveAfter(searchField.element)
+    pageNav.moveAfter(posts.element)
 
-    const pageNav = new PageNavigator(itemsPerPage, 30, container.element)
+    pageNav.addNavCB((page) => {
+        renderPosts(currentTags, page - 1, itemsPerPage)
+    })
+
+    searchField.addSearchCB(async (tags) => {
+        currentTags = tags
+        renderPosts(currentTags, 0, itemsPerPage)
+        pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), 1)
+    })
 
     return container.element;
 }

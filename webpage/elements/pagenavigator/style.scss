@@ -1,21 +1,28 @@
-.internal-page-navigator{
-    display: flex;
-    flex-direction: row;
+.internal-page-navigator {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
     align-items: center;
     gap: 10px;
     border: 3px solid var(--outline);
     padding: 10px;
     border-radius: 20px;
 
-    .page-button{
+    .page-button {
         font-size: 18px;
         background-color: var(--background);
         padding: 3px 6px;
         border-radius: 3px;
+        aspect-ratio: 1 / 1;
+        transition: 0.1s;
+        min-width: 20px;
 
-        &:hover{
-            background-color: var(--outline);
-            color: var(--background);
+        &.active {
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--outline);
+                color: var(--background);
+            }
         }
     }
 }

@@ -87,7 +87,7 @@ const LANG = {
     },
     main: {
         welcome: 'Welcome to',
-        featured: 'Feautured posts',
+        featured: 'Featured posts',
     },
     postView: {
         hiddenLabel: 'This post is not visible',

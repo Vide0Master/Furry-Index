@@ -2,7 +2,7 @@ import Elem from "../../components/elem/script.js";
 import Icon from "../../components/icon/script.js";
 
 export default class SearchField extends Elem {
-    constructor(parent, searchCB = true) {
+    constructor(parent) {
         super('internal-search-field', parent)
 
         const searchInput = new Elem('search-field', this.element, 'input')
@@ -11,18 +11,27 @@ export default class SearchField extends Elem {
 
         const searchIcon = new Icon('search', this.element, null, "20x20")
 
-        if (searchCB) {
-            searchInput.element.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') {
-                    searchCB(searchInput.element.value.split(' '))
-                } else if (e.key === 'Escape') {
-                    searchInput.element.blur()
-                }
-            })
-
-            searchIcon.element.addEventListener('click', () => {
-                searchCB(searchInput.element.value.split(' '))
-            })
+        this.getTags = () => {
+            return searchInput.element.value.split(' ')
         }
+
+        this.callbacks = []
+
+        this.addSearchCB = (func) => {
+            this.callbacks.push(func)
+        }
+
+        searchInput.element.addEventListener('keyup', (e) => {
+            switch (e.key) {
+                case 'Enter': this.startCallbacks(); break
+                case 'Escape': searchInput.element.blur(); break;
+            }
+        })
+
+        searchIcon.element.addEventListener('click', this.startCallbacks)
+    }
+
+    startCallbacks() {
+        this.callbacks.forEach((cb) => cb(this.getTags()))
     }
 }

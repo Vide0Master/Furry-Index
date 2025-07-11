@@ -32,6 +32,10 @@ export default class Elem {
         this.wipe = () => {
             this.element.innerHTML = ''
         }
+
+        this.addEvent = (event, func) => {
+            this.element.addEventListener(event, func)
+        }
     }
 
     get text() {
