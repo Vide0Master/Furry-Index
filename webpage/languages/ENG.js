@@ -220,6 +220,9 @@ const LANG = {
                 'Post',
                 'edited successfully'
             ]
+        },
+        search:{
+            label:'Search'
         }
     },
     features: {

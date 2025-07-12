@@ -1,5 +1,6 @@
 import Elem from "../../components/elem/script.js";
 import Icon from "../../components/icon/script.js";
+import Language from "../../scripts/language.js";
 
 export default class SearchField extends Elem {
     constructor(parent) {
@@ -7,7 +8,7 @@ export default class SearchField extends Elem {
 
         const searchInput = new Elem('search-field', this.element, 'input')
         searchInput.element.type = 'text'
-        searchInput.element.placeholder = 'Search...'
+        searchInput.element.placeholder = `${Language.lang.elements.search.label}...`
 
         const searchIcon = new Icon('search', this.element, null, "20x20")
 
