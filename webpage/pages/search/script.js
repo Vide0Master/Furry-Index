@@ -3,7 +3,6 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 import API from "../../scripts/api.js";
-import Language from "../../scripts/language.js";
 
 export const tag = "search";
 export const tagLimit = 1;

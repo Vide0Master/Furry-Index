@@ -98,8 +98,6 @@ export async function render(params) {
     const PData = postData.post;
     const postDataBlock = new Elem('post-data-block', container.element);
 
-    console.log(PData)
-
     renderTags(PData.tags, postDataBlock.element);
     renderUploadData(PData.owner, PData.createdOn, postDataBlock.element);
     renderRating(PData.rating, postDataBlock.element)

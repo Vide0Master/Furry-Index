@@ -4,17 +4,23 @@
     align-items: center;
     gap: 10px;
     border: 3px solid var(--outline);
-    padding: 10px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 100vh;
+    width: fit-content;
 
     .page-button {
         font-size: 18px;
         background-color: var(--background);
         padding: 3px 6px;
         border-radius: 3px;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 1 / 1.25;
         transition: 0.1s;
         min-width: 20px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
 
         &.active {
             cursor: pointer;

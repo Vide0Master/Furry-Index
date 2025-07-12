@@ -91,9 +91,7 @@ exports.GET = async (req, res) => {
                 include: { group: true },
                 orderBy: { name: 'desc' }
             },
-            files: {
-                select: { id: true }
-            }
+            files: true
         },
         orderBy: {
             createdOn: 'desc'

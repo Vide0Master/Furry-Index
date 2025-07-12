@@ -1,12 +1,17 @@
 .postmaster-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
     .head-bar {
         background-color: var(--background);
         width: 100%;
         padding: 10px;
         border-radius: 100vh;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
     }
 
     .posts-field{

@@ -88,5 +88,10 @@ exports.GET = async (req, res) => {
         }
     })
 
+    if (req.query.count === 'true') {
+        const count = await prisma.file.count({ where: baseWhere });
+        return res.status(200).json({ files: userFiles, count });
+    }
+
     return res.status(200).json({ files: userFiles })
 }

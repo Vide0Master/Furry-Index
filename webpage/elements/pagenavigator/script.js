@@ -5,7 +5,6 @@ const pageElems = 9
 export default class PageNavigator extends Elem {
     constructor(pages, current, parent) {
         super('internal-page-navigator', parent);
-        console.log('pages:' + pages + ', current:' + current)
 
         this.renderButtons(pages, current)
 
@@ -38,8 +37,10 @@ export default class PageNavigator extends Elem {
 
             const pageN = current - negative + i
             if (pageN <= 0 || pageN > pages) continue
-            pageButton.text = pageN
+            
             pageButton.element.classList.add('active')
+
+            new Elem(null, pageButton.element).text = pageN
 
             pageButton.addEvent('hover', () => {
                 this.hover(pageN)
