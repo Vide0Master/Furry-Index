@@ -25,7 +25,6 @@ export default async function makePostMaker(postData, editedCB) {
             .filter(tag => !tag?.group || tag.group.basename !== 'meta')
             .map(tag => tag.name) || []
     }
-    console.log(PostData)
 
     const postname = new TextInputLine(Language.lang.elements.postMaker.postName, container.element, null, null, (value) => {
         PostData.name = value

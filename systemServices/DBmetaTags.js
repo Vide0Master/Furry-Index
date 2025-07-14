@@ -19,11 +19,13 @@ module.exports = async () => {
         update: {
             name: { ENG: 'Meta' },
             locked: true,
+            priority: -1
         },
         create: {
             basename: 'meta',
             name: { ENG: 'Meta' },
             locked: true,
+            priority: -1
         }
     })
 

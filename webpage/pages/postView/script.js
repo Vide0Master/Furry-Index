@@ -13,9 +13,67 @@ export const tag = "postView";
 export const tagLimit = 10;
 
 function renderTags(tags, parent) {
+    const groups = [];
+
+    for (const tag of tags) {
+        const basename = typeof tag.group?.basename === 'string'
+            ? tag.group.basename
+            : 'default';
+
+        const groupIndex = groups.findIndex(g => g.basename === basename);
+
+        if (groupIndex === -1) {
+            const groupObj = tag.group
+                ? { ...tag.group }
+                : {
+                    basename: 'default',
+                    name: { ENG: 'Tags' },
+                    priority: 0,
+                    color: '#5b34eb'
+                };
+
+            groupObj.tags = [{
+                name: tag.name,
+                count: tag.count,
+                group: {
+                    basename: groupObj.basename,
+                    name: groupObj.name,
+                    color: groupObj.color
+                }
+            }];
+
+            groups.push(groupObj);
+        } else {
+            const existing = groups[groupIndex];
+            existing.tags.push({
+                name: tag.name,
+                count: tag.count,
+                group: {
+                    basename: existing.basename,
+                    name: existing.name,
+                    color: existing.color
+                }
+            });
+        }
+    }
+
+    for (const group of groups) {
+        group.tags.sort((a, b) => b.count - a.count);
+    }
+
+    groups.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+
     const postTagsElem = new Elem('post-tags-column', parent);
-    new Elem('tag-label', postTagsElem.element).text = Language.lang.postView.tagsLabel;
-    tags.forEach(tag => new Tag(tag, postTagsElem.element));
+
+    for (const group of groups) {
+        const tagsBlock = new Elem('tags-block', postTagsElem.element);
+
+        new Elem('tag-group-label', tagsBlock.element).text = group.name[Language.currentLang];
+
+        for (const tag of group.tags) {
+            new Tag(tag, tagsBlock.element);
+        }
+    }
 }
 
 function renderUploadData(owner, createdOn, parent) {

@@ -43,10 +43,12 @@
             display: flex;
             flex-direction: column;
             align-items: start;
-            gap: 5px;
+            gap: 10px;
 
-            .tag-label {
-                justify-self: start;
+            .tags-block {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
             }
         }
 
@@ -66,9 +68,12 @@
     .post-conatiner {
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 10px;
 
         .post-label {
+            align-self: normal;
+
             .post-name {
                 font-size: 25px;
             }

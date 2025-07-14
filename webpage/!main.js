@@ -7,8 +7,8 @@ import User from "./scripts/userdata.js"
 
 //on dom load
 document.addEventListener('DOMContentLoaded', async () => {
-    await User.updateUserData()
     await AppInfo.getAppInfo()
+    await User.updateUserData()
     Header.render()
     Main.render()
     Footer.render()

@@ -4,8 +4,12 @@
     align-items: center;
     gap: 5px;
     background-color: #fff;
-    border-radius: 100vh;
+    border-radius: 15px;
     width: fit-content;
+    overflow: visible;
+    position: relative;
+    z-index: 1000;
+    transition: 0.2s;
 
     input {
         font-size: 16px;
@@ -25,5 +29,67 @@
     .icon-elem {
         --icon-color: #000;
         margin-right: 7px;
+    }
+
+    &.autocomplete-visible {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    .search-autocomplete {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        border-radius: 15px;
+
+        background-color: color-mix(in srgb, var(--background) 75%, transparent 25%);
+        backdrop-filter: blur(5px);
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        max-height: 0px;
+        animation: search-autocomplete-out 0.2s ease forwards;
+
+        .tag-element {
+            cursor: pointer;
+
+            &.active,
+            &:hover {
+                border-right-width: 10px;
+            }
+        }
+
+        &.autocomplete-visible {
+            animation: search-autocomplete-in 0.2s 0.2s ease forwards;
+        }
+
+        @keyframes search-autocomplete-in {
+            from {
+                max-height: 0px;
+                padding: 0px;
+            }
+
+            to {
+                max-height: 300px;
+                padding: 7px;
+            }
+        }
+
+        @keyframes search-autocomplete-out {
+            from {
+                max-height: 300px;
+                padding: 7px;
+            }
+
+            to {
+                max-height: 0px;
+                padding: 0px;
+            }
+        }
     }
 }

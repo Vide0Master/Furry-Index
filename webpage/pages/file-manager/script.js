@@ -1,8 +1,10 @@
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
+import Video from "../../components/video/script.js";
 import FileCard from "../../elements/fileCard/script.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
 import SearchField from "../../elements/searchfield/script.js";
+import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
 
@@ -32,7 +34,22 @@ export async function render(params) {
 
         const filesResp = await API('GET', `/api/files${query}`)
         for (const file of filesResp.files) {
-            new FileCard(file, false, fileField.element)
+            const fcard = new FileCard(file, false, fileField.element)
+
+            fcard.image.image.setAttribute('draggable', 'false')
+
+            fcard.image.addEvent('click', () => {
+                const overlay = new Overlay()
+                const scrollCont = new Elem('file-manager-preview-scroll-cont', overlay.element)
+                switch (true) {
+                    case ['mp4', 'webm', 'mkv'].includes(file.filetype): {
+                        new Video(`/file/${file.id}`, scrollCont.element)
+                    }; break
+                    default: {
+                        new Image(`/file/${file.id}`, 'file image', scrollCont.element)
+                    }; break
+                }
+            })
         }
     }
 

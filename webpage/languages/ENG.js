@@ -7,6 +7,11 @@ const LANG = {
             NOLINK: 'Does not have link assigned'
         }
     },
+    BUILD: {
+        dev: 'DEVELOPMENT BUILD',
+        eval: 'EVALUATION BUILD',
+        sdb: 'SEPARATE DATABASE PROVIDED'
+    },
     header: {
         main: 'Main',
         search: 'Search',
@@ -221,8 +226,8 @@ const LANG = {
                 'edited successfully'
             ]
         },
-        search:{
-            label:'Search'
+        search: {
+            label: 'Search'
         }
     },
     features: {

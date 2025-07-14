@@ -33,8 +33,8 @@ export default class Elem {
             this.element.innerHTML = ''
         }
 
-        this.addEvent = (event, func) => {
-            this.element.addEventListener(event, func)
+        this.addEvent = (event, func, once = false) => {
+            this.element.addEventListener(event, func, { once })
         }
     }
 

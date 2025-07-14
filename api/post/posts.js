@@ -88,8 +88,8 @@ exports.GET = async (req, res) => {
         where,
         include: {
             tags: {
-                include: { group: true },
-                orderBy: { name: 'desc' }
+                include: { group: true, _count: true },
+                orderBy: { name: 'desc' },
             },
             files: true
         },
@@ -97,6 +97,13 @@ exports.GET = async (req, res) => {
             createdOn: 'desc'
         }
     });
+
+    for (const post of posts) {
+        for (const tag of post.tags) {
+            tag.count = tag._count.posts;
+            delete tag._count
+        }
+    }
 
     return res.status(200).json({ posts });
 };
@@ -159,4 +166,31 @@ exports.POST = async (req, res) => {
     if (!newPost) return res.status(500).send('Error creating post!')
 
     res.status(200).json({ postID: newPost.id })
+}
+
+exports.OPTIONS = async (req, res) => {
+
+    if (!req.body?.text) return res.status(400).send('No text provided!')
+
+    const tagsMatch = await prisma.tag.findMany({
+        where: {
+            name: {
+                startsWith: req.body.text,
+                mode: 'insensitive'
+            }
+        },
+        include: {
+            _count: true
+        },
+        orderBy: { name: 'asc' }
+    })
+
+
+    for (const tag of tagsMatch) {
+        tag.count = tag._count.posts;
+        delete tag._count
+    }
+
+
+    return res.status(200).json({ complete: tagsMatch })
 }

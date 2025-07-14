@@ -30,11 +30,11 @@ function createDevInfoBanner(appinfo) {
     const text = new Elem('text', devBuildInfo.element)
     switch (true) {
         case appinfo.isDev: {
-            text.text = 'DEVELOPMENT BUILD'
+            text.text = Language.lang.BUILD.dev
         }; break;
         case appinfo.isEval: {
-            text.text = 'EVALUATION BUILD'
+            text.text = Language.lang.BUILD.eval
         }; break;
     }
-    new Elem('text', devBuildInfo.element).text = 'SEPARATE DATABASE PROVIDED'
+    new Elem('text', devBuildInfo.element).text = Language.lang.BUILD.sdb
 }

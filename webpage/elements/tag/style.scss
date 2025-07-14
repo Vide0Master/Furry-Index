@@ -1,6 +1,6 @@
 .tag-element {
     width: fit-content;
-    padding: 3px 6px;
+    padding: 4px 8px;
     border: solid 2px var(--tag-color);
     color: var(--tag-color);
     border-radius: 100vh;
@@ -10,7 +10,9 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 5px;
+
+    transition: 0.2s;
 
     .tag-name {
         width: fit-content;

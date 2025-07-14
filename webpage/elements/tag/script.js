@@ -11,6 +11,8 @@ export default class Tag extends Elem {
 
         text.text = tagData.name
 
+        if (tagData.count) new Elem('count', this.element).text = tagData.count
+
         if (tagData.group) {
             this.element.title = tagData?.group.name[Language.currentLang] ? tagData.group.name[Language.currentLang] : tagData.group.basename
         }

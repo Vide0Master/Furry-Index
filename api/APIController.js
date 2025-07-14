@@ -47,7 +47,7 @@ for (let i = 0; i < apiFiles.length; i++) {
 
     for (const method in module) {
         if (['ROUTE', 'PERMISSIONS'].includes(method)) continue
-        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'SET'].includes(method)) {
+        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'].includes(method)) {
             cmd.bad(`Method ${method} is not allowed, skipping`, [cmd.preps.API])
             continue
         }
@@ -59,6 +59,7 @@ for (let i = 0; i < apiFiles.length; i++) {
         })
         routeCounter++
     }
+
     if (routeCounter == 0) {
         cmd.bad(`${path.basename(apiFiles[i])} does not contain any usable routes`, [cmd.preps.API])
     }

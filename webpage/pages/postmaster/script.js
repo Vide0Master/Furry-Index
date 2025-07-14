@@ -37,7 +37,7 @@ export async function render(params) {
         const postsResp = await API('GET', `/api/posts${query}`)
 
         for (const post of postsResp.posts) {
-            new PostCard(post, postsField.element)
+            new PostCard(post, postsField.element, true, () => { renderPosts(currentTags, 0, itemsPerPage) })
         }
     }
 

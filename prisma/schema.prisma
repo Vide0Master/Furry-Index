@@ -72,6 +72,7 @@ model TagGroup {
     color    String  @default("#ffffff")
     tags     Tag[]
     locked   Boolean @default(false)
+    priority Int     @default(0)
 
     @@index([basename])
 }

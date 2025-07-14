@@ -29,8 +29,10 @@ exports.GET = async (req, res) => {
                             basename: true,
                             name: true,
                             color: true,
+                            priority: true,
                         }
-                    }
+                    },
+                    _count: true
                 }
             },
             owner: {
@@ -44,6 +46,11 @@ exports.GET = async (req, res) => {
     })
 
     if (!post.visible && user?.id != post.ownerid) return res.status(403).send('Post is not available')
+
+    for (const tag of post.tags) {
+        tag.count = tag._count.posts;
+        delete tag._count
+    }
 
     res.status(200).json({ post })
 }

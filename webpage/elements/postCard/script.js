@@ -85,11 +85,8 @@ export default class PostCard extends Elem {
         }
 
         if (!isInEditor) {
-            const postlink = new Link(null, `/post/${postData.id}`, null, true, 'post-link')
-            postlink.textElem.element.remove()
-
             this.element.addEventListener('click', () => {
-                postlink.element.click()
+                Router.navigate(`/post/${postData.id}`)
             })
 
             this.element.addEventListener('mouseenter', () => {
