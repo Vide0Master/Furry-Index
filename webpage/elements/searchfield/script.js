@@ -39,7 +39,7 @@ export default class SearchField extends Elem {
             }
         })
 
-        searchIcon.addEvent('click', this.startCallbacks)
+        searchIcon.addEvent('click', () => { this.startCallbacks() })
 
         if (typeof autocompleteLink === 'string') {
             const autocompleteField = new Elem('search-autocomplete', this.element)
@@ -69,6 +69,9 @@ export default class SearchField extends Elem {
 
                 if (tags.length == 0) {
                     autocompleteField.switchVisible(false)
+                    currentTag = 0
+                    tagsAutocomp = []
+                    if (timeout) clearTimeout(timeout)
                     return
                 } else {
                     autocompleteField.switchVisible(true)
@@ -76,7 +79,12 @@ export default class SearchField extends Elem {
 
                 const latestTag = tags[tags.length - 1]
 
-                if (latestTag.length < 2) return
+                if (latestTag.length < 2) {
+                    currentTag = 0
+                    tagsAutocomp = []
+                    if (timeout) clearTimeout(timeout)
+                    return
+                }
 
                 currentTag = 0
                 tagsAutocomp = []
@@ -84,12 +92,12 @@ export default class SearchField extends Elem {
                 if (timeout) clearTimeout(timeout)
 
                 timeout = setTimeout(async () => {
-                    const recommendations = await API('OPTIONS', '/api/posts', { text: latestTag })
+                    const recommendations = await API('GET', `${autocompleteLink}?q=${latestTag}`)
                     autocompleteVisible(true)
                     recommendations.complete.sort((a, b) => b.count - a.count)
                     recommendations.complete.forEach((tag) => {
                         const tagElem = new Tag(tag, autocompleteField.element)
-                        tagElem.addEvent('click',()=>{
+                        tagElem.addEvent('click', () => {
                             tags.pop()
                             tags.push(tag.name)
                             console.log(tags)
@@ -102,7 +110,7 @@ export default class SearchField extends Elem {
                         })
                         tagsAutocomp.push({ name: tag.name, elem: tagElem })
                     })
-                }, 1000)
+                }, 500)
             })
 
             searchInput.addEvent('keydown', async (e) => {
@@ -154,7 +162,9 @@ export default class SearchField extends Elem {
             })
 
             searchInput.addEvent('focusout', () => {
-                autocompleteVisible(false)
+                setTimeout(() => {
+                    autocompleteVisible(false)
+                }, 100)
             })
 
             searchInput.addEvent('focusin', () => {
@@ -164,6 +174,7 @@ export default class SearchField extends Elem {
     }
 
     startCallbacks() {
+        console.log(this.callbacks)
         this.callbacks.forEach((cb) => cb(this.getTags()))
     }
 }

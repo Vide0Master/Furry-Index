@@ -167,30 +167,3 @@ exports.POST = async (req, res) => {
 
     res.status(200).json({ postID: newPost.id })
 }
-
-exports.OPTIONS = async (req, res) => {
-
-    if (!req.body?.text) return res.status(400).send('No text provided!')
-
-    const tagsMatch = await prisma.tag.findMany({
-        where: {
-            name: {
-                startsWith: req.body.text,
-                mode: 'insensitive'
-            }
-        },
-        include: {
-            _count: true
-        },
-        orderBy: { name: 'asc' }
-    })
-
-
-    for (const tag of tagsMatch) {
-        tag.count = tag._count.posts;
-        delete tag._count
-    }
-
-
-    return res.status(200).json({ complete: tagsMatch })
-}

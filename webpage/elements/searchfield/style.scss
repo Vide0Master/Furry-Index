@@ -60,7 +60,7 @@
 
             &.active,
             &:hover {
-                border-right-width: 10px;
+                border-color: var(--outline-highlight);
             }
         }
 

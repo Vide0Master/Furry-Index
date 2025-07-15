@@ -40,7 +40,7 @@ export async function render(params) {
 
     renderPosts(currentTags, 0, itemsPerPage)
 
-    const searchField = new SearchField(container.element, '/api/posts')
+    const searchField = new SearchField(container.element, '/api/posts/tags')
 
     const pagesCount = Math.ceil((await getPostsCount(currentTags)) / itemsPerPage)
     const pageNav = new PageNavigator(pagesCount, 1, container.element)

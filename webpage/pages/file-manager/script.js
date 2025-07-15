@@ -60,7 +60,7 @@ export async function render(params) {
 
     renderFiles(currentTags, 0, itemsPerPage)
 
-    const searchField = new SearchField(searchBar.element)
+    const searchField = new SearchField(searchBar.element, '/api/files/tags')
 
     const pagesCount = Math.ceil((await getFilesCount(currentTags)) / itemsPerPage)
     const pageNav = new PageNavigator(pagesCount, 1, container.element)
