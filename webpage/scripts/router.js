@@ -32,7 +32,7 @@ class Router {
                 if (href.startsWith('http') || href.startsWith('//')) return;
 
                 e.preventDefault();
-                await this.navigate(href);
+                await this.navigate(href, e.target.parentElement);
             }
         });
 
@@ -67,7 +67,8 @@ class Router {
         }
     }
 
-    static async navigate(path) {
+    static async navigate(path, initElem) {
+        console.log(initElem)
         Overlay.clearOverlays()
         this.init();
         if (window.location.pathname + window.location.search !== path) {
