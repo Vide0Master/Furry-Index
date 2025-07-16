@@ -55,15 +55,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy compose + .env via SCP
-        uses: appleboy/scp-action@v1
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          source: "docker-compose.yml,.env"
-          target: "${{ secrets.REMOTE_PATH }}/"
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy compose + .env via scp
+        run: |
+          scp -o StrictHostKeyChecking=no \
+            docker-compose.yml .env \
+            ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}/
 
       - name: Deploy on remote server
         run: |
