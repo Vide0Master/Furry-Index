@@ -70,6 +70,13 @@ exports.GET = async (req, res) => {
         });
     }
 
+    const visibility = {
+        OR: [
+            { visible: true },
+            user.id ? { ownerid: user.id } : undefined
+        ]
+    }
+
     const where = {
         AND: [
             { visible: true },
