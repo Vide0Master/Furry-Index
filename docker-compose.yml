@@ -8,6 +8,8 @@ services:
       - ENVIROMENT=${ENVIROMENT}
     volumes:
       - ./file_storage:/app/file_storage
+    ports:
+      - "${FIPORT}:3000"
     depends_on:
       postgres:
         condition: service_healthy

@@ -39,6 +39,7 @@ jobs:
 
     env:
       ENVIROMENT: "EVAL"
+      FIPORT: "4100"
       PGPORT: "11000"
 
     steps:
@@ -49,6 +50,7 @@ jobs:
         run: |
           echo "ENVIROMENT=${ENVIROMENT}" > .env
           echo "PGPORT=${PGPORT}"           >> .env
+          echo "FIPORT=${FIPORT}"             >>> .env
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
