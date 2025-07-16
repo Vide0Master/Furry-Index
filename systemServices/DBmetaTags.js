@@ -17,13 +17,13 @@ module.exports = async () => {
     const tagGroup = await prisma.tagGroup.upsert({
         where: { basename: 'meta' },
         update: {
-            name: { ENG: 'Meta' },
+            name: { ENG: 'Meta', UA: 'Мета', RU: 'Мета' },
             locked: true,
             priority: -1
         },
         create: {
             basename: 'meta',
-            name: { ENG: 'Meta' },
+            name: { ENG: 'Meta', UA: 'Мета', RU: 'Мета' },
             locked: true,
             priority: -1
         }

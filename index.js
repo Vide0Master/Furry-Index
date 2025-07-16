@@ -16,8 +16,10 @@ if (globalVariables.DEVmode) {
     cmd.info(`${cmd.colorize('Furdex', 'cyan')} is running in ${cmd.colorize('DEVELOPMENT', 'red')} mode, some features will not be available in production mode.`, [cmd.preps.Debug, cmd.preps.System])
 }
 
-require('./systemServices/DBmetaTags')()
+require('./systemServices/DBmetaTags.js')()
 
-require('./systemServices/checkFileIntegrity')()
+require('./systemServices/checkFileIntegrity.js')()
 
-require('./systemServices/webServer')
+require('./systemServices/sync-langs.js')
+
+require('./systemServices/webServer.js')

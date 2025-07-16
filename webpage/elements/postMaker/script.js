@@ -37,7 +37,7 @@ export default async function makePostMaker(postData, editedCB) {
     postdesc.input = PostData.description != '' ? PostData.description : ''
 
     new DropdownList(
-        (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: val, value: val })),
+        (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.rating[val], value: val })),
         container.element, Language.lang.elements.postMaker.postRating, (val) => { PostData.rating = val }
     ).element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
 
@@ -104,7 +104,7 @@ export default async function makePostMaker(postData, editedCB) {
 
     if (PostData.files.length != 0) getFiles(postType.element.value, PostData.files)
 
-    const tagsField = new BigTextField('Tags', container.element, 'custom', (val) => {
+    const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, 'custom', (val) => {
         const tags = val.split(' ').filter(tag => tag != '' && !tag.startsWith('#'))
         tagsField.setLimit(tags.length)
         PostData.tags = tags.map(tag => `${tag}`)

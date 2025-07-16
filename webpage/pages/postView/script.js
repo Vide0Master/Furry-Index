@@ -9,6 +9,11 @@ import formatDate from "../../scripts/formatDate.js";
 import formatFileSize from "../../scripts/formatFileSize.js";
 import Language from "../../scripts/language.js";
 
+function capitalizeFirst(str) {
+    if (!str) return '';
+    return str[0].toUpperCase() + str.slice(1);
+}
+
 export const tag = "postView";
 export const tagLimit = 10;
 
@@ -27,7 +32,7 @@ function renderTags(tags, parent) {
                 ? { ...tag.group }
                 : {
                     basename: 'default',
-                    name: { ENG: 'Tags' },
+                    name: { ENG: 'Tags', UA: 'Мета', RU: 'Мета' },
                     priority: 0,
                     color: '#5b34eb'
                 };
@@ -68,7 +73,7 @@ function renderTags(tags, parent) {
     for (const group of groups) {
         const tagsBlock = new Elem('tags-block', postTagsElem.element);
 
-        new Elem('tag-group-label', tagsBlock.element).text = group.name[Language.currentLang];
+        new Elem('tag-group-label', tagsBlock.element).text = !!group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
 
         for (const tag of group.tags) {
             new Tag(tag, tagsBlock.element);
