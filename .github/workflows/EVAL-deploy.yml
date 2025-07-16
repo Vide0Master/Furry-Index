@@ -49,8 +49,8 @@ jobs:
       - name: Generate .env
         run: |
           echo "ENVIROMENT=${ENVIROMENT}" > .env
-          echo "PGPORT=${PGPORT}"           >> .env
-          echo "FIPORT=${FIPORT}"             >>> .env
+          echo "PGPORT=${PGPORT}" >> .env
+          echo "FIPORT=${FIPORT}" >> .env
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
