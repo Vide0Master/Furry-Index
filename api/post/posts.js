@@ -75,7 +75,7 @@ exports.GET = async (req, res) => {
             {
                 OR: [
                     { visible: true },
-                    user.id ? { ownerid: user.id } : undefined
+                    user ? { ownerid: user.id } : undefined
                 ]
             },
             ...processedFilters
