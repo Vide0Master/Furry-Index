@@ -1,5 +1,8 @@
 FROM node:20.19.1-alpine
 
+RUN apk update && \
+    apk add --no-cache ffmpeg
+
 ENV DATABASE_URL=postgresql://postgres:postgres@postgres:5432/furry-index?schema=public
 WORKDIR /app
 
