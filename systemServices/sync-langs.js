@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const cmd = require('./cmdPretty')
 
 const LANG_DIR = path.join(__dirname, '../webpage', 'languages');
 
@@ -91,12 +92,12 @@ for (const code of LANGUAGE_CODES) {
     if (fs.existsSync(filePath)) {
         targetLang = parseLangFile(filePath);
     } else {
-        console.log(`⚠ Язык ${code} отсутствует — будет создан`);
+        cmd.warn(`Language ${code} is missing, creating...`, [cmd.preps.Debug, cmd.preps.System, { text: "Language sync", color: "green" }]);
     }
 
     const synced = syncLang(baseLang, targetLang);
     const output = generateLangFile(synced);
     fs.writeFileSync(filePath, output, 'utf-8');
 
-    console.log(`✔ Синхронизирован: ${fileName}`);
+    cmd.ok(`${fileName}`, [cmd.preps.Debug, cmd.preps.System, { text: "Language sync", color: "green" }])
 }

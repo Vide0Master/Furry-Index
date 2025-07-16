@@ -1,0 +1,68 @@
+name: Build and deploy Furry Index (EVALUATION)
+
+on:
+  push:
+    branches:
+      - evaluation
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Docker Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:latest
+          IMAGE_NAME=${IMAGE_NAME,,}
+          docker build -t $IMAGE_NAME .
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      - name: Push Docker image
+        run: docker push $IMAGE_NAME
+
+  remote-deploy:
+    runs-on: ubuntu-latest
+
+    needs: build-and-push
+
+    env:
+      ENVIROMENT: "EVAL"
+      PGPORT: "11000"
+
+    steps:
+      - name: Checkout (again for copying compose file)
+        uses: actions/checkout@v3
+
+      - name: Generate .env
+        run: |
+          echo "ENVIROMENT=${ENVIROMENT}" > .env
+          echo "PGPORT=${PGPORT}"           >> .env
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy compose + .env via SCP
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "docker-compose.yml,.env"
+          target: "${{ secrets.REMOTE_PATH }}/"
+
+      - name: Deploy on remote server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
+            cd ${{ secrets.REMOTE_PATH }}
+            docker compose pull
+            docker compose up -d
+          EOF
