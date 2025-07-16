@@ -33,6 +33,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      furry_index_net:
+        ipv4_address: 172.28.0.11
 
 networks:
   furry_index_net:
