@@ -141,15 +141,15 @@ export async function render(params) {
             const registerResult = await API('POST', '/api/register', registerData)
 
             if (registerResult.HTTPCODE == 200) {
-                if (autologin.checkbox.element.value) {
+                if (autologin.checkbox.checked) {
                     const loginResult = await API('POST', '/api/login', {
                         login: registerData.username,
                         password: registerData.password,
-                        remember: rememberMe.checkbox.element.value,
+                        remember: rememberMe.checkbox.checked,
                     })
 
                     if (loginResult.HTTPCODE == 200) {
-                        new Alert.Simple(`${Language.lang.login.success[0]} ${registerData.login}`, Language.lang.login.success[1], 5000, '#109f10')
+                        new Alert.Simple(`${Language.lang.login.success[0]} ${registerData.username}`, Language.lang.login.success[1], 5000, '#109f10')
                         await User.updateUserData()
                         UserLabel.checkUserData()
                         Header.checkUserLoginState()
