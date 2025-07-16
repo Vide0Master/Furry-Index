@@ -1,7 +1,6 @@
 .furry-index-logo {
     background: linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%);
     border-radius: 100vh;
-
     padding: 5px;
 
     .foreground {
@@ -13,6 +12,7 @@
             background-clip: text;
             background-image: linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%);
             color: transparent;
+            text-align: center;
         }
     }
 }
