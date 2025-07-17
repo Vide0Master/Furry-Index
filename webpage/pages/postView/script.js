@@ -32,7 +32,7 @@ function renderTags(tags, parent) {
                 ? { ...tag.group }
                 : {
                     basename: 'default',
-                    name: { ENG: 'Tags', UA: 'Мета', RU: 'Мета' },
+                    name: { ENG: 'Tags', UA: 'Теги', RU: 'Теги' },
                     priority: 0,
                     color: '#5b34eb'
                 };
