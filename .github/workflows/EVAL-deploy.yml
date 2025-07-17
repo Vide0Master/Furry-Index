@@ -49,7 +49,7 @@ jobs:
       - name: Generate .env
         run: |
           echo "ENVIROMENT=${ENVIROMENT}" > .env
-          echo "BUILDLNK=ghcr.io/${{ github.repository }}:evaluation" >> .env
+          echo "BUILDLNK=${IMAGE_NAME}" >> .env
           echo "PGPORT=${PGPORT}" >> .env
           echo "FIPORT=${FIPORT}" >> .env
 
