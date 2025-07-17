@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}:latest
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:evaluation
           IMAGE_NAME=${IMAGE_NAME,,}
           docker build -t $IMAGE_NAME .
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
@@ -49,6 +49,7 @@ jobs:
       - name: Generate .env
         run: |
           echo "ENVIROMENT=${ENVIROMENT}" > .env
+          echo "BUILDLNK=ghcr.io/${{ github.repository }}:evaluation" >> .env
           echo "PGPORT=${PGPORT}" >> .env
           echo "FIPORT=${FIPORT}" >> .env
 
