@@ -86,10 +86,12 @@ exports.PUT = async (req, res) => {
             const filesTags = await prisma.file.findMany({
                 where: { id: { in: req.body.files } },
                 select: {
-                    tags: { select: { name: true } }
+                    tags: { select: { name: true } },
+                    id: true
                 }
             });
             for (const file of filesTags) {
+                updateFileLastActivity(file.id)
                 for (const { name } of file.tags) {
                     if (!postTagsMap.has(name)) {
                         postTagsMap.set(name, { where: { name }, create: { name } });
@@ -133,6 +135,16 @@ exports.DELETE = async (req, res) => {
 
     if (!postID) return res.status(400).send('No postID in route')
 
+    const postData = await prisma.post.findUnique({
+        where: { id: postID },
+        select: {
+            files: true
+        }
+    })
+
+    for(const file of postData.files){
+        updateFileLastActivity(file.id)
+    }
 
     const rm = await prisma.post.deleteMany({
         where: {

@@ -180,10 +180,10 @@ const LANG = {
                 "Вага"
             ],
             linked: {
-                label: "Пов'язано з",
+                label: "Пов'язан з",
                 to: {
-                    post: "пост",
-                    pfavatar: "аватар"
+                    post: "постом",
+                    pfavatar: "аватаром"
                 }
             },
             delete: {

@@ -124,7 +124,8 @@ exports.POST = async (req, res) => {
         select: {
             tags: {
                 select: { name: true }
-            }
+            },
+            id:true
         }
     })
 
@@ -138,6 +139,7 @@ exports.POST = async (req, res) => {
     }))
 
     for (const file of filesTags) {
+        updateFileLastActivity(file.id)
         for (const tag of file.tags) {
             const exists = postTags.some(t => t.where.name === tag.name)
             if (!exists) {

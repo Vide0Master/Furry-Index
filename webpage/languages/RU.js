@@ -180,7 +180,7 @@ const LANG = {
                 "Вес"
             ],
             linked: {
-                label: "Связано с",
+                label: "Связан с",
                 to: {
                     post: "постом",
                     pfavatar: "аватаром"

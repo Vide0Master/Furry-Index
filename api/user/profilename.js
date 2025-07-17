@@ -1,3 +1,4 @@
+const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
@@ -55,6 +56,8 @@ exports.PUT = async (req, res) => {
         data
     })
 
+    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
+
     return res.status(200).send('Profile updated successfully')
 }
 
@@ -87,6 +90,8 @@ exports.DELETE = async (req, res) => {
         },
         data
     })
+    
+    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
     return res.status(200).send('Profile updated successfully')
 }

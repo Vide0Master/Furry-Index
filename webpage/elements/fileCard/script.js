@@ -13,7 +13,7 @@ import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 
-export default class FileCard extends Elem{
+export default class FileCard extends Elem {
     constructor(file, isUploadable, parent, options = { remove: true }) {
         super('file-card', parent)
 
@@ -124,10 +124,14 @@ export default class FileCard extends Elem{
             this.image = new Image(`/file/${file.id}?thumbnail=150`, 'file image', this.fileContainer.element)
 
             this.uploaded = new Elem('uploaded-on', this.element)
-
             new Icon('upload', this.uploaded.element)
-
             new Elem('uploaded-on-text', this.uploaded.element).text = formatDate(file.createdAt)
+
+            if (file.eraseOn) {
+                this.eraseOn = new Elem('erase-on', this.element)
+                new Icon('delete-file', this.eraseOn.element)
+                new Elem('erase-on-text', this.eraseOn.element).text = formatDate(file.eraseOn)
+            }
 
             const tagsList = new Elem('tags-list', this.element)
 

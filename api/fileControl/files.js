@@ -76,8 +76,7 @@ exports.GET = async (req, res) => {
                     icon: true,
                     group: {
                         select: { basename: true, color: true, name: true }
-                    },
-                    _count: true
+                    }
                 }
             },
             post: true,
@@ -94,9 +93,12 @@ exports.GET = async (req, res) => {
         return res.status(200).json({ files: userFiles, count });
     }
 
-    return res.status(200).json({ files: userFiles })
-}
+    for(const file of userFiles){
+        if(!file.avatarfor && !file.post){
+            const date = new Date(file.updatedAt)
+            file.eraseOn = date.setDate(date.getDate() + 2)
+        }
+    }
 
-exports.OPTIONS = async (req, res) => {
-    return res.status(200).json({ test: 'test' })
+    return res.status(200).json({ files: userFiles })
 }
