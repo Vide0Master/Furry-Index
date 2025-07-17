@@ -24,11 +24,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}:evaluation
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:latest
           IMAGE_NAME=${IMAGE_NAME,,}
           docker build -t $IMAGE_NAME .
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-          echo "image_name=$IMAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Push Docker image
         run: docker push $IMAGE_NAME
@@ -42,7 +41,6 @@ jobs:
       ENVIROMENT: "EVAL"
       FIPORT: "4100"
       PGPORT: "11000"
-      IMAGE_NAME: ${{ needs.build-and-push.outputs.image_name }}
 
     steps:
       - name: Checkout (again for copying compose file)
@@ -51,7 +49,6 @@ jobs:
       - name: Generate .env
         run: |
           echo "ENVIROMENT=${ENVIROMENT}" > .env
-          echo "BUILDLNK=${IMAGE_NAME}" >> .env
           echo "PGPORT=${PGPORT}" >> .env
           echo "FIPORT=${FIPORT}" >> .env
 

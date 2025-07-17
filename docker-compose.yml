@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${BUILDLNK}
+    image: ghcr.io/vide0master/furry-index:latest
     build:
       context: .
     restart: unless-stopped
