@@ -12,6 +12,7 @@ import getFileHash from "../../scripts/getFileHash.js";
 import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
+import Countdown from "../countdown/script.js";
 
 export default class FileCard extends Elem {
     constructor(file, isUploadable, parent, options = { remove: true }) {
@@ -130,7 +131,7 @@ export default class FileCard extends Elem {
             if (file.eraseOn) {
                 this.eraseOn = new Elem('erase-on', this.element)
                 new Icon('delete-file', this.eraseOn.element)
-                new Elem('erase-on-text', this.eraseOn.element).text = formatDate(file.eraseOn)
+                new Countdown(file.eraseOn, this.eraseOn.element, file.updatedAt)
             }
 
             const tagsList = new Elem('tags-list', this.element)
@@ -163,7 +164,9 @@ export default class FileCard extends Elem {
                     }
                 }
 
-                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, this.delete)
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, () => {
+                    new Alert.Confirm(`${Language.lang.elements.fileCard.delete.confirmText[0]} ${file.id}${Language.lang.elements.fileCard.delete.confirmText[1]}`, Language.lang.elements.fileCard.delete.confirm, () => { this.delete() })
+                })
             }
         }
     }

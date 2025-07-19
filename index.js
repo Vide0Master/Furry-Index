@@ -5,7 +5,19 @@ const cmd = require('./systemServices/cmdPretty')
 if (globalVariables.compactIntro) {
     cmd.log(cmd.colorize('Fur', 'brightYellow') + cmd.colorize('dex', 'brightCyan'))
 } else {
-    for (const line of sysConfig.label) {
+    const label = [
+        " ________                           __                     ",
+        "|        \\                         |  \\                    ",
+        "| $$$$$$$$__    __   ______    ____| $$  ______   __    __ ",
+        "| $$__   |  \\  |  \\ /      \\  /      $$ /      \\ |  \\  /  \\",
+        "| $$  \\  | $$  | $$|  $$$$$$\\|  $$$$$$$|  $$$$$$\\ \\$$\/  $$",
+        "| $$$$$  | $$  | $$| $$   \\$$| $$  | $$| $$    $$  >$$  $$ ",
+        "| $$     | $$__/ $$| $$      | $$__| $$| $$$$$$$$ /  $$$$\\ ",
+        "| $$      \\$$    $$| $$       \\$$    $$ \\$$     \\|  $$ \\$$\\",
+        " \\$$       \\$$$$$$  \\$$        \\$$$$$$$  \\$$$$$$$ \\$$   \\$$"
+    ]
+
+    for (const line of label) {
         cmd.log(cmd.colorize(line, 'brightCyan'))
     }
 }
@@ -23,3 +35,5 @@ require('./systemServices/checkFileIntegrity.js')()
 require('./systemServices/sync-langs.js')
 
 require('./systemServices/webServer.js')
+
+require('./systemServices/filePersistencyChecker.js')

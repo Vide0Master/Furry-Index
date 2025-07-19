@@ -1,3 +1,4 @@
+const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
@@ -63,6 +64,13 @@ exports.PUT = async (req, res) => {
     if (!postID) return res.status(400).send('No postID in route');
     if (!req.body) return res.status(400).send('No body request');
 
+    const post = await prisma.post.findUnique({
+        where: { id: postID },
+        include: { files: { select: { id: true } } }
+    })
+
+    if (!post) return res.status(404).send('Post not found')
+
     const restricted = ['id', 'ownerid', 'owner', 'createdOn'];
     if (Object.keys(req.body).some(key => restricted.includes(key))) {
         return res.status(403).send('Cant edit restricted fields');
@@ -71,6 +79,14 @@ exports.PUT = async (req, res) => {
     const updateData = {};
 
     if (req.body.files) {
+        for (const file of post.files) {
+            updateFileLastActivity(file.id)
+        }
+
+        for (const fileID of req.body.files) {
+            updateFileLastActivity(fileID)
+        }
+
         updateData.files = {
             set: req.body.files.map(id => ({ id }))
         };
@@ -86,12 +102,10 @@ exports.PUT = async (req, res) => {
             const filesTags = await prisma.file.findMany({
                 where: { id: { in: req.body.files } },
                 select: {
-                    tags: { select: { name: true } },
-                    id: true
+                    tags: { select: { name: true } }
                 }
             });
             for (const file of filesTags) {
-                updateFileLastActivity(file.id)
                 for (const { name } of file.tags) {
                     if (!postTagsMap.has(name)) {
                         postTagsMap.set(name, { where: { name }, create: { name } });
@@ -136,15 +150,15 @@ exports.DELETE = async (req, res) => {
     if (!postID) return res.status(400).send('No postID in route')
 
     const postData = await prisma.post.findUnique({
-        where: { id: postID },
-        select: {
-            files: true
-        }
+        where: {
+            id: postID
+        },
+        include: { files: { select: { id: true } } }
     })
 
-    for(const file of postData.files){
-        updateFileLastActivity(file.id)
-    }
+    if (!postData) return res.status(404).send('Post not found')
+
+    if (postData.ownerid != user.id) return res.status(403).send('You are not allowed to edit this post')
 
     const rm = await prisma.post.deleteMany({
         where: {
@@ -153,7 +167,11 @@ exports.DELETE = async (req, res) => {
         }
     })
 
-    if (rm.count == 0) return res.status(403).send('Removal denied')
+    if (rm.count == 0) return res.status(500).send('Rm error')
+
+    postData.files.forEach(file => {
+        updateFileLastActivity(file.id)
+    })
 
     return res.status(200).send('Post removed successfully')
 }

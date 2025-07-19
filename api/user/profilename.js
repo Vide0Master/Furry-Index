@@ -49,14 +49,14 @@ exports.PUT = async (req, res) => {
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
     }
 
+    if(data.avatarID) updateFileLastActivity(data.avatarID)
+
     const updatedUser = await prisma.user.update({
         where: {
             id: sessionUser.id
         },
         data
     })
-
-    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
     return res.status(200).send('Profile updated successfully')
 }
@@ -84,14 +84,14 @@ exports.DELETE = async (req, res) => {
         data[datVar] ? data[datVar] = null : delete data[datVar]
     }
 
+    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
+
     const updatedUser = await prisma.user.update({
         where: {
             id: sessionUser.id
         },
         data
     })
-    
-    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
     return res.status(200).send('Profile updated successfully')
 }

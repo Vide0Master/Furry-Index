@@ -56,7 +56,7 @@ export async function render(params) {
             value: k,
             selected: Language.currentLang == k
         })),
-        pages.webpage.element, 'Language', (val) => {
+        pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
         })
 

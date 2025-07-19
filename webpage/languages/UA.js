@@ -131,6 +131,7 @@ const LANG = {
         },
         webpage: {
             language: {
+                label: "Мова",
                 ENG: "Англійська",
                 UA: "Українська",
                 RU: "російська"
@@ -188,6 +189,11 @@ const LANG = {
             },
             delete: {
                 buttonLabel: "Видалити",
+                confirm: "Перевірка",
+                confirmText: [
+                    "Ви хочете видалити файл",
+                    "?"
+                ],
                 alert: "Видалено файл"
             }
         },

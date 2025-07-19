@@ -3,9 +3,9 @@ const prisma = require("./prisma")
 module.exports = class DBFunctions {
     static async updateFileLastActivity(id) {
         await prisma.file.update({
-            where: { id: id },
+            where: { id },
             data: {
-                updatedAt: new Date()
+                updatedAt:new Date()
             }
         })
     }

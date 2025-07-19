@@ -53,10 +53,18 @@ exports.GET = async (req, res) => {
         postFilter = {}
     }
 
+    const delay = new Date();
+    delay.setDate(delay.getDate() - 1);
+
     const userFiles = await prisma.file.findMany({
         skip: page * take,
         take,
         where: {
+            OR: [
+                { post: { isNot: null } },
+                { avatarfor: { isNot: null } },
+                { updatedAt: { gte: delay } }
+            ],
             AND: [
                 baseWhere,
                 postFilter
@@ -93,10 +101,11 @@ exports.GET = async (req, res) => {
         return res.status(200).json({ files: userFiles, count });
     }
 
-    for(const file of userFiles){
-        if(!file.avatarfor && !file.post){
+    for (const file of userFiles) {
+        if (!file.avatarfor && !file.post) {
             const date = new Date(file.updatedAt)
-            file.eraseOn = date.setDate(date.getDate() + 2)
+            date.setDate(date.getDate() + 1)
+            file.eraseOn = date.toISOString()
         }
     }
 
