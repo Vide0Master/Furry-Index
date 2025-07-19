@@ -39,10 +39,7 @@ export default class Countdown extends Elem {
     }
 
     update() {
-        if (window.location.pathname !== this.startRoute) {
-            this.kill();
-            return;
-        }
+        //TODO: MAKE COUNTER KILLER, MEMORY LEAK RISK
 
         const now = Date.now();
         const remaining = this.timeLimit - now;
