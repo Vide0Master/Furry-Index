@@ -100,7 +100,6 @@ export default class SearchField extends Elem {
                         tagElem.addEvent('click', () => {
                             tags.pop()
                             tags.push(tag.name)
-                            console.log(tags)
                             searchInput.element.value = tags.join(' ') + ' '
                             currentTag = 0
                             tagsAutocomp = []
@@ -174,7 +173,6 @@ export default class SearchField extends Elem {
     }
 
     startCallbacks() {
-        console.log(this.callbacks)
         this.callbacks.forEach((cb) => cb(this.getTags()))
     }
 }

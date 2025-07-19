@@ -1,3 +1,4 @@
+const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
@@ -48,6 +49,8 @@ exports.PUT = async (req, res) => {
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
     }
 
+    if(data.avatarID) updateFileLastActivity(data.avatarID)
+
     const updatedUser = await prisma.user.update({
         where: {
             id: sessionUser.id
@@ -80,6 +83,8 @@ exports.DELETE = async (req, res) => {
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
         data[datVar] ? data[datVar] = null : delete data[datVar]
     }
+
+    if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
     const updatedUser = await prisma.user.update({
         where: {

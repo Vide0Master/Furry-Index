@@ -53,10 +53,18 @@ exports.GET = async (req, res) => {
         postFilter = {}
     }
 
+    const delay = new Date();
+    delay.setDate(delay.getDate() - 1);
+
     const userFiles = await prisma.file.findMany({
         skip: page * take,
         take,
         where: {
+            OR: [
+                { post: { isNot: null } },
+                { avatarfor: { isNot: null } },
+                { updatedAt: { gte: delay } }
+            ],
             AND: [
                 baseWhere,
                 postFilter
@@ -76,8 +84,7 @@ exports.GET = async (req, res) => {
                     icon: true,
                     group: {
                         select: { basename: true, color: true, name: true }
-                    },
-                    _count: true
+                    }
                 }
             },
             post: true,
@@ -94,9 +101,13 @@ exports.GET = async (req, res) => {
         return res.status(200).json({ files: userFiles, count });
     }
 
-    return res.status(200).json({ files: userFiles })
-}
+    for (const file of userFiles) {
+        if (!file.avatarfor && !file.post) {
+            const date = new Date(file.updatedAt)
+            date.setDate(date.getDate() + 1)
+            file.eraseOn = date.toISOString()
+        }
+    }
 
-exports.OPTIONS = async (req, res) => {
-    return res.status(200).json({ test: 'test' })
+    return res.status(200).json({ files: userFiles })
 }

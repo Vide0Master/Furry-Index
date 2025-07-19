@@ -56,7 +56,7 @@ export async function render(params) {
             value: k,
             selected: Language.currentLang == k
         })),
-        pages.webpage.element, 'Language', (val) => {
+        pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
         })
 
@@ -78,8 +78,8 @@ export async function render(params) {
         //region avatar control
         const avatarLine = new Elem('avatar-line', pages.user.element)
 
-        const rmAvatar = new Button(LANG.settings.user.removeAvatar, avatarLine.element, null, async () => {
-            new Alert.Confirm(LANG.settings.user.removeAvatarAlert, null, async () => {
+        const rmAvatar = new Button(Language.lang.settings.user.removeAvatar, avatarLine.element, null, async () => {
+            new Alert.Confirm(Language.lang.settings.user.removeAvatarAlert, null, async () => {
                 const rmResult = await API('DELETE', `/api/profile/${User.data.username}`, { avatarID: true })
                 if (rmResult.HTTPCODE == 200) {
                     await User.updateUserData()

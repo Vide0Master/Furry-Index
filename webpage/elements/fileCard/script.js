@@ -12,8 +12,9 @@ import getFileHash from "../../scripts/getFileHash.js";
 import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
+import Countdown from "../countdown/script.js";
 
-export default class FileCard extends Elem{
+export default class FileCard extends Elem {
     constructor(file, isUploadable, parent, options = { remove: true }) {
         super('file-card', parent)
 
@@ -124,10 +125,14 @@ export default class FileCard extends Elem{
             this.image = new Image(`/file/${file.id}?thumbnail=150`, 'file image', this.fileContainer.element)
 
             this.uploaded = new Elem('uploaded-on', this.element)
-
             new Icon('upload', this.uploaded.element)
-
             new Elem('uploaded-on-text', this.uploaded.element).text = formatDate(file.createdAt)
+
+            if (file.eraseOn) {
+                this.eraseOn = new Elem('erase-on', this.element)
+                new Icon('delete-file', this.eraseOn.element)
+                new Countdown(file.eraseOn, this.eraseOn.element, file.updatedAt)
+            }
 
             const tagsList = new Elem('tags-list', this.element)
 
@@ -159,7 +164,9 @@ export default class FileCard extends Elem{
                     }
                 }
 
-                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, this.delete)
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, () => {
+                    new Alert.Confirm(`${Language.lang.elements.fileCard.delete.confirmText[0]} ${file.id}${Language.lang.elements.fileCard.delete.confirmText[1]}`, Language.lang.elements.fileCard.delete.confirm, () => { this.delete() })
+                })
             }
         }
     }

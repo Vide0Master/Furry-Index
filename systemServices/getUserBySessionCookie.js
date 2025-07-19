@@ -16,9 +16,10 @@ module.exports = async function getUserBySessionCookie(cookie, exclude = []) {
                             file: true
                         }
                     },
+                    avatarID: true,
                     createdAt: true,
                     privateprofileparams: true,
-                    globalprofileparams: true,
+                    globalprofileparams: true
                 }
             }
         }

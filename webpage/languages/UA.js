@@ -131,6 +131,7 @@ const LANG = {
         },
         webpage: {
             language: {
+                label: "Мова",
                 ENG: "Англійська",
                 UA: "Українська",
                 RU: "російська"
@@ -180,14 +181,19 @@ const LANG = {
                 "Вага"
             ],
             linked: {
-                label: "Пов'язано з",
+                label: "Пов'язан з",
                 to: {
-                    post: "пост",
-                    pfavatar: "аватар"
+                    post: "постом",
+                    pfavatar: "аватаром"
                 }
             },
             delete: {
                 buttonLabel: "Видалити",
+                confirm: "Перевірка",
+                confirmText: [
+                    "Ви хочете видалити файл",
+                    "?"
+                ],
                 alert: "Видалено файл"
             }
         },

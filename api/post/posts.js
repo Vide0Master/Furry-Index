@@ -1,3 +1,4 @@
+const { updateFileLastActivity } = require("../../systemServices/DBFunctions");
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
@@ -128,7 +129,8 @@ exports.POST = async (req, res) => {
         select: {
             tags: {
                 select: { name: true }
-            }
+            },
+            id:true
         }
     })
 
@@ -142,6 +144,7 @@ exports.POST = async (req, res) => {
     }))
 
     for (const file of filesTags) {
+        updateFileLastActivity(file.id)
         for (const tag of file.tags) {
             const exists = postTags.some(t => t.where.name === tag.name)
             if (!exists) {

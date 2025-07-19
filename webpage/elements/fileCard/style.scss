@@ -24,14 +24,15 @@
         cursor: help;
     }
 
-    .uploaded-on {
+    .uploaded-on,
+    .erase-on {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 5px;
     }
 
-    .tags-list{
+    .tags-list {
         display: flex;
         flex-direction: column;
         align-items: start;

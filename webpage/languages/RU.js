@@ -131,6 +131,7 @@ const LANG = {
         },
         webpage: {
             language: {
+                label: "Язык",
                 ENG: "Английский",
                 UA: "Украинский",
                 RU: "русский"
@@ -180,7 +181,7 @@ const LANG = {
                 "Вес"
             ],
             linked: {
-                label: "Связано с",
+                label: "Связан с",
                 to: {
                     post: "постом",
                     pfavatar: "аватаром"
@@ -188,6 +189,11 @@ const LANG = {
             },
             delete: {
                 buttonLabel: "Удалить",
+                confirm: "Подтверждение",
+                confirmText: [
+                    "Вы хотите удалить файл",
+                    "?"
+                ],
                 alert: "Удалён файл"
             }
         },
