@@ -58,42 +58,8 @@ class Router {
 
         this.init();
         if (window.location.pathname + window.location.search !== path) {
-            function getGlobalElementMetrics(el) {
-                const rect = el.getBoundingClientRect();
-                return {
-                    top: rect.top + window.scrollY,
-                    left: rect.left + window.scrollX,
-                    width: rect.width,
-                    height: rect.height
-                };
-            }
-
-            const triggerPos = getGlobalElementMetrics(initElem)
-            const navzonePos = getGlobalElementMetrics(this.container)
-
-            const overlayStyle = []
-
-            for (const val in triggerPos) {
-                overlayStyle.push(`--trigger-${val}: ${triggerPos[val]}px`)
-            }
-
-            for (const val in navzonePos) {
-                overlayStyle.push(`--target-${val}: ${navzonePos[val]}px`)
-            }
-
-            const overlayElem = new Elem('internal-transition-block', document.querySelector('main'))
-            overlayElem.element.style = overlayStyle.join('; ')
-
-            overlayElem.onAnimationEnd(async () => {
-                window.history.pushState({}, '', path);
-                await this._loadRoute(path);
-
-                overlayElem.element.classList.add('internal-page-switch-overlay-kill')
-                overlayElem.onAnimationEnd(() => {
-                    overlayElem.kill()
-                })
-
-            })
+            window.history.pushState({}, '', path);
+            await this._loadRoute(path);
         }
     }
 
