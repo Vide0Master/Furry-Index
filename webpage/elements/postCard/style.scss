@@ -66,4 +66,13 @@
         flex-wrap: wrap;
         gap: 5px;
     }
+
+    .post-name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }

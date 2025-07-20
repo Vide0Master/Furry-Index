@@ -73,7 +73,12 @@ exports.GET = async (req, res) => {
 
     const where = {
         AND: [
-            { visible: true },
+            {
+                OR: [
+                    { visible: true },
+                    { ownerid: user.id }
+                ]
+            },
             ...processedFilters
         ]
     };
@@ -126,7 +131,7 @@ exports.POST = async (req, res) => {
             tags: {
                 select: { name: true }
             },
-            id:true
+            id: true
         }
     })
 
