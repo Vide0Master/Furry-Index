@@ -10,7 +10,6 @@ import Language from "../../scripts/language.js";
 import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import FileCard from "../../elements/fileCard/script.js";
-import LANG from "../../languages/ENG.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import Link from "../../components/link/script.js";
 
@@ -98,7 +97,7 @@ export async function render(params) {
             const fileList = new Elem('file-list', avatarSelector.element)
             for (const file of files.files) {
                 const fileElem = new FileCard(file, false, fileList.element, { remove: false })
-                new Button('Choose', fileElem.element, null, async () => {
+                new Button(Language.lang.settings.user.selectBtn, fileElem.element, null, async () => {
                     const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
                         overlay.element.click()

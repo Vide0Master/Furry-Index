@@ -9,7 +9,7 @@ export default class Image extends Elem {
 
         const loadingContainer = new Elem('internal-image-loading-container', this.element).element
 
-        const pawCenteringElem = new Elem('paw-container', loadingContainer.element).element
+        const pawCenteringElem = new Elem('paw-container', loadingContainer).element
 
         const paws = 8
 

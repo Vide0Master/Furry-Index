@@ -14,10 +14,10 @@ export default class Header {
         const navRow = new Elem('nav-row', this.element, 'nav')
 
         this.main = new Link(Language.lang.header.main, '/', navRow.element)
-        this.settings = new Link(Language.lang.header.search, '/search', navRow.element, true)
+        this.search = new Link(Language.lang.header.search, '/search', navRow.element, true, null, 'search')
         this.settings = new Link(Language.lang.header.settings, '/settings', navRow.element, true, null, 'settings')
         this.upload = new Link(Language.lang.header.upload, '/upload', navRow.element, true, 'hidden', 'upload')
-        this.fileManager = new Link(Language.lang.header.fileManager, '/file-manager', navRow.element, true, 'hidden')
+        this.fileManager = new Link(Language.lang.header.fileManager, '/file-manager', navRow.element, true, 'hidden', 'file')
         this.postMaster = new Link('✦ ' + Language.lang.header.postMaster, '/post-master', navRow.element, true)
 
         UserLabel.append(navRow.element)
