@@ -53,8 +53,6 @@ class Router {
         }
     }
 
-
-
     static async navigate(path, initElem) {
         Overlay.clearOverlays()
 

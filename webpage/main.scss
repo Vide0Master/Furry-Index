@@ -42,7 +42,7 @@ body {
     background-color: color-mix(in srgb, var(--background-s) 50%, transparent 50%);
     backdrop-filter: blur(20px);
 
-    animation: internal-page-switch-overlay 0.5s cubic-bezier(.49, .1, .92, .59) 0.1s forwards;
+    animation: internal-page-switch-overlay 0.3s cubic-bezier(.49, .1, .92, .59) forwards;
 
     @keyframes internal-page-switch-overlay {
         from {
