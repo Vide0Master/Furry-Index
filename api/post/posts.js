@@ -70,15 +70,13 @@ exports.GET = async (req, res) => {
             }
         });
     }
+    const visibility = { OR: [{ visible: true }] }
+
+    if (user) visibility.OR.push({ ownerid: user.id })
 
     const where = {
         AND: [
-            {
-                OR: [
-                    { visible: true },
-                    { ownerid: user.id }
-                ]
-            },
+            visibility,
             ...processedFilters
         ]
     };
