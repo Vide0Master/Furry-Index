@@ -42,7 +42,7 @@ export default async function makePostMaker(postData, editedCB) {
     ).element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
 
     const postType = new DropdownList(
-        (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: val, value: val })),
+        (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.type[val], value: val })),
         container.element, Language.lang.elements.postMaker.postType, getFiles
     )
     postType.element.value = PostData.type != '' ? PostData.type : 'placeholder'
