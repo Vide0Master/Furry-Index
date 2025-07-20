@@ -1,9 +1,9 @@
+import Elem from '../components/elem/script.js';
 import Overlay from '../features/overlay/script.js';
 import staticRoutes from '../staticVariables/routerRoutes.js';
 
 class Router {
     static routes = [...staticRoutes];
-    static cache = new Map();
     static containerSelector = 'main';
     static container = null;
     static _initialized = false;
@@ -32,22 +32,8 @@ class Router {
                 if (href.startsWith('http') || href.startsWith('//')) return;
 
                 e.preventDefault();
-                await this.navigate(href, e.target.parentElement);
-            }
-        });
 
-        document.addEventListener('mouseover', (e) => {
-            const link = e.target.closest('a');
-            if (!link) return;
-
-            const isExternal = link.hasAttribute('external');
-            const isInternal = link.hasAttribute('internal') || !isExternal;
-
-            if (isInternal) {
-                const href = link.getAttribute('href');
-                if (!href.startsWith('http') && !href.startsWith('//')) {
-                    this.preload(href);
-                }
+                await this.navigate(href, e.target.tagName == 'A' ? e.target : e.target.parentNode);
             }
         });
 
@@ -68,57 +54,47 @@ class Router {
     }
 
     static async navigate(path, initElem) {
-        console.log(initElem)
         Overlay.clearOverlays()
+
         this.init();
         if (window.location.pathname + window.location.search !== path) {
-            window.history.pushState({}, '', path);
-            await this._loadRoute(path);
-        }
-        this.cache.clear()
-    }
-
-    static async preload(path) {
-        const { pathname } = new URL(path, window.location.origin);
-        const match = this._matchRoute(pathname);
-        if (!match) return;
-
-        const cached = this.cache.get(path);
-        const now = Date.now();
-
-        if (cached && now - cached.timestamp < 60000) return;
-
-        try {
-            const pageModule = await import(match.route.module);
-            if (typeof pageModule.render !== 'function') {
-                console.warn(`Module ${match.route.module} does not export render()`);
-                return;
+            function getGlobalElementMetrics(el) {
+                const rect = el.getBoundingClientRect();
+                return {
+                    top: rect.top + window.scrollY,
+                    left: rect.left + window.scrollX,
+                    width: rect.width,
+                    height: rect.height
+                };
             }
 
-            match.params.query = this._parseQuery(path);
-            const content = await pageModule.render(match.params);
-            const tag = typeof pageModule.tag === 'string' ? pageModule.tag : 'default';
-            const tagLimit = typeof pageModule.tagLimit === 'number' ? pageModule.tagLimit : 3;
+            const triggerPos = getGlobalElementMetrics(initElem)
+            const navzonePos = getGlobalElementMetrics(this.container)
 
-            this._addToCache(path, { content, tag, timestamp: now }, tagLimit);
-        } catch (err) {
-            console.error(`Failed to preload ${match.route.module}`, err);
+            const overlayStyle = []
+
+            for (const val in triggerPos) {
+                overlayStyle.push(`--trigger-${val}: ${triggerPos[val]}px`)
+            }
+
+            for (const val in navzonePos) {
+                overlayStyle.push(`--target-${val}: ${navzonePos[val]}px`)
+            }
+
+            const overlayElem = new Elem('internal-transition-block', document.querySelector('main'))
+            overlayElem.element.style = overlayStyle.join('; ')
+
+            overlayElem.onAnimationEnd(async () => {
+                window.history.pushState({}, '', path);
+                await this._loadRoute(path);
+
+                overlayElem.element.classList.add('internal-page-switch-overlay-kill')
+                overlayElem.onAnimationEnd(() => {
+                    overlayElem.kill()
+                })
+
+            })
         }
-    }
-
-    static _addToCache(path, pageData, tagLimit = 3) {
-        const tag = pageData.tag;
-
-        const cachedWithTag = [...this.cache.entries()]
-            .filter(([_, data]) => data.tag === tag)
-            .sort((a, b) => a[1].timestamp - b[1].timestamp);
-
-        if (cachedWithTag.length >= tagLimit) {
-            const oldestPath = cachedWithTag[0][0];
-            this.cache.delete(oldestPath);
-        }
-
-        this.cache.set(path, pageData);
     }
 
     static _matchRoute(pathname) {
@@ -169,25 +145,23 @@ class Router {
         const { route, params } = match;
 
         try {
-            if (this.cache.has(fullPath)) {
-                const pageData = this.cache.get(fullPath);
-                this.container.innerHTML = '';
-                this.container.appendChild(pageData.content);
-            } else {
-                const pageModule = await import(route.module);
-                if (typeof pageModule.render !== 'function') {
-                    throw new Error('Module does not export a render() function');
-                }
-
-                const content = await pageModule.render(params);
-                const tag = typeof pageModule.tag === 'string' ? pageModule.tag : 'default';
-                const tagLimit = typeof pageModule.tagLimit === 'number' ? pageModule.tagLimit : 3;
-
-                this.container.innerHTML = '';
-                this.container.appendChild(content);
-
-                this._addToCache(fullPath, { content, tag, timestamp: Date.now() }, tagLimit);
+            const pageModule = await import(route.module);
+            if (typeof pageModule.render !== 'function') {
+                throw new Error('Module does not export a render() function');
             }
+
+            const content = await pageModule.render(params);
+
+            const children = Array.from(this.container.children);
+            for (const child of children) {
+                if (!child.matches('.internal-transition-block')) {
+                    // maybe some killer for event listeners? 
+                    // tf i'm talkin bout, nothing!!! xdddddddddddddd
+                    child.remove();
+                }
+            }
+
+            this.container.appendChild(content);
         } catch (err) {
             console.error(`Error loading ${route.module}:`, err);
             this.container.innerHTML = `<p>Error loading page</p>`;

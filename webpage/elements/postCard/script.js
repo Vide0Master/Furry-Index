@@ -86,11 +86,7 @@ export default class PostCard extends Elem {
 
         if (!isInEditor) {
             this.element.addEventListener('click', () => {
-                Router.navigate(`/post/${postData.id}`)
-            })
-
-            this.element.addEventListener('mouseenter', () => {
-                Router.preload(`/post/${postData.id}`)
+                Router.navigate(`/post/${postData.id}`, this.element)
             })
         }
     }
