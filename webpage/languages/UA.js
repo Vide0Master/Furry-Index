@@ -203,6 +203,12 @@ const LANG = {
                 questionable: "Під питанням",
                 mature: "Для дорослих"
             },
+            type: {
+                image: "Зображення",
+                imageGroup: "Группа зображень",
+                comic: "Комікс",
+                video: "Відео"
+            },
             editButtons: {
                 visible: "Видимість",
                 remove: "Видалити",

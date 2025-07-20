@@ -203,6 +203,12 @@ const LANG = {
                 questionable: "Сомнительно",
                 mature: "Для взрослых"
             },
+            type: {
+                image: "Картинка",
+                imageGroup: "Группа картинок",
+                comic: "Комикс",
+                video: "Видео"
+            },
             editButtons: {
                 visible: "Видимость",
                 remove: "Удалить",

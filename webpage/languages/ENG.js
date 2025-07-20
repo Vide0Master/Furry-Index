@@ -203,6 +203,12 @@ const LANG = {
                 questionable: "Questionable",
                 mature: "Mature"
             },
+            type: {
+                image: 'Image',
+                imageGroup: 'Image group',
+                comic: 'Comic',
+                video: 'Video'
+            },
             editButtons: {
                 visible: "Visible",
                 remove: "Remove",
