@@ -70,6 +70,9 @@ exports.GET = async (req, res) => {
             }
         });
     }
+    const visibility = { OR: [{ visible: true }] }
+
+    if (user) visibility.OR.push({ ownerid: user.id })
 
     const visibility = { OR: [{ visible: true }] }
 
@@ -130,7 +133,7 @@ exports.POST = async (req, res) => {
             tags: {
                 select: { name: true }
             },
-            id:true
+            id: true
         }
     })
 

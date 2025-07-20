@@ -10,6 +10,7 @@ import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
+import Icon from "../../components/icon/script.js";
 
 export default class PostCard extends Elem {
     constructor(postData, parent, isInEditor = false, updateEditorCB) {
@@ -36,7 +37,8 @@ export default class PostCard extends Elem {
         }
 
         this.name = new Elem('post-name', this.element)
-        this.name.text = postData.name
+        if (!postData.visible) new Icon('non-visible', this.name.element).element.title = Language.lang.postView.hiddenLabel
+        new Elem('text', this.name.element).text += postData.name
 
         // this.tagrow = new Elem('tag-row', this.element)
         // for (const tag of postData.tags) {
