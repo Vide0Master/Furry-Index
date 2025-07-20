@@ -74,10 +74,6 @@ exports.GET = async (req, res) => {
 
     if (user) visibility.OR.push({ ownerid: user.id })
 
-    const visibility = { OR: [{ visible: true }] }
-
-    if (user) visibility.OR.push({ ownerid: user.id })
-
     const where = {
         AND: [
             visibility,
