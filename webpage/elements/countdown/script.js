@@ -39,7 +39,19 @@ export default class Countdown extends Elem {
     }
 
     update() {
-        //TODO: MAKE COUNTER KILLER, MEMORY LEAK RISK
+        // INFO: WELL FUCK!
+        // This single killer will be NOT ENOUGH!!!
+        // Whole app has a bunch of mistakes with memory leaks
+        // pi-archive didn't have this issues cuz every page is loaded from server and rendered from scratch
+        // this has manual updates...
+        // solution to timer problems that is created lower is temporary too
+        // i don't know normal solution to this problem, so...
+        // if it will be real problem of the app, well i'll fix it, but not now...
+
+        if (window.location.pathname !== this.startRoute) {
+            this.kill();
+            return;
+        }
 
         const now = Date.now();
         const remaining = this.timeLimit - now;
@@ -47,7 +59,7 @@ export default class Countdown extends Elem {
         if (remaining <= 0) {
             clearInterval(this._interval);
             if (this.finishCB) this.finishCB()
-            if (this.countdownCircle) this.countdownCircle.element.style.setProperty('--progress', '0deg');
+            if (this.countdownCircle) this.countdownCircle.element.style = '--progress: 0deg;'
             return;
         }
 

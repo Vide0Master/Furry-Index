@@ -36,6 +36,10 @@ export default class Elem {
         this.addEvent = (event, func, once = false) => {
             this.element.addEventListener(event, func, { once })
         }
+
+        this.onAnimationEnd = (cb) => {
+            this.addEvent('animationend', cb, true)
+        }
     }
 
     get text() {
