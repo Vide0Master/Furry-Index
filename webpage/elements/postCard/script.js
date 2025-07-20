@@ -37,8 +37,11 @@ export default class PostCard extends Elem {
         }
 
         this.name = new Elem('post-name', this.element)
-        if (!postData.visible) new Icon('non-visible', this.name.element).element.title = Language.lang.postView.hiddenLabel
+        const isVisibleIcon = new Icon('non-visible', this.name.element)
+        isVisibleIcon.element.title = Language.lang.postView.hiddenLabel
         new Elem('text', this.name.element).text += postData.name
+
+        isVisibleIcon.switchVisible(!postData.visible)
 
         // this.tagrow = new Elem('tag-row', this.element)
         // for (const tag of postData.tags) {
@@ -68,7 +71,12 @@ export default class PostCard extends Elem {
 
             const visSwitch = new SwitchInput(Language.lang.elements.postCard.editButtons.visible, buttonCont.element, async (state) => {
                 const result = await API('PUT', `/api/posts/${postData.id}`, { visible: state })
-                if (!result.updated) visSwitch.change()
+                
+                if (!result.updated) {
+                    visSwitch.change()
+                } else {
+                    isVisibleIcon.switchVisible(!state)
+                }
             }, postData.visible)
 
             new Button(Language.lang.elements.postCard.editButtons.remove, buttonCont.element, null, async () => {
