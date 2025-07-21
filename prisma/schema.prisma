@@ -122,4 +122,7 @@ model Score {
     postID String
     post   Post      @relation(fields: [postID], references: [id])
     type   ScoreType
+
+    @@unique([userid, postID])
+    @@index([userid, postID])
 }

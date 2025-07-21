@@ -49,4 +49,8 @@ export default class Elem {
     set text(text) {
         this.element.innerText = text
     }
+
+    set title(text) {
+        this.element.title = text
+    }
 }

@@ -188,15 +188,44 @@ export async function render(params) {
     const ratingBlock = new Elem('rating-block', controlBlock.element)
     const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
     const scoreText = new Elem('score-text', scoreTextCont.element)
-    const upBtn = new Button('▲', ratingBlock.element, 'btn-up', () => { })
-    const downBtn = new Button('▼', ratingBlock.element, 'btn-down', () => { })
+    const upBtn = new Button('▲', ratingBlock.element, 'btn-up', () => { updateScore('up') })
+    const downBtn = new Button('▼', ratingBlock.element, 'btn-down', () => { updateScore('down') })
 
     scoreTextCont.moveAfter(upBtn.element)
 
-    scoreText.text = PData.score
-    scoreText.element.classList.add(PData.score >= 0 ? 'up' : 'down')
+    function setScore(val) {
+        scoreText.text = val
+        scoreText.element.classList.remove('up', 'down')
+        scoreText.element.classList.add(parseInt(val) >= 0 ? 'up' : 'down')
+    }
 
-    if (PData.ownerid == User.data.id) {
+    setScore(PData.score)
+
+    let currentType = ''
+
+    function setButtonState(state) {
+        currentType = state
+        upBtn.element.classList.toggle('active', false)
+        downBtn.element.classList.toggle('active', false)
+        if (state == 'up') upBtn.element.classList.toggle('active', true)
+        if (state == 'down') downBtn.element.classList.toggle('active', true)
+    }
+
+    setButtonState(PData.ownscore)
+
+    async function updateScore(type) {
+        if (currentType == type) {
+            const resp = await API('DELETE', `/api/post/${PData.id}/score`)
+            setButtonState(resp.state)
+            setScore(resp.score)
+        } else {
+            const resp = await API('POST', `/api/post/${PData.id}/score`, { type })
+            setButtonState(resp.state)
+            setScore(resp.score)
+        }
+    }
+
+    if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
             makePostMaker(PData, () => {
                 Router.navigate(`/post/${PData.id}`, false, true)

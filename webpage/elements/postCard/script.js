@@ -66,8 +66,9 @@ export default class PostCard extends Elem {
 
         const smallDataField = new Elem('small-data-field', this.element)
         const scoreText = new Elem('score-text', smallDataField.element)
-        // scoreText.text = `${postData.score >= 0 ? '▲' : '▼'}${postData.score}`
-        scoreText.text = postData.score
+        scoreText.text = `${postData.score >= 0 ? '▲' : '▼'}${postData.score}`
+        // scoreText.text = postData.score
+        scoreText.title='Score'
 
         scoreText.element.classList.add(postData.score >= 0 ? 'up' : 'down')
 

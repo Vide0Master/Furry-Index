@@ -132,6 +132,13 @@
                     }
                 }
 
+                .btn-up,
+                .btn-down {
+                    &:hover {
+                        border-color: var(--outline);
+                    }
+                }
+
                 .btn-up {
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
@@ -139,7 +146,10 @@
                     border-right: none;
 
                     &:hover {
-                        border-color: var(--outline);
+                        color: var(--ok-color);
+                    }
+
+                    &.active {
                         color: var(--ok-color);
                     }
                 }
@@ -151,11 +161,13 @@
                     border-left: none;
 
                     &:hover {
-                        border-color: var(--outline);
+                        color: var(--nok-color);
+                    }
+
+                    &.active {
                         color: var(--nok-color);
                     }
                 }
-
             }
         }
     }
