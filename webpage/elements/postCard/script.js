@@ -66,12 +66,18 @@ export default class PostCard extends Elem {
 
         new TextLabel(rating.txt, this.element, rating.clr, true)
 
+        const smallDataField = new Elem('small-data-field', this.element)
+        const scoreText = new Elem('score-text', smallDataField.element)
+        scoreText.text = `${postData.score >= 0 ? '⬆' : '⬇'}${postData.score}`
+
+        scoreText.element.classList.add(postData.score >= 0 ? 'up' : 'down')
+
         if (isInEditor) {
             const buttonCont = new Elem('edit-buttons-row', this.element)
 
             const visSwitch = new SwitchInput(Language.lang.elements.postCard.editButtons.visible, buttonCont.element, async (state) => {
                 const result = await API('PUT', `/api/posts/${postData.id}`, { visible: state })
-                
+
                 if (!result.updated) {
                     visSwitch.change()
                 } else {
@@ -95,7 +101,7 @@ export default class PostCard extends Elem {
         }
 
         if (!isInEditor) {
-            this.element.addEventListener('click', () => {
+            previewContainer.addEvent('click', () => {
                 Router.navigate(`/post/${postData.id}`, this.element)
             })
         }

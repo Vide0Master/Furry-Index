@@ -63,6 +63,35 @@
             align-items: center;
             gap: 5px;
         }
+
+        .rating-block {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 5px;
+
+            .score-text-cont {
+                padding: 5px;
+                background-color: var(--background-s);
+                border: solid 3px var(--interactible-passive);
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-up {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                padding-right: 5px;
+            }
+
+            .btn-down {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                padding-left: 5px;
+            }
+        }
     }
 
     .post-conatiner {

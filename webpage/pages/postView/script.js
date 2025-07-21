@@ -1,3 +1,4 @@
+import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
 import Link from "../../components/link/script.js";
@@ -177,6 +178,16 @@ export async function render(params) {
     if (['image', 'imageGroup', 'comic', 'video'].includes(PData.type)) {
         renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer);
     }
+
+    const ratingBlock = new Elem('rating-block', postDataBlock.element)
+    const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
+    const scoreText = new Elem('score-text', scoreTextCont.element)
+    const upBtn = new Button('⬆', ratingBlock.element, 'btn-up', () => { })
+    const downBtn = new Button('⬇', ratingBlock.element, 'btn-down', () => { })
+
+    scoreTextCont.moveAfter(upBtn.element)
+
+    scoreText.text = PData.score
 
     if (!PData.visible) {
         new Elem(null, postDataBlock.element).text = Language.lang.postView.hiddenLabel;

@@ -12,22 +12,10 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
-        font-size: 60px;
+        font-size: 40px;
 
-        .welcome {}
-
-        .FI-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 30px;
-
-            .FI-text {
-                background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                color: transparent;
-            }
+        .welcome{
+            text-align: center;
         }
     }
 
