@@ -63,35 +63,6 @@
             align-items: center;
             gap: 5px;
         }
-
-        .rating-block {
-            display: flex;
-            flex-direction: row;
-            align-items: stretch;
-            gap: 5px;
-
-            .score-text-cont {
-                padding: 5px;
-                background-color: var(--background-s);
-                border: solid 3px var(--interactible-passive);
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .btn-up {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-                padding-right: 5px;
-            }
-
-            .btn-down {
-                border-top-left-radius: 0;
-                border-bottom-left-radius: 0;
-                padding-left: 5px;
-            }
-        }
     }
 
     .post-conatiner {
@@ -122,6 +93,69 @@
             img {
                 max-height: 700px;
                 object-fit: contain;
+            }
+        }
+
+        .control-block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--background);
+            border-radius: 100vh;
+            padding: 10px;
+
+            .rating-block {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+
+                .score-text-cont {
+                    padding: 5px;
+                    background-color: var(--background-s);
+                    border: solid 3px var(--interactible-passive);
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    border-left: none;
+                    border-right: none;
+
+                    .score-text {
+                        &.up {
+                            color: var(--ok-color);
+                        }
+
+                        &.down {
+                            color: var(--nok-color);
+                        }
+                    }
+                }
+
+                .btn-up {
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                    padding-right: 5px;
+                    border-right: none;
+
+                    &:hover {
+                        border-color: var(--outline);
+                        color: var(--ok-color);
+                    }
+                }
+
+                .btn-down {
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                    padding-left: 5px;
+                    border-left: none;
+
+                    &:hover {
+                        border-color: var(--outline);
+                        color: var(--nok-color);
+                    }
+                }
+
             }
         }
     }

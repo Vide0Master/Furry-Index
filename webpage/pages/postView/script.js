@@ -9,6 +9,10 @@ import API from "../../scripts/api.js";
 import formatDate from "../../scripts/formatDate.js";
 import formatFileSize from "../../scripts/formatFileSize.js";
 import Language from "../../scripts/language.js";
+import User from "../../scripts/userdata.js";
+import makePostMaker from "../../elements/postMaker/script.js";
+import Router from "../../scripts/router.js";
+
 
 function capitalizeFirst(str) {
     if (!str) return '';
@@ -179,15 +183,26 @@ export async function render(params) {
         renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer);
     }
 
-    const ratingBlock = new Elem('rating-block', postDataBlock.element)
+    const controlBlock = new Elem('control-block', postimgContainer.element)
+
+    const ratingBlock = new Elem('rating-block', controlBlock.element)
     const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
     const scoreText = new Elem('score-text', scoreTextCont.element)
-    const upBtn = new Button('⬆', ratingBlock.element, 'btn-up', () => { })
-    const downBtn = new Button('⬇', ratingBlock.element, 'btn-down', () => { })
+    const upBtn = new Button('▲', ratingBlock.element, 'btn-up', () => { })
+    const downBtn = new Button('▼', ratingBlock.element, 'btn-down', () => { })
 
     scoreTextCont.moveAfter(upBtn.element)
 
     scoreText.text = PData.score
+    scoreText.element.classList.add(PData.score >= 0 ? 'up' : 'down')
+
+    if (PData.ownerid == User.data.id) {
+        new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
+            makePostMaker(PData, () => {
+                Router.navigate(`/post/${PData.id}`, false, true)
+            })
+        })
+    }
 
     if (!PData.visible) {
         new Elem(null, postDataBlock.element).text = Language.lang.postView.hiddenLabel;

@@ -53,11 +53,11 @@ class Router {
         }
     }
 
-    static async navigate(path, initElem) {
-        Overlay.clearOverlays()
+    static async navigate(path, killOverlays = true, force = false) {
+        if (killOverlays) Overlay.clearOverlays()
 
         this.init();
-        if (window.location.pathname + window.location.search !== path) {
+        if (window.location.pathname + window.location.search !== path || force) {
             window.history.pushState({}, '', path);
             await this._loadRoute(path);
         }

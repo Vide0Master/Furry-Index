@@ -1,12 +1,10 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
-import Link from "../../components/link/script.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
 import makePostMaker from "../postMaker/script.js";
-import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
@@ -68,7 +66,8 @@ export default class PostCard extends Elem {
 
         const smallDataField = new Elem('small-data-field', this.element)
         const scoreText = new Elem('score-text', smallDataField.element)
-        scoreText.text = `${postData.score >= 0 ? '⬆' : '⬇'}${postData.score}`
+        // scoreText.text = `${postData.score >= 0 ? '▲' : '▼'}${postData.score}`
+        scoreText.text = postData.score
 
         scoreText.element.classList.add(postData.score >= 0 ? 'up' : 'down')
 
