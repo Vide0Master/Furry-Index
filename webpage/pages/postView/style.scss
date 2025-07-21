@@ -132,13 +132,6 @@
                     }
                 }
 
-                .btn-up,
-                .btn-down {
-                    &:hover {
-                        border-color: var(--outline);
-                    }
-                }
-
                 .btn-up {
                     border-top-right-radius: 0;
                     border-bottom-right-radius: 0;
@@ -166,6 +159,19 @@
 
                     &.active {
                         color: var(--nok-color);
+                    }
+                }
+
+                .btn-up,
+                .btn-down {
+                    &:disabled {
+                        &:hover {
+                            color: var(--background);
+                        }
+                    }
+
+                    &:hover {
+                        border-color: var(--outline);
                     }
                 }
             }

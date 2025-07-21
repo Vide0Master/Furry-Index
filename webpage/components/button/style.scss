@@ -12,4 +12,9 @@ button {
     &:hover {
         border-color: var(--interactible-hover);
     }
+
+    &:disabled {
+        color: var(--background);
+        cursor: not-allowed;
+    }
 }
