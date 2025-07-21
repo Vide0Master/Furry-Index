@@ -225,6 +225,11 @@ export async function render(params) {
         }
     }
 
+    if (User.data == null) {
+        upBtn.element.disabled = true
+        downBtn.element.disabled = true
+    }
+
     if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
             makePostMaker(PData, () => {
