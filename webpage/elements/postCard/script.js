@@ -1,12 +1,10 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
-import Link from "../../components/link/script.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
 import makePostMaker from "../postMaker/script.js";
-import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
@@ -66,12 +64,20 @@ export default class PostCard extends Elem {
 
         new TextLabel(rating.txt, this.element, rating.clr, true)
 
+        const smallDataField = new Elem('small-data-field', this.element)
+        const scoreText = new Elem('score-text', smallDataField.element)
+        scoreText.text = `${postData.score >= 0 ? '▲' : '▼'}${postData.score}`
+        // scoreText.text = postData.score
+        scoreText.title='Score'
+
+        scoreText.element.classList.add(postData.score >= 0 ? 'up' : 'down')
+
         if (isInEditor) {
             const buttonCont = new Elem('edit-buttons-row', this.element)
 
             const visSwitch = new SwitchInput(Language.lang.elements.postCard.editButtons.visible, buttonCont.element, async (state) => {
                 const result = await API('PUT', `/api/posts/${postData.id}`, { visible: state })
-                
+
                 if (!result.updated) {
                     visSwitch.change()
                 } else {
@@ -95,7 +101,7 @@ export default class PostCard extends Elem {
         }
 
         if (!isInEditor) {
-            this.element.addEventListener('click', () => {
+            previewContainer.addEvent('click', () => {
                 Router.navigate(`/post/${postData.id}`, this.element)
             })
         }

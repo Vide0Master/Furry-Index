@@ -10,40 +10,46 @@ exports.GET = async (req, res) => {
 
     const postID = req.params.postID
 
+    const include = {
+        files: {
+            select: {
+                id: true,
+                fileparams: true
+            }
+        },
+        tags: {
+            select: {
+                name: true,
+                icon: true,
+                group: {
+                    select: {
+                        basename: true,
+                        name: true,
+                        color: true,
+                        priority: true,
+                    }
+                },
+                _count: true
+            }
+        },
+        owner: {
+            select: {
+                username: true,
+                visiblename: true,
+                avatarID: true
+            }
+        }
+    }
+
+    if (user) {
+        include.scores = { where: { userid: user.id } }
+    }
+
     const post = await prisma.post.findUnique({
         where: {
             id: postID
         },
-        include: {
-            files: {
-                select: {
-                    id: true,
-                    fileparams: true
-                }
-            },
-            tags: {
-                select: {
-                    name: true,
-                    icon: true,
-                    group: {
-                        select: {
-                            basename: true,
-                            name: true,
-                            color: true,
-                            priority: true,
-                        }
-                    },
-                    _count: true
-                }
-            },
-            owner: {
-                select: {
-                    username: true,
-                    visiblename: true,
-                    avatarID: true
-                }
-            }
-        }
+        include
     })
 
     if (!post.visible && user?.id != post.ownerid) return res.status(403).send('Post is not available')
@@ -51,6 +57,11 @@ exports.GET = async (req, res) => {
     for (const tag of post.tags) {
         tag.count = tag._count.posts;
         delete tag._count
+    }
+
+    if (post.scores) {
+        post.ownscore = post.scores[0]?.type || 'none'
+        delete post.scores
     }
 
     res.status(200).json({ post })

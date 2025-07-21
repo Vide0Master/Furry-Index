@@ -83,6 +83,8 @@ export default async function API(method, route, body, credentials = false) {
                 styleRoute
             );
 
+            console.log(data)
+
             console.groupEnd();
         }
 

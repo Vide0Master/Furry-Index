@@ -24,7 +24,7 @@
         border-radius: 100vh;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
-        background-color: rgb(194, 53, 53);
+        background-color: var(--nok-color, red);
         height: calc(100% - 6px);
         width: calc(50% - 3px);
         top: 3px;
@@ -43,7 +43,7 @@
     }
 
     .checkbox:checked+.swatch {
-        background-color: rgb(132, 191, 38);
+        background-color: var(--ok-color, green);
         left: calc(50%);
         border-radius: 100vh;
         border-top-left-radius: 0;

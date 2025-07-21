@@ -92,7 +92,7 @@ exports.GET = async (req, res) => {
                 select: {
                     username: true
                 }
-            }
+            },
         }
     })
 

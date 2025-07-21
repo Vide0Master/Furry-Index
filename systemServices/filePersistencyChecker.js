@@ -7,26 +7,39 @@ const cmd = require('./cmdPretty.js');
 const delay = new Date();
 delay.setDate(delay.getDate() - 1);
 
-cron.schedule('0 0 * * *', async () => {
+async function checkAndRmOldFiles() {
     const filesToRm = await prisma.file.findMany({
-        AND: [
-            { post: { is: null } },
-            { avatarfor: { is: null } },
-            { updatedAt: { lte: delay } }
-        ]
+        where: {
+            AND: [
+                { post: { is: null } },
+                { avatarfor: { is: null } },
+                { updatedAt: { lte: delay } }
+            ]
+        }
     })
     if (filesToRm.length > 0) {
-        cmd.info(`Purging ${filesToRm.length} files`, [cmd.preps.System, cmd.preps.fs])
+        cmd.info(`Purging ${filesToRm.length} files...`, [cmd.preps.System, cmd.preps.fs])
 
         for (const file of filesToRm) {
             await removeFile(path.join(__dirname, `../file_storage/${file.file}`))
+            await prisma.file.delete({
+                where: {
+                    id: file.id
+                }
+            })
         }
 
         cmd.awesome(`Purge of ${filesToRm.length} files finished!`, [cmd.preps.System, cmd.preps.fs])
     } else {
-        cmd.info(`No files for purging found...`, [cmd.preps.System, cmd.preps.fs])
+        cmd.info(`No files for purging found... skipping`, [cmd.preps.System, cmd.preps.fs])
     }
+}
+
+cron.schedule('0 0 * * *', async () => {
+    await checkAndRmOldFiles()
 }, {
     scheduled: true,
     timezone: 'Europe/Kiev'
 });
+
+checkAndRmOldFiles()

@@ -1,3 +1,4 @@
+import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
 import Link from "../../components/link/script.js";
@@ -8,6 +9,10 @@ import API from "../../scripts/api.js";
 import formatDate from "../../scripts/formatDate.js";
 import formatFileSize from "../../scripts/formatFileSize.js";
 import Language from "../../scripts/language.js";
+import User from "../../scripts/userdata.js";
+import makePostMaker from "../../elements/postMaker/script.js";
+import Router from "../../scripts/router.js";
+
 
 function capitalizeFirst(str) {
     if (!str) return '';
@@ -176,6 +181,56 @@ export async function render(params) {
 
     if (['image', 'imageGroup', 'comic', 'video'].includes(PData.type)) {
         renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer);
+    }
+
+    const controlBlock = new Elem('control-block', postimgContainer.element)
+
+    const ratingBlock = new Elem('rating-block', controlBlock.element)
+    const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
+    const scoreText = new Elem('score-text', scoreTextCont.element)
+    const upBtn = new Button('▲', ratingBlock.element, 'btn-up', () => { updateScore('up') })
+    const downBtn = new Button('▼', ratingBlock.element, 'btn-down', () => { updateScore('down') })
+
+    scoreTextCont.moveAfter(upBtn.element)
+
+    function setScore(val) {
+        scoreText.text = val
+        scoreText.element.classList.remove('up', 'down')
+        scoreText.element.classList.add(parseInt(val) >= 0 ? 'up' : 'down')
+    }
+
+    setScore(PData.score)
+
+    let currentType = ''
+
+    function setButtonState(state) {
+        currentType = state
+        upBtn.element.classList.toggle('active', false)
+        downBtn.element.classList.toggle('active', false)
+        if (state == 'up') upBtn.element.classList.toggle('active', true)
+        if (state == 'down') downBtn.element.classList.toggle('active', true)
+    }
+
+    setButtonState(PData.ownscore)
+
+    async function updateScore(type) {
+        if (currentType == type) {
+            const resp = await API('DELETE', `/api/post/${PData.id}/score`)
+            setButtonState(resp.state)
+            setScore(resp.score)
+        } else {
+            const resp = await API('POST', `/api/post/${PData.id}/score`, { type })
+            setButtonState(resp.state)
+            setScore(resp.score)
+        }
+    }
+
+    if (PData.ownerid == User?.data?.id) {
+        new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
+            makePostMaker(PData, () => {
+                Router.navigate(`/post/${PData.id}`, false, true)
+            })
+        })
     }
 
     if (!PData.visible) {

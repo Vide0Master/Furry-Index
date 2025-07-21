@@ -86,17 +86,23 @@ exports.GET = async (req, res) => {
         return res.status(200).json({ count });
     }
 
+    const include = {
+        tags: {
+            include: { group: true, _count: true },
+            orderBy: { name: 'desc' },
+        },
+        files: true,
+    }
+
+    if (user) {
+        include.scores = { where: { userid: user.id } }
+    }
+
     const posts = await prisma.post.findMany({
         skip: page * take,
         take,
         where,
-        include: {
-            tags: {
-                include: { group: true, _count: true },
-                orderBy: { name: 'desc' },
-            },
-            files: true
-        },
+        include,
         orderBy: {
             createdOn: 'desc'
         }
@@ -106,6 +112,11 @@ exports.GET = async (req, res) => {
         for (const tag of post.tags) {
             tag.count = tag._count.posts;
             delete tag._count
+        }
+
+        if (post.scores) {
+            post.ownscore = post.scores[0]?.type || 'none'
+            delete post.scores
         }
     }
 

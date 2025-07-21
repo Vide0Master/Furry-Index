@@ -21,6 +21,7 @@ model User {
     posts                Post[]
     globalprofileparams  Json?
     privateprofileparams Json?
+    scores               Score[]
 
     @@index([username, id])
 }
@@ -103,6 +104,25 @@ model Post {
     updatedOn   DateTime   @default(now()) @updatedAt()
     rating      PostRating
     visible     Boolean    @default(false)
+    score       Int        @default(0)
+    scores      Score[]
 
     @@index([id])
+}
+
+enum ScoreType {
+    up
+    down
+}
+
+model Score {
+    id     String    @id @unique @default(uuid())
+    userid String
+    user   User      @relation(fields: [userid], references: [id])
+    postID String
+    post   Post      @relation(fields: [postID], references: [id])
+    type   ScoreType
+
+    @@unique([userid, postID])
+    @@index([userid, postID])
 }
