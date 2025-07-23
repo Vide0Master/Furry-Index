@@ -8,8 +8,8 @@ exports.ROUTE = '/api/posts'
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    const page = req.query.p ? parseInt(req.query.p, 10) : 0;
-    const take = req.query.t ? parseInt(req.query.t, 10) : 10;
+    const page = req.query.p ? parseInt(req.query.p) : 0;
+    const take = req.query.t ? parseInt(req.query.t) : 50;
     const tagFilter = req.query.tags
         ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
         : [];
@@ -91,6 +91,7 @@ exports.GET = async (req, res) => {
             include: { group: true, _count: true },
             orderBy: { name: 'desc' },
         },
+        favourites: { select: { userid: true } },
         files: true,
     }
 
@@ -118,6 +119,10 @@ exports.GET = async (req, res) => {
             post.ownscore = post.scores[0]?.type || 'none'
             delete post.scores
         }
+
+        if (user && post.favourites.some(v => v.userid == user.id)) post.myfav = true
+        
+        if (post.favourites) post.favourites = post.favourites.length
     }
 
     return res.status(200).json({ posts });

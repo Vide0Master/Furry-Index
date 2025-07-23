@@ -108,7 +108,8 @@ const LANG = {
             resolution: "Розширення",
             uploadedOn: "Завантажено"
         },
-        rating: "Рейтинг"
+        rating: "Рейтинг",
+        favourite: "Обране"
     },
     profile: {
         noUsername: "Ім'я користувача не вказане в адресі сторінки",

@@ -108,7 +108,8 @@ const LANG = {
             resolution: "Resolution",
             uploadedOn: "Uploaded on",
         },
-        rating: "Rating"
+        rating: "Rating",
+        favourite: "Favourite"
     },
     profile: {
         noUsername: "No username specified in page route",

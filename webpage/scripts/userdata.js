@@ -19,6 +19,10 @@ class User {
         await this.updateUserData()
         cb(unloginRslt.HTTPCODE == 200)
     }
+
+    static loggedIn() {
+        return this.data != null
+    }
 }
 
 export default User
