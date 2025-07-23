@@ -66,11 +66,15 @@ export default class PostCard extends Elem {
 
         const smallDataField = new Elem('small-data-field', this.element)
         const scoreText = new Elem('score-text', smallDataField.element)
-        scoreText.text = `${postData.score >= 0 ? '▲' : '▼'}${postData.score}`
-        // scoreText.text = postData.score
-        scoreText.title='Score'
-
+        scoreText.text = `${postData.score >= 0 ? '▲' : '▼'} ${postData.score}`
+        scoreText.title = Language.lang.elements.postCard.score
         scoreText.element.classList.add(postData.score >= 0 ? 'up' : 'down')
+
+        if (postData.favourites > 0) {
+            const favsElem = new Elem('favs-elem', smallDataField.element)
+            favsElem.text = '❤︎ ' + postData.favourites
+            favsElem.title = Language.lang.elements.postCard.favs
+        }
 
         if (isInEditor) {
             const buttonCont = new Elem('edit-buttons-row', this.element)

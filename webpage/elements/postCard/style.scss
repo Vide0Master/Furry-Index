@@ -60,14 +60,16 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 5px;
+        gap: 10px;
         background-color: var(--background-s);
         border-radius: 100vh;
         padding: 5px 7.5px;
 
-        .score-text {
+        &>* {
             cursor: help;
+        }
 
+        .score-text {
             &.up {
                 color: var(--ok-color);
             }

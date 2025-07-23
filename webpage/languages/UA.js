@@ -218,7 +218,9 @@ const LANG = {
                     "Пост",
                     "прибрано"
                 ]
-            }
+            },
+            score: "Рейтинг",
+            favs: "У обраному"
         },
         postMaker: {
             postName: "Назва",

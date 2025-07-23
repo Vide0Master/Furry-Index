@@ -218,7 +218,9 @@ const LANG = {
                     "Post",
                     "removed"
                 ]
-            }
+            },
+            score: 'Score',
+            favs: 'In favourites'
         },
         postMaker: {
             postName: "Name",
