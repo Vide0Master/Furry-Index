@@ -9,19 +9,20 @@ datasource db {
 }
 
 model User {
-    id                   String    @id @unique @default(uuid())
-    username             String    @unique
+    id                   String      @id @unique @default(uuid())
+    username             String      @unique
     visiblename          String?
     password             String
-    createdAt            DateTime  @default(now())
-    avatarID             String?   @unique
-    avatar               File?     @relation("User-Avatar", fields: [avatarID], references: [id])
+    createdAt            DateTime    @default(now())
+    avatarID             String?     @unique
+    avatar               File?       @relation("User-Avatar", fields: [avatarID], references: [id])
     sessions             Session[]
-    files                File[]    @relation("User-Files")
+    files                File[]      @relation("User-Files")
     posts                Post[]
     globalprofileparams  Json?
     privateprofileparams Json?
     scores               Score[]
+    favourites           Favourite[]
 
     @@index([username, id])
 }
@@ -92,20 +93,21 @@ enum PostRating {
 }
 
 model Post {
-    id          String     @id @unique @default(uuid())
+    id          String      @id @unique @default(uuid())
     type        PostType
     name        String
-    tags        Tag[]      @relation("Post-Tags")
+    tags        Tag[]       @relation("Post-Tags")
     files       File[]
     description String
     ownerid     String
-    owner       User       @relation(fields: [ownerid], references: [id])
-    createdOn   DateTime   @default(now())
-    updatedOn   DateTime   @default(now()) @updatedAt()
+    owner       User        @relation(fields: [ownerid], references: [id])
+    createdOn   DateTime    @default(now())
+    updatedOn   DateTime    @default(now()) @updatedAt()
     rating      PostRating
-    visible     Boolean    @default(false)
-    score       Int        @default(0)
+    visible     Boolean     @default(false)
+    score       Int         @default(0)
     scores      Score[]
+    favourites  Favourite[]
 
     @@index([id])
 }
@@ -119,10 +121,21 @@ model Score {
     id     String    @id @unique @default(uuid())
     userid String
     user   User      @relation(fields: [userid], references: [id])
-    postID String
-    post   Post      @relation(fields: [postID], references: [id])
+    postid String
+    post   Post      @relation(fields: [postid], references: [id])
     type   ScoreType
 
-    @@unique([userid, postID])
-    @@index([userid, postID])
+    @@unique([userid, postid])
+    @@index([userid, postid])
+}
+
+model Favourite {
+    id     String @id @unique @default(uuid())
+    userid String
+    user   User   @relation(fields: [userid], references: [id])
+    postid String
+    post   Post   @relation(fields: [postid], references: [id])
+
+    @@unique([userid, postid])
+    @@index([userid, postid])
 }

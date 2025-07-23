@@ -12,6 +12,8 @@ import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
 import makePostMaker from "../../elements/postMaker/script.js";
 import Router from "../../scripts/router.js";
+import SwitchInput from "../../components/switchinput/script.js";
+import Favourites from "../../scripts/favouriteControl.js";
 
 
 function capitalizeFirst(str) {
@@ -229,6 +231,19 @@ export async function render(params) {
         upBtn.element.disabled = true
         downBtn.element.disabled = true
     }
+
+    const favSwitch = new SwitchInput(`${PData.favourites} ${Language.lang.postView.favourite}`, controlBlock.element, async (state) => {
+        let cnt = null
+        if (state) {
+            cnt = await Favourites.add(PData.id)
+        } else {
+            cnt = await Favourites.rm(PData.id)
+        }
+
+        console.log(cnt)
+
+        if (cnt != null) favSwitch.text = `${cnt} ${Language.lang.postView.favourite}`
+    }, PData.myfav || (await Favourites.includes(PData.id)))
 
     if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {

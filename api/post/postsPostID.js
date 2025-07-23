@@ -32,6 +32,11 @@ exports.GET = async (req, res) => {
                 _count: true
             }
         },
+        favourites: {
+            select: {
+                userid: true
+            }
+        },
         owner: {
             select: {
                 username: true,
@@ -49,7 +54,7 @@ exports.GET = async (req, res) => {
         where: {
             id: postID
         },
-        include
+        include,
     })
 
     if (!post.visible && user?.id != post.ownerid) return res.status(403).send('Post is not available')
@@ -63,6 +68,11 @@ exports.GET = async (req, res) => {
         post.ownscore = post.scores[0]?.type || 'none'
         delete post.scores
     }
+
+    
+    if(user && post.favourites.some(v=>v.userid==user.id)) post.myfav=true
+
+    if (post.favourites) post.favourites = post.favourites.length
 
     res.status(200).json({ post })
 }

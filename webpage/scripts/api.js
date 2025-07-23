@@ -16,7 +16,7 @@ export default async function API(method, route, body, credentials = false) {
         }
 
         const response = await fetch(route, {
-            method,
+            method: method.toUpperCase(),
             headers,
             body: fetchBody,
             credentials: credentials ? 'include' : 'same-origin',

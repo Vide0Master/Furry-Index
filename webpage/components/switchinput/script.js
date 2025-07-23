@@ -1,6 +1,6 @@
 import Elem from "../elem/script.js"
 
-export default class SwitchInput extends Elem{
+export default class SwitchInput extends Elem {
     constructor(desc, parent, chcb, checked = false, cname) {
         super('input-switch', parent, 'div')
 
@@ -27,5 +27,13 @@ export default class SwitchInput extends Elem{
                 this.checkbox.checked = !this.checkbox.checked
             }
         }
+    }
+
+    set text(text) {
+        this.label.text = text
+    }
+
+    get text() { 
+        return this.label.text
     }
 }
