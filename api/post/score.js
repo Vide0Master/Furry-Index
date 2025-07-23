@@ -3,7 +3,7 @@ const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
 const { ScoreType } = require('@prisma/client')
 
-exports.ROUTE = '/api/post/:postID/score'
+exports.ROUTE = '/api/post/:postid/score'
 
 async function recalcPostScore(postid) {
     const scores = await prisma.score.findMany({

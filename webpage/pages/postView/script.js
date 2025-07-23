@@ -232,16 +232,38 @@ export async function render(params) {
         downBtn.element.disabled = true
     }
 
-    const favSwitch = new SwitchInput(`${PData.favourites} ${Language.lang.postView.favourite}`, controlBlock.element, async (state) => {
+    let favstate = PData.myfav || (await Favourites.includes(PData.id))
+
+    const favBtn = new Button(null, controlBlock.element, 'fav-btn')
+    new Elem('heart', favBtn.element).text = '❤︎'
+    const favCount = new Elem('fav-count', favBtn.element)
+    favCount.text = PData.favourites
+    favBtn.element.classList.toggle('faved', favstate)
+
+    favBtn.addEvent('click', async () => {
         let cnt = null
-        if (state) {
+        if (!favstate) {
             cnt = await Favourites.add(PData.id)
         } else {
             cnt = await Favourites.rm(PData.id)
         }
+        favstate = !favstate
 
-        if (cnt != null) favSwitch.text = `${cnt} ${Language.lang.postView.favourite}`
-    }, PData.myfav || (await Favourites.includes(PData.id)))
+        favBtn.element.classList.toggle('faved', favstate)
+
+        if (cnt != null) favCount.text = cnt
+    })
+
+    /*const favSwitch = new SwitchInput(`${PData.favourites} ${Language.lang.postView.favourite}`, controlBlock.element, async (state) => {
+            let cnt = null
+            if (state) {
+                cnt = await Favourites.add(PData.id)
+            } else {
+                cnt = await Favourites.rm(PData.id)
+            }
+    
+            if (cnt != null) favSwitch.text = `${cnt} ${Language.lang.postView.favourite}`
+        }, )*/
 
     if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
