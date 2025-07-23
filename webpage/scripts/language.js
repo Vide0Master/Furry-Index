@@ -15,7 +15,7 @@ class Language {
 
     static lang = languages[this.currentLang]
 
-    static setLanguage(lang, reload = false) {
+    static setLanguage(lang, reload = true) {
         if (!this.availableLanguages.includes(lang)) return
         localStorage.setItem('language', lang)
         this.currentLang = lang

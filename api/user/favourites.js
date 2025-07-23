@@ -32,7 +32,7 @@ exports.GET = async (req, res) => {
             }
         })
 
-        return res.status(200).json({ favs })
+        return res.status(200).json({ favourites: favs.map(v=>v.postid) })
     }
 }
 

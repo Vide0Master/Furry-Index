@@ -218,7 +218,9 @@ const LANG = {
                     "Пост",
                     "прибрано"
                 ]
-            }
+            },
+            score: "Рейтинг",
+            favs: "У обраному"
         },
         postMaker: {
             postName: "Назва",
@@ -248,6 +250,12 @@ const LANG = {
             confirm: {
                 confirmButton: "Так",
                 cancelButton: "Ні"
+            }
+        },
+        favs: {
+            limit: {
+                top: "Увага!",
+                content: "Ви зберегли 50 обраних в офлайн режимі.\n\nЗареєструйтесь щоб додавати в обрані без обмежень."
             }
         }
     }

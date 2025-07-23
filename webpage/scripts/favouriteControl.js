@@ -1,4 +1,6 @@
+import Alert from "../features/alert/script.js"
 import API from "./api.js"
+import Language from "./language.js"
 import User from "./userdata.js"
 
 const favsLSName = 'favourites'
@@ -29,8 +31,13 @@ class Favourites {
             const resp = await API('PUT', `/api/favourites`, { post: id })
             return resp.count
         } else {
-            this.localFavs.push(id)
-            this.set(this.localFavs)
+            if (this.localFavs.length >= 50) {
+                new Alert.Simple(Language.lang.features.favs.limit.content, Language.lang.features.favs.limit.top, null, '#ffffff', 'fav-adding-error')
+            } else {
+                this.localFavs.push(id)
+                this.set(this.localFavs)
+                return true
+            }
         }
     }
 
@@ -43,6 +50,7 @@ class Favourites {
             if (idx !== -1) {
                 this.localFavs.splice(idx, 1);
                 this.set(this.localFavs);
+                return true
             }
         }
     }

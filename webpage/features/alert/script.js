@@ -12,7 +12,7 @@ class AlertComponent {
             alerts[id].highlight()
             return
         }
-
+        
         this.alertCont = new Elem('alert', alertsContainer.element)
 
         this.alertCont.element.style = 'animation: internal-show-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;'

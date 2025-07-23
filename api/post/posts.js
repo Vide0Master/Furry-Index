@@ -19,6 +19,19 @@ exports.GET = async (req, res) => {
             const clause = { owner: { username: value } };
             return negative ? { NOT: clause } : clause;
         },
+        'id': (value, negative) => {
+            const clause = { OR: value.split(',').map(v => ({ id: v })) };
+            return negative ? { NOT: clause } : clause;
+        },
+        'fav': (value, negative) => {
+            let clause = {}
+            if (value != 'server' || !user) {
+                clause = { favourites: { some: { user: { username: value } } } };
+            } else {
+                clause = { favourites: { some: { userid: user.id } } };
+            }
+            return negative ? { NOT: clause } : clause;
+        }
     };
 
     const positiveTagNames = [];
@@ -121,7 +134,7 @@ exports.GET = async (req, res) => {
         }
 
         if (user && post.favourites.some(v => v.userid == user.id)) post.myfav = true
-        
+
         if (post.favourites) post.favourites = post.favourites.length
     }
 

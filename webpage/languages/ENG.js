@@ -218,7 +218,9 @@ const LANG = {
                     "Post",
                     "removed"
                 ]
-            }
+            },
+            score: 'Score',
+            favs: 'In favourites'
         },
         postMaker: {
             postName: "Name",
@@ -248,6 +250,12 @@ const LANG = {
             confirm: {
                 confirmButton: "Yes",
                 cancelButton: "No"
+            }
+        },
+        favs: {
+            limit: {
+                top: "Warning!",
+                content: "You saved 50 favourites in offline mode.\n\nRegister to use unlimited favourites."
             }
         }
     }
