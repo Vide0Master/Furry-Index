@@ -240,8 +240,6 @@ export async function render(params) {
             cnt = await Favourites.rm(PData.id)
         }
 
-        console.log(cnt)
-
         if (cnt != null) favSwitch.text = `${cnt} ${Language.lang.postView.favourite}`
     }, PData.myfav || (await Favourites.includes(PData.id)))
 
