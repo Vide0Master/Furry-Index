@@ -247,23 +247,15 @@ export async function render(params) {
         } else {
             cnt = await Favourites.rm(PData.id)
         }
+
+        if(cnt !== true && typeof cnt != 'number') return
+
         favstate = !favstate
 
         favBtn.element.classList.toggle('faved', favstate)
 
-        if (cnt != null) favCount.text = cnt
+        if (cnt != null && typeof cnt == 'number') favCount.text = cnt
     })
-
-    /*const favSwitch = new SwitchInput(`${PData.favourites} ${Language.lang.postView.favourite}`, controlBlock.element, async (state) => {
-            let cnt = null
-            if (state) {
-                cnt = await Favourites.add(PData.id)
-            } else {
-                cnt = await Favourites.rm(PData.id)
-            }
-    
-            if (cnt != null) favSwitch.text = `${cnt} ${Language.lang.postView.favourite}`
-        }, )*/
 
     if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {

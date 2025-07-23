@@ -251,6 +251,12 @@ const LANG = {
                 confirmButton: "Yes",
                 cancelButton: "No"
             }
+        },
+        favs: {
+            limit: {
+                top: "Warning!",
+                content: "You saved 50 favourites in offline mode.\n\nRegister to use unlimited favourites."
+            }
         }
     }
 }

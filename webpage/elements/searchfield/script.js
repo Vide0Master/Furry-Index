@@ -12,7 +12,7 @@ export default class SearchField extends Elem {
         searchInput.element.type = 'text'
         searchInput.element.placeholder = `${Language.lang.elements.search.label}...`
 
-        const searchIcon = new Icon('search', this.element, null, "20x20")
+        const searchIcon = new Icon('search', this.element, 'search-icon', "20x20")
 
         this.getTags = () => {
             return searchInput.element.value.split(' ')

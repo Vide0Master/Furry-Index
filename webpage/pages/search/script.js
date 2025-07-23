@@ -3,6 +3,7 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 import API from "../../scripts/api.js";
+import Favourites from "../../scripts/favouriteControl.js";
 
 export const tag = "search";
 export const tagLimit = 1;
@@ -19,6 +20,14 @@ export async function render(params) {
     async function renderPosts(tags, page = 0, take = itemsPerPage) {
         posts.wipe()
         const req = []
+
+        if (tags.some(v => v.startsWith('fav:local'))) {
+            const localFavIndex = tags.indexOf('fav:local')
+            tags.splice(localFavIndex, 1)
+
+            if (Favourites.localFavs)
+                tags.push('id:' + Favourites.localFavs.join(','))
+        }
 
         if (tags) req.push(`tags=${tags.join('+')}`)
         if (page) req.push(`p=${page}`)
