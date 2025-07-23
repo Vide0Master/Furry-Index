@@ -196,7 +196,8 @@ const LANG = {
                     '?'
                 ],
                 alert: "Removed file"
-            }
+            },
+            useAsAvatar: 'Avatar'
         },
         postCard: {
             rating: {

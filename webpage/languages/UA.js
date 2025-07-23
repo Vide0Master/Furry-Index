@@ -196,7 +196,8 @@ const LANG = {
                     "?"
                 ],
                 alert: "Видалено файл"
-            }
+            },
+            useAsAvatar: "Аватар"
         },
         postCard: {
             rating: {

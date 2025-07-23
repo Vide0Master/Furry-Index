@@ -13,6 +13,8 @@ import Tag from "../tag/script.js";
 import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Countdown from "../countdown/script.js";
+import User from "../../scripts/userdata.js";
+import UserLabel from "../userLabel/script.js";
 
 export default class FileCard extends Elem {
     constructor(file, isUploadable, parent, options = { remove: true }) {
@@ -131,7 +133,7 @@ export default class FileCard extends Elem {
             if (file.eraseOn) {
                 this.eraseOn = new Elem('erase-on', this.element)
                 new Icon('delete-file', this.eraseOn.element)
-                new Countdown(file.eraseOn, this.eraseOn.element, file.updatedAt)
+                this.eraseOnCntdown = new Countdown(file.eraseOn, this.eraseOn.element, file.updatedAt)
             }
 
             const tagsList = new Elem('tags-list', this.element)
@@ -140,17 +142,40 @@ export default class FileCard extends Elem {
                 new Tag(tag, tagsList.element)
             }
 
-            if (file.post || file.avatarfor) {
-                const txtLbl = new TextLabel(null, this.element, 'green', true)
-                new Elem(null, txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
+            this.txtLbl = {}
 
-                if (file.post) {
-                    new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, txtLbl.element, true)
-                }
+            const makeInfoLbl = () => {
+                if (file.post || file.avatarfor) {
+                    this.txtLbl = new TextLabel(null, this.element, 'green', true)
+                    new Elem(null, this.txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
 
-                if (file.avatarfor) {
-                    new Link(Language.lang.elements.fileCard.linked.to.pfavatar, `/profile/${file.avatarfor.username}`, txtLbl.element, true)
+                    if (file.post) {
+                        new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, this.txtLbl.element, true)
+                    }
+
+                    if (file.avatarfor) {
+                        new Link(Language.lang.elements.fileCard.linked.to.pfavatar, `/profile/${file.avatarfor.username}`, this.txtLbl.element, true)
+                    }
                 }
+            }
+
+            makeInfoLbl()
+
+            if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post) {
+                this.setAvatarBtn = new Button(Language.lang.elements.fileCard.useAsAvatar, this.element, null, async () => {
+                    const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
+                    if (avatarSetResult.HTTPCODE == 200) {
+                        await User.updateUserData()
+                        UserLabel.checkUserData()
+                        this.setAvatarBtn.kill()
+                        this.eraseOn.kill()
+                        this.eraseOnCntdown.kill()
+                        this.removeButton.kill()
+                        
+                        file.avatarfor = { username: User.data.username }
+                        makeInfoLbl()
+                    }
+                })
             }
 
             if (options.remove && !file.post && !file.avatarfor) {
