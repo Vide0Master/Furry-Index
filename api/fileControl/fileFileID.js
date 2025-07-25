@@ -18,9 +18,8 @@ exports.GET = async (req, res) => {
         where: {
             id: fileID
         },
-        select: {
-            file: true,
-            ownerid: true
+        include:{
+            
         }
     })
 
