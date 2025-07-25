@@ -142,38 +142,26 @@ export default class FileCard extends Elem {
                 new Tag(tag, tagsList.element)
             }
 
-            this.txtLbl = {}
+            if (file.post || file.avatarfor) {
+                this.txtLbl = new TextLabel(null, this.element, 'green', true)
+                new Elem(null, this.txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
 
-            const makeInfoLbl = () => {
-                if (file.post || file.avatarfor) {
-                    this.txtLbl = new TextLabel(null, this.element, 'green', true)
-                    new Elem(null, this.txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
+                if (file.post) {
+                    new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, this.txtLbl.element, true)
+                }
 
-                    if (file.post) {
-                        new Link(Language.lang.elements.fileCard.linked.to.post, `/post/${file.post.id}`, this.txtLbl.element, true)
-                    }
-
-                    if (file.avatarfor) {
-                        new Link(Language.lang.elements.fileCard.linked.to.pfavatar, `/profile/${file.avatarfor.username}`, this.txtLbl.element, true)
-                    }
+                if (file.avatarfor) {
+                    new Link(Language.lang.elements.fileCard.linked.to.pfavatar, `/profile/${file.avatarfor.username}`, this.txtLbl.element, true)
                 }
             }
 
-            makeInfoLbl()
-
-            if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post) {
+            if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post && !User.data?.avatar?.file) {
                 this.setAvatarBtn = new Button(Language.lang.elements.fileCard.useAsAvatar, this.element, null, async () => {
                     const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
                         await User.updateUserData()
                         UserLabel.checkUserData()
-                        this.setAvatarBtn.kill()
-                        this.eraseOn.kill()
-                        this.eraseOnCntdown.kill()
-                        this.removeButton.kill()
-                        
-                        file.avatarfor = { username: User.data.username }
-                        makeInfoLbl()
+                        location.reload()
                     }
                 })
             }
