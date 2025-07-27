@@ -69,8 +69,8 @@ exports.GET = async (req, res) => {
         delete post.scores
     }
 
-    
-    if(user && post.favourites.some(v=>v.userid==user.id)) post.myfav=true
+
+    if (user && post.favourites.some(v => v.userid == user.id)) post.myfav = true
 
     if (post.favourites) post.favourites = post.favourites.length
 
