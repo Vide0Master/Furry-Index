@@ -36,4 +36,4 @@ require('./systemServices/sync-langs.js')
 
 require('./systemServices/webServer.js')
 
-require('./systemServices/filePersistencyChecker.js')
+require('./systemServices/cron/cronJobs.js')
