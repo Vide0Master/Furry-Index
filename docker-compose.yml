@@ -8,6 +8,8 @@ services:
       - ENVIROMENT=${ENVIROMENT}
     volumes:
       - ./file_storage:/app/file_storage
+    ports:
+      - "${FIPORT}:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -31,6 +33,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      furry_index_net:
+        ipv4_address: 172.28.0.11
 
 networks:
   furry_index_net:
