@@ -36,7 +36,7 @@
     label {
         position: absolute;
         left: 0;
-        top: 50%;
+        top: 18px;
         color: var(--font-main);
         transform: translateY(-50%);
         cursor: text;
@@ -48,34 +48,10 @@
         white-space: nowrap;
     }
 
-    &.error {
-        --border-clr-internal: red;
-    }
-
-    .error {
-        position: absolute;
-        left: 50%;
-        top: 100%;
-        transform: translate(-50%, -50%);
-        border: solid 3px red;
-        padding: 2px 6px;
-        border-radius: 100vh;
-        background-color: var(--background-s);
-        opacity: 0;
-        animation: text-input-error-show 0.1s linear forwards;
-        pointer-events: none;
-        user-select: none;
-        text-align: center;
-        white-space: nowrap;
-
-        @keyframes text-input-error-show {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
+    .checks-box{
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 }

@@ -14,6 +14,10 @@ export default class SwitchInput extends Elem {
 
         this.checkbox.checked = checked
 
+        if(cname){
+            this.element.classList.add(cname)
+        }
+
         if (chcb) {
             this.checkbox.addEventListener('change', () => {
                 chcb(this.checkbox.checked)

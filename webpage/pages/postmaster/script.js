@@ -26,9 +26,15 @@ export async function render(params) {
         postsField.wipe()
         const req = []
 
-        tags.push(`author:${User.data.username}`)
+        console.log(currentTags)
 
-        if (tags) req.push(`tags=${tags.join('+')}`)
+        console.log(tags)
+
+        const fullTags = [...tags, `author:${User.data.username}`]
+
+        console.log(fullTags)
+
+        if (fullTags) req.push(`tags=${fullTags.join('+')}`)
         if (page) req.push(`p=${page}`)
         if (take) req.push(`t=${take}`)
 
@@ -42,8 +48,8 @@ export async function render(params) {
     }
 
     async function getPostsCount(tags = []) {
-        tags.push(`author:${User.data.username}`)
-        const pagesCount = await API('GET', `/api/posts?count=true${tags.length > 0 ? `&tags=${tags.join('+')}` : ''}`)
+        const fullTags = [...tags, `author:${User.data.username}`]
+        const pagesCount = await API('GET', `/api/posts?count=true${fullTags.length > 0 ? `&tags=${fullTags.join('+')}` : ''}`)
         return pagesCount.count
     }
 
@@ -52,7 +58,7 @@ export async function render(params) {
     const searchField = new SearchField(headBar.element, '/api/posts/tags')
 
     const newPostButton = new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
-        makePostMaker(null, () => { renderPosts(currentTags, 1, itemsPerPage) })
+        makePostMaker(null, () => { renderPosts(currentTags, 0, itemsPerPage) })
     })
 
     const pagesCount = Math.ceil((await getPostsCount(currentTags)) / itemsPerPage)
@@ -60,7 +66,7 @@ export async function render(params) {
 
     async function loadPost(postid) {
         const postdata = await API('GET', `/api/posts/${postid}`)
-        makePostMaker(postdata.post, () => { renderPosts(currentTags, 1, itemsPerPage) })
+        makePostMaker(postdata.post, () => { renderPosts(currentTags, 0, itemsPerPage) })
     }
 
     pageNav.addNavCB((page) => {
@@ -68,6 +74,8 @@ export async function render(params) {
     })
 
     searchField.addSearchCB(async (tags) => {
+        console.log(tags)
+        console.log(currentTags)
         currentTags = tags
         renderPosts(currentTags, 0, itemsPerPage)
         pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), 1)

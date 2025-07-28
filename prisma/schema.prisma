@@ -44,12 +44,12 @@ model File {
     filetype   String
     fileparams Json?
     ownerid    String
-    owner      User     @relation("User-Files", fields: [ownerid], references: [id], onDelete: Cascade)
+    owner      User     @relation("User-Files", fields: [ownerid], references: [id])
     createdAt  DateTime @default(now())
     updatedAt  DateTime @default(now()) @updatedAt
     tags       Tag[]    @relation("File-Tags")
     postid     String?
-    post       Post?    @relation(fields: [postid], references: [id])
+    post       Post?    @relation(fields: [postid], references: [id], onDelete: SetNull)
     locked     Boolean  @default(false)
     avatarfor  User?    @relation("User-Avatar")
 
@@ -120,9 +120,9 @@ enum ScoreType {
 model Score {
     id     String    @id @unique @default(uuid())
     userid String
-    user   User      @relation(fields: [userid], references: [id])
+    user   User      @relation(fields: [userid], references: [id], onDelete: Cascade)
     postid String
-    post   Post      @relation(fields: [postid], references: [id])
+    post   Post      @relation(fields: [postid], references: [id], onDelete: Cascade)
     type   ScoreType
 
     @@unique([userid, postid])
@@ -132,9 +132,9 @@ model Score {
 model Favourite {
     id     String @id @unique @default(uuid())
     userid String
-    user   User   @relation(fields: [userid], references: [id])
+    user   User   @relation(fields: [userid], references: [id], onDelete: Cascade)
     postid String
-    post   Post   @relation(fields: [postid], references: [id])
+    post   Post   @relation(fields: [postid], references: [id], onDelete: Cascade)
 
     @@unique([userid, postid])
     @@index([userid, postid])

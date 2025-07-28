@@ -26,6 +26,7 @@ const LANG = {
     },
     login: {
         mainLabel: "Вход",
+        button: "Войти",
         fields: {
             username: "Имя пользователя",
             password: "Пароль",
@@ -45,24 +46,31 @@ const LANG = {
         username: {
             label: "Имя пользователя",
             error: {
-                usernameRequired: "Требуется имя пользователя",
                 min: "Минимум",
                 max: "Максимум",
-                char: "символов",
+                chars: "символов",
                 lowecase: "Только строчные",
                 restrictedSymbol: "Запрещённый символ",
-                taken: "Занят"
+                taken: {
+                    default: "Имя должно быть уникальным",
+                    ok: "Имя уникальном",
+                    nok: "Имя занято"
+                },
+                specialSymbolCheck: {
+                    default: "Спец. символы запрещены",
+                    ok: "Спец. символы не найдены",
+                    nok: "Уберите спец символы"
+                }
             }
         },
         passFirst: {
             label: "Пароль",
             error: {
                 min: "Минимум",
-                char: "символов",
-                characters: "Нужна буква",
-                uppercase: "Должен быть заглавная буква",
-                numbers: "Нужна цифра",
-                restrictedSymbols: "Запрещённый символ"
+                max: "Максимум",
+                chars: "символов",
+                uppercase: "Нужна заглавная буква",
+                numbers: "Нужна цифра"
             }
         },
         passSecond: {

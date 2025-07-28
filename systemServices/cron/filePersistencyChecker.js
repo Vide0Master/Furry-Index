@@ -1,8 +1,7 @@
-const prisma = require('./prisma.js')
-const cron = require('node-cron');
-const removeFile = require('./removeFile.js');
+const prisma = require('../prisma.js')
+const removeFile = require('../removeFile.js');
 const path = require('path');
-const cmd = require('./cmdPretty.js');
+const cmd = require('../cmdPretty.js');
 
 const delay = new Date();
 delay.setDate(delay.getDate() - 1);
@@ -35,11 +34,6 @@ async function checkAndRmOldFiles() {
     }
 }
 
-cron.schedule('0 0 * * *', async () => {
-    await checkAndRmOldFiles()
-}, {
-    scheduled: true,
-    timezone: 'Europe/Kiev'
-});
-
 checkAndRmOldFiles()
+
+module.exports = checkAndRmOldFiles
