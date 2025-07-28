@@ -10,6 +10,7 @@ import Router from "../../scripts/router.js";
 import User from "../../scripts/userdata.js";
 import UserLabel from "../../elements/userLabel/script.js";
 import Header from "../../components/header/script.js";
+import BasicCheck from "../../scripts/basicChecks.js";
 
 export const tag = "register";
 export const tagLimit = 1;
@@ -25,102 +26,85 @@ export async function render(params) {
 
     new Elem('label', container.element).element.innerText = Language.lang.register.label
     const textInp = new TextInputLine(Language.lang.register.username.label, container.element, null, null,
-        async (usernameinput) => {
-            if (usernameinput.length == 0) {
+        async (username) => {
+            console.log(username)
+            if (username == null) {
                 registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.usernameRequired)
-                return
-            }
-
-            if (usernameinput.length <= 3) {
-                registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.min + " 3 " + Language.lang.register.username.error.char)
-                return
-            }
-
-            if (usernameinput.length > 20) {
-                registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.max + " 20 " + Language.lang.register.username.error.char)
-                return
-            }
-
-            const capitals = /[A-Z]/
-            if (capitals.test(usernameinput)) {
-                registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.lowecase)
-                return
-            }
-
-            const restrictedSymbols = /^[a-z0-9-_]+$/
-            if (!restrictedSymbols.test(usernameinput)) {
-                registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.restrictedSymbol)
-                return
-            }
-
-            const result = await API('GET', `/api/register?username=${usernameinput}`)
-            if (result.taken) {
-                registerData.error = true
-                textInp.displayError(Language.lang.register.username.error.taken)
                 return
             }
 
             registerData.error = false
-            textInp.removeError()
             registerData.username = textInp.input.value
         })
+
+    textInp.addCheck(Language.lang.register.username.error.min + " 3 " + Language.lang.register.username.error.chars, (val) => {
+        return !BasicCheck.MinLen(val, 3)
+    })
+
+    textInp.addCheck(Language.lang.register.username.error.max + " 30 " + Language.lang.register.username.error.chars, (val) => {
+        return !BasicCheck.MaxLen(val, 30)
+    })
+
+    textInp.addCheck(Language.lang.register.username.error.lowecase, (val) => {
+        return !BasicCheck.includesUppercase(val)
+    })
+
+    textInp.addCheck(Language.lang.register.username.error.specialSymbolCheck, (val) => {
+        const rslt = BasicCheck.getNonLatinChars(val)
+        if (rslt.length == 0) {
+            return true
+        } else {
+            return `(${rslt.join(', ')})`
+        }
+    })
+
+    textInp.addCheck(Language.lang.register.username.error.taken, async (val) => {
+        const result = await API('GET', `/api/register?username=${val}`)
+        return !result.taken
+    })
+
     const passFirst = new PasswordInput(Language.lang.register.passFirst.label, container.element, null,
         async (pass) => {
-            if (pass.length < 8) {
+            console.log(pass)
+            if (pass == null) {
                 registerData.error = true
-                passFirst.displayError(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.char)
-                return
-            }
-
-            const letters = /[A-Za-z]/
-            if (!letters.test(pass)) {
-                registerData.error = true
-                passFirst.displayError(Language.lang.register.passFirst.error.characters)
-                return
-            }
-
-            const capitals = /[A-Z]/
-            if (!capitals.test(pass)) {
-                registerData.error = true
-                passFirst.displayError(Language.lang.register.passFirst.error.uppercase)
-                return
-            }
-
-
-            const numbers = /[0-9]/
-            if (!numbers.test(pass)) {
-                registerData.error = true
-                passFirst.displayError(Language.lang.register.passFirst.error.numbers)
-                return
-            }
-
-            const restrictedSymbols = /^[A-Za-z0-9-_+~!@#$%^&*]+$/
-            if (!restrictedSymbols.test(pass)) {
-                registerData.error = true
-                passFirst.displayError(Language.lang.register.passFirst.error.restrictedSymbols)
                 return
             }
 
             registerData.error = false
-            passFirst.removeError()
         })
+
+    passFirst.addCheck(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.chars, (val) => {
+        return !BasicCheck.MinLen(val, 8)
+    })
+
+    passFirst.addCheck(Language.lang.register.passFirst.error.max + " 1000 " + Language.lang.register.passFirst.error.chars, (val) => {
+        return !BasicCheck.MaxLen(val, 1000)
+    })
+
+    passFirst.addCheck(Language.lang.register.passFirst.error.uppercase, (val) => {
+        return BasicCheck.includesUppercase(val)
+    })
+
+    passFirst.addCheck(Language.lang.register.passFirst.error.numbers, (val) => {
+        return BasicCheck.includesDigit(val)
+    })
+
     const passSecond = new PasswordInput(Language.lang.register.passSecond.label, container.element, null,
         async (pass) => {
-            if (passFirst.input.value != pass) {
+            console.log(pass)
+            if (pass == null) {
                 registerData.error = true
-                passSecond.displayError(Language.lang.register.passSecond.error.notMatch)
                 return
             }
 
             registerData.error = false
-            passSecond.removeError()
             registerData.password = pass
         })
+
+    passSecond.addCheck(Language.lang.register.passSecond.error.notMatch, (val) => {
+        return passFirst.input.value === val
+    })
 
     const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, 'hidden')
 
@@ -134,6 +118,7 @@ export async function render(params) {
     new Button(Language.lang.register.label, container.element, null,
         async () => {
             if (registerData.error) {
+                console.log(registerData)
                 new Alert.Simple(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
                 return
             }
@@ -141,19 +126,19 @@ export async function render(params) {
             const registerResult = await API('POST', '/api/register', registerData)
 
             if (registerResult.HTTPCODE == 200) {
-                if (autologin.checkbox.element.value) {
+                if (autologin.checkbox.checked) {
                     const loginResult = await API('POST', '/api/login', {
                         login: registerData.username,
                         password: registerData.password,
-                        remember: rememberMe.checkbox.element.value,
+                        remember: rememberMe.checkbox.checked,
                     })
 
                     if (loginResult.HTTPCODE == 200) {
-                        new Alert.Simple(`${Language.lang.login.success[0]} ${registerData.login}`, Language.lang.login.success[1], 5000, '#109f10')
                         await User.updateUserData()
+                        new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, '#109f10')
                         UserLabel.checkUserData()
                         Header.checkUserLoginState()
-                        Router.navigate('/profile')
+                        Router.navigate(`/profile/${User.data.username}`)
                     } else {
                         new Alert.Simple(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, 'loginerr')
                     }
