@@ -69,8 +69,9 @@ export async function render(params) {
         makePostMaker(postdata.post, () => { renderPosts(currentTags, 0, itemsPerPage) })
     }
 
-    pageNav.addNavCB((page) => {
+    pageNav.addNavCB(async (page) => {
         renderPosts(currentTags, page - 1, itemsPerPage)
+        pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), page)
     })
 
     searchField.addSearchCB(async (tags) => {

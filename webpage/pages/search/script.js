@@ -57,8 +57,9 @@ export async function render(params) {
     posts.moveAfter(searchField.element)
     pageNav.moveAfter(posts.element)
 
-    pageNav.addNavCB((page) => {
+    pageNav.addNavCB(async (page) => {
         renderPosts(currentTags, page - 1, itemsPerPage)
+        pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), page)
     })
 
     searchField.addSearchCB(async (tags) => {

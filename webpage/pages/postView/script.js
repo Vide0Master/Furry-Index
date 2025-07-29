@@ -103,11 +103,13 @@ function renderFileData(files, type, parent, postID, postimgContainer) {
 
     if (type === 'image' || type === 'video') count = 1;
 
+    const fileContainer = new Elem('files-cont', postimgContainer.element)
+
     files.forEach(file => {
         if (type === 'video') {
-            new Video(`/api/posts/${postID}/file/${file.id}`, postimgContainer.element);
+            new Video(`/api/posts/${postID}/file/${file.id}`, fileContainer.element);
         } else {
-            new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', postimgContainer.element);
+            new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', fileContainer.element);
         }
         avg.width += file.fileparams.width;
         avg.height += file.fileparams.height;
@@ -248,7 +250,7 @@ export async function render(params) {
             cnt = await Favourites.rm(PData.id)
         }
 
-        if(cnt !== true && typeof cnt != 'number') return
+        if (cnt !== true && typeof cnt != 'number') return
 
         favstate = !favstate
 

@@ -79,20 +79,27 @@
             }
         }
 
-        .internal-image-container {
-            grid-column: 2;
-            grid-row: 1;
-            width: fit-content;
-            height: fit-content;
+        .files-cont {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            height: 700px;
+            width: 100%;
 
-            @media (max-width: 700px) {
-                grid-column: 1;
-                grid-row: 1;
-            }
+            .internal-image-container {
+                height: fit-content;
+                width: fit-content;
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
 
-            img {
-                max-height: 700px;
-                object-fit: contain;
+                img {
+                    max-height: 700px;
+                    object-fit: contain;
+                }
             }
         }
 
@@ -182,8 +189,8 @@
                 align-items: center;
                 gap: 5px;
 
-                &.faved{
-                    .heart{
+                &.faved {
+                    .heart {
                         color: var(--ok-color);
                     }
                 }
