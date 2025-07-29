@@ -53,34 +53,6 @@ function buildResult(resultKey) {
     return ' ' + colorize(text, color);
 }
 
-function buildProgressBar(perc, width) {
-    const symbols = [' ', '⡀', '⡄', '⡆', '⡇', '⣇', '⣧', '⣷', '⣿'];
-    const fullUnits = Math.floor((perc / 100) * width);
-    const remainder = ((perc / 100) * width) - fullUnits;
-    const partialIndex = Math.floor(remainder * (symbols.length - 1));
-
-    let bar = '';
-
-    for (let i = 0; i < width; i++) {
-        if (i < fullUnits) {
-            bar += symbols[symbols.length - 1];
-        } else if (i === fullUnits && partialIndex > 0) {
-            bar += symbols[partialIndex];
-        } else {
-            bar += symbols[0];
-        }
-    }
-
-    return bar;
-}
-
-function calculatePercFromProgress(current, total) {
-    if (typeof current === 'number' && typeof total === 'number' && total > 0) {
-        return (current / total) * 100;
-    }
-    return null;
-}
-
 function cmdLineBuilder(preps, text, resultKey) {
     return buildPrefix(preps) + buildMain(text) + buildResult(resultKey);
 }
@@ -95,56 +67,40 @@ class cmd {
     static cerr(msg, preps) { console.log(cmdLineBuilder(preps, msg, 'ce')); }
     static awesome(msg, preps) { console.log(cmdLineBuilder(preps, msg, 'awesome')); }
 
-    static progress(state = { text: '', result: null, perc: null, current: null, total: null }, preps = []) {
-        const cycle = ['⠉', '⠘', '⠰', '⠤', '⠆', '⠃'];
-        let idx = 0;
-        let prevLen = 0;
+    static nested(nest, preps, status = 'info') {
+        console.log(cmdLineBuilder(preps, nest.label, status));
 
-        const timer = setInterval(() => {
-            idx = (idx + 1) % cycle.length;
-            render()
-        }, 150);
+        const prepsLength = 0;
 
-        function render() {
-            let perc = state.perc;
-            if (perc == null && state.current != null && state.total != null) {
-                perc = calculatePercFromProgress(state.current, state.total);
-            }
+        function renderLayer(node, prefix = '', isLast = true) {
+            const hasChildren = node.childs && node.childs.length > 0;
+            let connector;
 
-            let line = buildPrefix(preps) + buildMain(state.text);
-
-            if (typeof perc === 'number') {
-                line += ' ' + colorize(buildProgressBar(perc, 30) + ' ' + `[${Math.floor(state.current)}/${Math.floor(state.total)}]`, 'brightCyan');
-            }
-
-            if (state.result) {
-                line += buildResult(state.result) + '\n';
-                clearInterval(timer);
+            if (hasChildren) {
+                connector = isLast ? '╚═╦═ ' : '╠═╦═ ';
             } else {
-                line += ' ' + colorize(cycle[idx] + ' PROCESSING', 'magenta') + '\r';
+                connector = isLast ? '╙─── ' : '╟─── ';
             }
 
-            if (prevLen > line.length) {
-                process.stdout.write('\x1B[2K\r');
-            }
+            const line = prefix + connector + (node.label ?? '[no label]');
+            console.log(' '.repeat(prepsLength) + line);
 
-            process.stdout.write(line);
-            prevLen = line.length;
+            if (!hasChildren) return;
+
+            const newPrefix = prefix + (isLast ? '  ' : '║ ');
+            node.childs.forEach((child, index) => {
+                const last = index === node.childs.length - 1;
+                renderLayer(child, newPrefix, last);
+            });
         }
 
-        return (resultKeyOrUpdate) => {
-            if (typeof resultKeyOrUpdate === 'string') {
-                state.result = resultKeyOrUpdate;
-            } else if (typeof resultKeyOrUpdate === 'object') {
-                if ('perc' in resultKeyOrUpdate) state.perc = resultKeyOrUpdate.perc;
-                if ('current' in resultKeyOrUpdate) state.current = resultKeyOrUpdate.current;
-                if ('total' in resultKeyOrUpdate) state.total = resultKeyOrUpdate.total;
-                if ('text' in resultKeyOrUpdate) state.text = resultKeyOrUpdate.text;
-                if ('state' in resultKeyOrUpdate) state.result = resultKeyOrUpdate.result
-            }
-            render()
-        };
+        delete nest.label;
+        nest.childs?.forEach((child, index) => {
+            const isLast = index === nest.childs.length - 1;
+            renderLayer(child, '', isLast);
+        });
     }
+
 
     static custom(text, resultKey, preps) {
         console.log(cmdLineBuilder(preps, text, resultKey));
@@ -159,7 +115,14 @@ class cmd {
         DB: { text: "Database", color: "red" },
         Debug: { text: "Debug", color: "red" },
         http: { text: "HTTP", color: "red" },
-        ws: { text: "WS", color: "cyan" }
+        ws: { text: "WS", color: "cyan" },
+        APIs: {
+            GET: { text: "GET", color: "green" },
+            POST: { text: "POST", color: "magenta" },
+            PUT: { text: "PUT", color: "yellow" },
+            PATCH: { text: "PATCH", color: "magenta" },
+            DELETE: { text: "DELETE", color: "red" }
+        }
     }
 }
 
