@@ -32,6 +32,11 @@ const getUserBySessionCookie = require('../systemServices/getUserBySessionCookie
 
 const localRoutes = []
 
+const routesNest = {}
+
+routesNest.label = `List of loaded routes`
+routesNest.childs = []
+
 for (let i = 0; i < apiFiles.length; i++) {
     const module = require(apiFiles[i])
     let route
@@ -45,9 +50,12 @@ for (let i = 0; i < apiFiles.length; i++) {
 
     let routeCounter = 0
 
+    routesNest.childs.push({ label: route, childs: [] })
+    const logIndex = routesNest.childs.findIndex(v => v.label == route)
+
     for (const method in module) {
         if (['ROUTE', 'PERMISSIONS'].includes(method)) continue
-        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'].includes(method)) {
+        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
             cmd.bad(`Method ${method} is not allowed, skipping`, [cmd.preps.API])
             continue
         }
@@ -58,6 +66,9 @@ for (let i = 0; i < apiFiles.length; i++) {
             PERMISSIONS: module.PERMISSIONS ? module.PERMISSIONS : undefined
         })
         routeCounter++
+
+        const prep = cmd.preps.APIs[method]
+        routesNest.childs[logIndex].childs.push({ label: cmd.colorize(prep.text, prep.color) })
     }
 
     if (routeCounter == 0) {
@@ -65,11 +76,7 @@ for (let i = 0; i < apiFiles.length; i++) {
     }
 }
 
-const loadProgress = cmd.progress({
-    text: `Loading routes`,
-    current: 0,
-    total: localRoutes.length
-}, [cmd.preps.API])
+cmd.nested(routesNest, [cmd.preps.API])
 
 for (const routeID in localRoutes) {
     const route = localRoutes[routeID]
@@ -104,10 +111,8 @@ for (const routeID in localRoutes) {
     middlewares.push(route.FUNCTION);
 
     webServer[route.METHOD](route.ROUTE, ...middlewares)
-    loadProgress({ current: parseInt(routeID) + 1 })
 }
 
-loadProgress('ok')
 
 webServer.use((req, res) => {
     res.status(404).send('Route not found.');
