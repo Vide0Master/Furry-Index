@@ -34,7 +34,9 @@ export async function render(params) {
 
         const filesResp = await API('GET', `/api/files${query}`)
         for (const file of filesResp.files) {
-            const fcard = new FileCard(file, false, fileField.element)
+            const fcard = new FileCard(file, false, fileField.element,
+                { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true }
+            )
 
             fcard.image.image.setAttribute('draggable', 'false')
 

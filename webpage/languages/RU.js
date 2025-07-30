@@ -205,7 +205,8 @@ const LANG = {
                 ],
                 alert: "Удалён файл"
             },
-            useAsAvatar: "Аватар"
+            useAsAvatar: "Аватар",
+            uploadBtn: "Загрузить"
         },
         postCard: {
             rating: {
@@ -252,6 +253,9 @@ const LANG = {
         },
         search: {
             label: "Поиск"
+        },
+        dropdown: {
+            label: "Выбрать"
         }
     },
     features: {

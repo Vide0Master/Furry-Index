@@ -21,6 +21,7 @@ export async function render(params) {
         for (const fCard of fileList) {
             fCard.uploadFile()
         }
+        groupUploadBtn.switchVisible(false)
     })
 
     groupUploadBtn.switchVisible(false)
@@ -29,11 +30,8 @@ export async function render(params) {
         fileList = []
         fileManagerField.element.innerHTML = ''
 
-        if (files.length > 1) {
-            groupUploadBtn.element.classList.remove('hidden')
-        } else {
-            groupUploadBtn.element.classList.add('hidden')
-        }
+        groupUploadBtn.switchVisible(files.length > 1)
+
         for (const file of files) {
             fileList.push(new FileCard(file, true, fileManagerField.element))
         }

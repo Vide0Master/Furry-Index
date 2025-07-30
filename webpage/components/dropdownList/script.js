@@ -1,3 +1,4 @@
+import Language from "../../scripts/language.js"
 import Elem from "../elem/script.js"
 import Icon from "../icon/script.js"
 
@@ -5,34 +6,62 @@ export default class DropdownList extends Elem {
     constructor(options, parent, placeholder, chcb) {
         super('internal-dropdown', parent)
 
-        new Icon('list', this.element)
+        this.options = options
 
-        this.select = new Elem('selector', this.element, 'select')
+        const label = new Elem('label', this.element)
+        new Icon('list', label.element)
+        this.textLabel = new Elem('text-label', label.element)
+        this.textLabel.text = placeholder ? placeholder : Language.lang.elements.dropdown.label
 
-        if (placeholder) this.select.element.appendChild(this.createOption(placeholder, 'placeholder', true, true))
+        this.optionsBlock = new Elem('options-block', this.element)
+
+        this.currentOption = 'placeholder'
+
+        this.createOption(placeholder ? placeholder : Language.lang.elements.dropdown.label, 'placeholder', false)
 
         for (const option of options) {
-            this.select.element.appendChild(this.createOption(option.name, option.value))
+            this.createOption(option.name, option.value)
             if (option?.selected) {
-                this.select.element.lastChild.selected = true
+                this.currentOption = option.value
+                this.textLabel.text = option.name
             }
         }
 
-        if (chcb) this.select.element.addEventListener('change', () => {
-            chcb(this.select.element.value)
+        if (chcb) this.chcb = () => {
+            chcb(this.currentOption)
+        }
+
+        label.addEvent('click', () => {
+            this.element.classList.toggle('dd-visible')
         })
 
-        delete this.select.text
+        this.addEvent('mouseleave', () => {
+            this.element.classList.toggle('dd-visible', false)
+        })
     }
 
-    createOption(name, value, selected = false, disabled = false) {
-        const option = document.createElement('option')
+    createOption(name, value, enabled = true) {
+        const option = new Elem('option', this.optionsBlock.element)
+        option.text = name
 
-        option.value = value
-        option.innerText = name
-        if (selected) option.selected = true
-        if (disabled) option.disabled = true
+        if (enabled) {
+            option.addEvent('click', () => {
+                this.currentOption = value
+                this.textLabel.text = name
+                this.element.classList.toggle('dd-visible', false)
+                if (this.chcb) this.chcb()
+            })
+        } else {
+            option.element.classList.add('disabled')
+        }
+    }
 
-        return option
+    get value() {
+        return this.currentOption
+    }
+
+    set value(value) {
+        this.currentOption = value
+        this.textLabel.text = this.options[this.options.findIndex(v => v.value == value)].name
     }
 }

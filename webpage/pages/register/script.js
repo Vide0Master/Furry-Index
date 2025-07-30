@@ -27,7 +27,6 @@ export async function render(params) {
     new Elem('label', container.element).element.innerText = Language.lang.register.label
     const textInp = new TextInputLine(Language.lang.register.username.label, container.element, null, null,
         async (username) => {
-            console.log(username)
             if (username == null) {
                 registerData.error = true
                 return
@@ -65,7 +64,6 @@ export async function render(params) {
 
     const passFirst = new PasswordInput(Language.lang.register.passFirst.label, container.element, null,
         async (pass) => {
-            console.log(pass)
             if (pass == null) {
                 registerData.error = true
                 return
@@ -92,7 +90,6 @@ export async function render(params) {
 
     const passSecond = new PasswordInput(Language.lang.register.passSecond.label, container.element, null,
         async (pass) => {
-            console.log(pass)
             if (pass == null) {
                 registerData.error = true
                 return
@@ -118,7 +115,6 @@ export async function render(params) {
     new Button(Language.lang.register.label, container.element, null,
         async () => {
             if (registerData.error) {
-                console.log(registerData)
                 new Alert.Simple(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
                 return
             }
