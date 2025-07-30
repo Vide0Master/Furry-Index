@@ -39,13 +39,13 @@ export default async function makePostMaker(postData, editedCB) {
     new DropdownList(
         (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.rating[val], value: val })),
         container.element, Language.lang.elements.postMaker.postRating, (val) => { PostData.rating = val }
-    ).element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
+    ).select.element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
 
     const postType = new DropdownList(
         (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.type[val], value: val })),
         container.element, Language.lang.elements.postMaker.postType, getFiles
     )
-    postType.element.value = PostData.type != '' ? PostData.type : 'placeholder'
+    postType.select.element.value = PostData.type != '' ? PostData.type : 'placeholder'
 
     const filesField = new Elem(['files-list', 'hidden'], container.element)
 

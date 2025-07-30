@@ -1,23 +1,28 @@
 import Elem from "../elem/script.js"
+import Icon from "../icon/script.js"
 
 export default class DropdownList extends Elem {
     constructor(options, parent, placeholder, chcb) {
-        super('internal-dropdown', parent, 'select')
+        super('internal-dropdown', parent)
 
-        if (placeholder) this.element.appendChild(this.createOption(placeholder, 'placeholder', true, true))
+        new Icon('list', this.element)
+
+        this.select = new Elem('selector', this.element, 'select')
+
+        if (placeholder) this.select.element.appendChild(this.createOption(placeholder, 'placeholder', true, true))
 
         for (const option of options) {
-            this.element.appendChild(this.createOption(option.name, option.value))
+            this.select.element.appendChild(this.createOption(option.name, option.value))
             if (option?.selected) {
-                this.element.lastChild.selected = true
+                this.select.element.lastChild.selected = true
             }
         }
 
-        if (chcb) this.element.addEventListener('change', () => {
-            chcb(this.element.value)
+        if (chcb) this.select.element.addEventListener('change', () => {
+            chcb(this.select.element.value)
         })
 
-        delete this.text
+        delete this.select.text
     }
 
     createOption(name, value, selected = false, disabled = false) {

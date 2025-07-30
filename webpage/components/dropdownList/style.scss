@@ -1,19 +1,33 @@
 .internal-dropdown {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: var(--background-s);
-    color: var(--font-main);
-    font-size: 16px;
-    padding: 6px 12px;
     border-radius: 100vh;
     border: 3px solid var(--interactible-passive);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 0px 10px;
     transition: 0.2s;
     width: fit-content;
+    background-color: var(--background-s);
 
-    &:focus,
+    .selector {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        color: var(--font-main);
+        background-color: var(--background-s);
+        font-size: 16px;
+        border: none;
+
+        padding: 5px;
+
+        &:focus,
+        &:hover {
+            outline: none;
+        }
+    }
+
     &:hover {
-        outline: none;
         border-color: var(--interactible-hover);
     }
 }
