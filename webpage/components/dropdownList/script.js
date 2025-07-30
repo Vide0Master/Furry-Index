@@ -8,6 +8,8 @@ export default class DropdownList extends Elem {
 
         this.options = options
 
+        this.placeholderName = placeholder
+
         const label = new Elem('label', this.element)
         new Icon('list', label.element)
         this.textLabel = new Elem('text-label', label.element)
@@ -62,6 +64,10 @@ export default class DropdownList extends Elem {
 
     set value(value) {
         this.currentOption = value
-        this.textLabel.text = this.options[this.options.findIndex(v => v.value == value)].name
+        if (value != 'placeholder') {
+            this.textLabel.text = this.options[this.options.findIndex(v => v.value == value)].name
+        } else {
+            this.textLabel.text = this.placeholderName
+        }
     }
 }
