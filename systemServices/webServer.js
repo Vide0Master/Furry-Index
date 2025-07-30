@@ -72,11 +72,11 @@ server.listen(globalVariables.PORT, () => {
         cmd.warn(`Port was not found in ${cmd.colorize('ENV', 'yellow')} varibles, automatically assigned ${cmd.colorize('3000', 'blue')}`,
             [cmd.preps.System])
 
+    require('../api/APIController')
+
     if (globalVariables.DEVmode)
         cmd.info(`Link to local page: ${cmd.colorize(`http://localhost:${globalVariables.PORT}`, 'cyan')}`,
             [cmd.preps.Debug, cmd.preps.http])
-
-    require('../api/APIController')
 });
 
 module.exports = { webServer: expressServer, wsServer: wss }

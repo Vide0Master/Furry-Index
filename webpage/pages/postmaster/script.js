@@ -26,13 +26,7 @@ export async function render(params) {
         postsField.wipe()
         const req = []
 
-        console.log(currentTags)
-
-        console.log(tags)
-
         const fullTags = [...tags, `author:${User.data.username}`]
-
-        console.log(fullTags)
 
         if (fullTags) req.push(`tags=${fullTags.join('+')}`)
         if (page) req.push(`p=${page}`)
@@ -69,13 +63,12 @@ export async function render(params) {
         makePostMaker(postdata.post, () => { renderPosts(currentTags, 0, itemsPerPage) })
     }
 
-    pageNav.addNavCB((page) => {
+    pageNav.addNavCB(async (page) => {
         renderPosts(currentTags, page - 1, itemsPerPage)
+        pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), page)
     })
 
     searchField.addSearchCB(async (tags) => {
-        console.log(tags)
-        console.log(currentTags)
         currentTags = tags
         renderPosts(currentTags, 0, itemsPerPage)
         pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), 1)

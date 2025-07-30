@@ -205,7 +205,8 @@ const LANG = {
                 ],
                 alert: "Removed file"
             },
-            useAsAvatar: 'Avatar'
+            useAsAvatar: 'Avatar',
+            uploadBtn: 'Upload'
         },
         postCard: {
             rating: {
@@ -252,6 +253,9 @@ const LANG = {
         },
         search: {
             label: "Search"
+        },
+        dropdown: {
+            label: 'Select'
         }
     },
     features: {

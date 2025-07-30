@@ -1,19 +1,103 @@
 .internal-dropdown {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: var(--background-s);
-    color: var(--font-main);
-    font-size: 16px;
-    padding: 6px 12px;
-    border-radius: 100vh;
     border: 3px solid var(--interactible-passive);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
     transition: 0.2s;
     width: fit-content;
+    background-color: var(--background-s);
+    overflow: visible;
+    position: relative;
 
-    &:focus,
+    border-radius: 15px;
+
+    transition: 0.2s;
+
+    .label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 10px;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .options-block {
+        z-index: 1000;
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 0;
+        min-width: 100%;
+
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+
+        background-color: color-mix(in srgb, var(--background) 90%, transparent 10%);
+        backdrop-filter: blur(5px);
+        border-radius: 15px;
+
+        animation: dd-list-out 0.2s ease forwards;
+
+        transition: 0.2s;
+
+        @keyframes dd-list-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes dd-list-out {
+            0% {
+                opacity: 1;
+                display: flex;
+            }
+
+            99% {
+                opacity: 0;
+                display: flex;
+            }
+
+            100% {
+                opacity: 0;
+                display: none;
+            }
+        }
+
+        .option {
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            padding: 10px;
+
+            &.disabled {
+                cursor: default;
+                &:hover{
+                    color: var(--font);
+                }
+            }
+
+            &:hover {
+                color: var(--font-hover);
+            }
+        }
+    }
+
+    &.dd-visible {
+        .options-block {
+            display: flex;
+            animation: dd-list-in 0.2s ease forwards;
+        }
+    }
+
     &:hover {
-        outline: none;
         border-color: var(--interactible-hover);
     }
+
 }

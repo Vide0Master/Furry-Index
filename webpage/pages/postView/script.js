@@ -14,6 +14,7 @@ import makePostMaker from "../../elements/postMaker/script.js";
 import Router from "../../scripts/router.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import Favourites from "../../scripts/favouriteControl.js";
+import PageNavigator from "../../elements/pagenavigator/script.js";
 
 
 function capitalizeFirst(str) {
@@ -103,16 +104,36 @@ function renderFileData(files, type, parent, postID, postimgContainer) {
 
     if (type === 'image' || type === 'video') count = 1;
 
+    const fileContainer = new Elem('files-cont', postimgContainer.element)
+
+    const filesElems = []
+
     files.forEach(file => {
         if (type === 'video') {
-            new Video(`/api/posts/${postID}/file/${file.id}`, postimgContainer.element);
+            filesElems.push(new Video(`/api/posts/${postID}/file/${file.id}`, fileContainer.element))
         } else {
-            new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', postimgContainer.element);
+            filesElems.push(new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', fileContainer.element))
         }
         avg.width += file.fileparams.width;
         avg.height += file.fileparams.height;
         avg.size += file.fileparams.size;
     });
+
+    if (filesElems.length > 1) {
+        for (let i = 1; i < filesElems.length; i++) {
+            filesElems[i].switchVisible(false)
+        }
+
+        const pageNav = new PageNavigator(filesElems.length, 1, fileContainer.element)
+
+        pageNav.addNavCB((page) => {
+            for (const elem of filesElems) {
+                elem.switchVisible(false)
+            }
+            filesElems[page - 1].switchVisible(true)
+            pageNav.renderButtons(filesElems.length, page)
+        })
+    }
 
     avg.width = Math.floor(avg.width / count);
     avg.height = Math.floor(avg.height / count);
@@ -248,7 +269,7 @@ export async function render(params) {
             cnt = await Favourites.rm(PData.id)
         }
 
-        if(cnt !== true && typeof cnt != 'number') return
+        if (cnt !== true && typeof cnt != 'number') return
 
         favstate = !favstate
 

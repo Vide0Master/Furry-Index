@@ -39,13 +39,13 @@ export default async function makePostMaker(postData, editedCB) {
     new DropdownList(
         (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.rating[val], value: val })),
         container.element, Language.lang.elements.postMaker.postRating, (val) => { PostData.rating = val }
-    ).element.value = PostData.rating != '' ? PostData.rating : 'placeholder'
+    ).value = PostData.rating != '' ? PostData.rating : 'placeholder'
 
     const postType = new DropdownList(
         (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.type[val], value: val })),
         container.element, Language.lang.elements.postMaker.postType, getFiles
     )
-    postType.element.value = PostData.type != '' ? PostData.type : 'placeholder'
+    postType.value = PostData.type != '' ? PostData.type : 'placeholder'
 
     const filesField = new Elem(['files-list', 'hidden'], container.element)
 
@@ -102,7 +102,7 @@ export default async function makePostMaker(postData, editedCB) {
         }
     }
 
-    if (PostData.files.length != 0) getFiles(postType.element.value, PostData.files)
+    if (PostData.files.length != 0) getFiles(postType.value, PostData.files)
 
     const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, 'custom', (val) => {
         const tags = val.split(' ').filter(tag => tag != '' && !tag.startsWith('#'))

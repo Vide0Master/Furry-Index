@@ -84,7 +84,8 @@ export default async function API(method, route, body, credentials = false) {
             );
 
             //! DO NOT DELETE
-            console.log(data)
+            console.log('Request body:\n', body)
+            console.log('Response:\n', data)
 
             console.groupEnd();
         }

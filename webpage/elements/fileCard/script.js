@@ -117,7 +117,7 @@ export default class FileCard extends Elem {
                 }
             }
 
-            this.uploadButton = new Button('Upload', this.element, null, this.uploadFile)
+            this.uploadButton = new Button(Language.lang.elements.fileCard.uploadBtn, this.element, null, this.uploadFile)
         } else {
             this.fileid = new Elem('file-id', this.element)
             this.fileid.text = file.id
@@ -166,19 +166,25 @@ export default class FileCard extends Elem {
                 })
             }
 
-            if (options.remove && !file.post && !file.avatarfor) {
+            if (options?.remove && !file.post && !file.avatarfor) {
                 this.delete = async (e) => {
                     this.removeButton.switchVisible(false)
-                    const removeResult = await API('DELETE', `/file/${file.id}${e.shiftKey ? "&force=true" : ""}`, null, true)
+                    const removeResult = await API('DELETE', `/file/${file.id}${e.shiftKey ? "?force=true" : ""}`, null, true)
 
                     if (removeResult.HTTPCODE == 200) {
                         new Alert.Simple(`ID: ${file.id}`, Language.lang.elements.fileCard.delete.alert, 5000, null, file.id)
                         this.element.remove()
                     }
+
+                    if (options.onRM) options.onRM()
                 }
 
-                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, () => {
-                    new Alert.Confirm(`${Language.lang.elements.fileCard.delete.confirmText[0]} ${file.id}${Language.lang.elements.fileCard.delete.confirmText[1]}`, Language.lang.elements.fileCard.delete.confirm, () => { this.delete() })
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, (e) => {
+                    if (e.shiftKey){
+                        this.delete(e)
+                        return
+                    }
+                    new Alert.Confirm(`${Language.lang.elements.fileCard.delete.confirmText[0]} ${file.id}${Language.lang.elements.fileCard.delete.confirmText[1]}`, Language.lang.elements.fileCard.delete.confirm, (e) => { this.delete(e) })
                 })
             }
         }

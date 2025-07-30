@@ -34,7 +34,9 @@ export async function render(params) {
 
         const filesResp = await API('GET', `/api/files${query}`)
         for (const file of filesResp.files) {
-            const fcard = new FileCard(file, false, fileField.element)
+            const fcard = new FileCard(file, false, fileField.element,
+                { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true }
+            )
 
             fcard.image.image.setAttribute('draggable', 'false')
 
@@ -65,14 +67,15 @@ export async function render(params) {
     const pagesCount = Math.ceil((await getFilesCount(currentTags)) / itemsPerPage)
     const pageNav = new PageNavigator(pagesCount, 1, container.element)
 
-    pageNav.addNavCB((page) => {
+    pageNav.addNavCB(async (page) => {
         renderFiles(currentTags, page - 1, itemsPerPage)
+        pageNav.renderButtons(Math.ceil((await getFilesCount(currentTags)) / itemsPerPage), page)
     })
 
     searchField.addSearchCB(async (tags) => {
         currentTags = tags
         renderFiles(currentTags, 0, itemsPerPage)
-        pageNav.renderButtons(Math.ceil((await getPostsCount(currentTags)) / itemsPerPage), 1)
+        pageNav.renderButtons(Math.ceil((await getFilesCount(currentTags)) / itemsPerPage), 1)
     })
 
     return container.element;

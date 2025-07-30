@@ -3,15 +3,18 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow: visible;
 
     .settings-selector-row {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 10px;
+        overflow: visible;
     }
 
     &>* {
+        overflow: visible;
         display: flex;
         flex-direction: column;
         align-items: start;

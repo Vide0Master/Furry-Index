@@ -6,6 +6,8 @@ export default class PageNavigator extends Elem {
     constructor(pages, current, parent) {
         super('internal-page-navigator', parent);
 
+        this.currentPage = current
+
         this.renderButtons(pages, current)
 
         this.navCB = []
@@ -20,6 +22,7 @@ export default class PageNavigator extends Elem {
         }
 
         this.navigate = (page) => {
+            this.currentPage = page
             this.navCB.forEach(cb => cb(page))
         }
 
@@ -31,13 +34,20 @@ export default class PageNavigator extends Elem {
     renderButtons(pages, current) {
         this.wipe()
 
+        const prevBtn = new Elem('page-button', this.element)
+        if (this.currentPage > 1) {
+            prevBtn.element.classList.add('active')
+            prevBtn.addEvent('click', () => { this.navigate(this.currentPage - 1) })
+        }
+        prevBtn.text = '<'
+
         for (let i = 0; i < pageElems; i++) {
             const pageButton = new Elem('page-button', this.element);
             const negative = Math.floor(pageElems / 2)
 
             const pageN = current - negative + i
             if (pageN <= 0 || pageN > pages) continue
-            
+
             pageButton.element.classList.add('active')
 
             new Elem(null, pageButton.element).text = pageN
@@ -50,5 +60,12 @@ export default class PageNavigator extends Elem {
                 this.navigate(pageN)
             })
         }
+
+        const nextBtn = new Elem('page-button', this.element)
+        if (this.currentPage < pages) {
+            nextBtn.element.classList.add('active')
+            nextBtn.addEvent('click', () => { this.navigate(this.currentPage + 1) })
+        }
+        nextBtn.text = '>'
     }
 }
