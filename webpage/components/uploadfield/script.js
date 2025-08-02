@@ -17,7 +17,7 @@ export default class UploadField extends Elem  {
         this.dropZone = document.createElement('div');
         this.dropZone.className = 'upload-drop-zone';
 
-        new Elem('label', this.dropZone).text = Language.lang.components.upload.field
+        new Elem('label', this.dropZone).text = `${Language.lang.components.upload.field}\n${accept.join(', ')}`
 
         new Icon('upload', this.dropZone, null, '30x30')
 
