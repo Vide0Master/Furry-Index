@@ -1,5 +1,4 @@
 header {
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -16,7 +15,7 @@ header {
         gap: 10px;
         align-items: center;
         flex-wrap: wrap;
-        width: 100%;
+        position: relative;
 
         &>* {
             background-color: var(--background-s);
@@ -24,16 +23,46 @@ header {
             border-radius: 10px;
         }
 
-        .user-label {
-            margin-left: auto;
-        }
+        @media (max-width: 700px) {
+            flex-direction: column;
+            align-items: start;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 5000;
+            background-color: color-mix(in srgb, var(--background) 50%, transparent 50%);
+            backdrop-filter: blur(5px);
+            padding: 10px;
+            border-radius: 10px;
 
-        .hidden {
-            display: none;
+            transform: translateX(-100%);
+
+            transition: 0.2s;
+
+            &.open {
+                transform: translateX(0);
+            }
         }
+    }
+
+    .user-label {
+        background-color: var(--background-s);
+        padding: 10px;
+        border-radius: 10px;
+        margin-left: auto;
+    }
+
+    .burger-menu-button {
+        background-color: var(--background-s);
+        padding: 10px;
+        border-radius: 10px;
+        display: none;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
 
         @media (max-width: 700px) {
-            justify-content: center;
+            display: flex;
         }
     }
 }
