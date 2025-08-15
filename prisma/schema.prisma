@@ -9,20 +9,22 @@ datasource db {
 }
 
 model User {
-    id                   String      @id @unique @default(uuid())
-    username             String      @unique
+    id                   String        @id @unique @default(uuid())
+    username             String        @unique
     visiblename          String?
     password             String
-    createdAt            DateTime    @default(now())
-    avatarID             String?     @unique
-    avatar               File?       @relation("User-Avatar", fields: [avatarID], references: [id])
+    createdAt            DateTime      @default(now())
+    avatarID             String?       @unique
+    avatar               File?         @relation("User-Avatar", fields: [avatarID], references: [id])
     sessions             Session[]
-    files                File[]      @relation("User-Files")
+    files                File[]        @relation("User-Files")
     posts                Post[]
     globalprofileparams  Json?
     privateprofileparams Json?
     scores               Score[]
     favourites           Favourite[]
+    directChats          Chat[]
+    userMessages         ChatMessage[]
 
     @@index([username, id])
 }
@@ -108,6 +110,7 @@ model Post {
     score       Int         @default(0)
     scores      Score[]
     favourites  Favourite[]
+    comments    Chat[]
 
     @@index([id])
 }
@@ -138,4 +141,43 @@ model Favourite {
 
     @@unique([userid, postid])
     @@index([userid, postid])
+}
+
+enum ChatLink {
+    userDM
+    post
+}
+
+model Chat {
+    id       String   @id @unique @default(uuid())
+    linkType ChatLink
+
+    userID String? @unique
+    user   User?   @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+    postID String? @unique
+    post   Post?   @relation(fields: [postID], references: [id], onDelete: Cascade)
+
+    chatMessages ChatMessage[]
+
+    @@index([userID, postID, id])
+}
+
+model ChatMessage {
+    id String @id @unique @default(uuid())
+
+    chatID String
+    chat   Chat   @relation(fields: [chatID], references: [id], onDelete: Cascade)
+
+    userID String
+    user   User   @relation(fields: [userID], references: [id], onDelete: Cascade)
+
+    text String
+
+    specialData Json?
+
+    sentAt   DateTime @default(now())
+    editedAt DateTime @default(now()) @updatedAt()
+
+    @@index([id])
 }

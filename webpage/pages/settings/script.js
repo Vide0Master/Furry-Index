@@ -93,10 +93,10 @@ export async function render(params) {
             const overlay = new Overlay()
             const avatarSelector = new Elem('avatar-selector', overlay.element)
             const files = await API('GET', '/api/files?inuse=false&tags=image&t=5')
-            new Elem('label', avatarSelector.element).text = 'Select an avatar image'
+            new Elem('label', avatarSelector.element).text = Language.lang.settings.user.selectAvatar
             const fileList = new Elem('file-list', avatarSelector.element)
             for (const file of files.files) {
-                const fileElem = new FileCard(file, false, fileList.element, { remove: false })
+                const fileElem = new FileCard(file, false, fileList.element, { remove: false, avatar: false })
                 new Button(Language.lang.settings.user.selectBtn, fileElem.element, null, async () => {
                     const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {

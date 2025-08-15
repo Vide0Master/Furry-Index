@@ -1,4 +1,4 @@
-FROM node:20.19.1-alpine
+FROM node:node:24.5.0-alpine
 
 RUN apk update && \
     apk add --no-cache ffmpeg

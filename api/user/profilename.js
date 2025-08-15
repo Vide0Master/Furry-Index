@@ -49,7 +49,7 @@ exports.PUT = async (req, res) => {
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
     }
 
-    if(data.avatarID) updateFileLastActivity(data.avatarID)
+    if (data.avatarID) updateFileLastActivity(data.avatarID)
 
     const updatedUser = await prisma.user.update({
         where: {
@@ -95,4 +95,3 @@ exports.DELETE = async (req, res) => {
 
     return res.status(200).send('Profile updated successfully')
 }
-

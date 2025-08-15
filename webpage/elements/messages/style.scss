@@ -1,0 +1,35 @@
+.internal-message-box {
+    background-color: var(--background);
+    // border: solid 3px var(--outline);
+    padding: 10px;
+    border-radius: 20px;
+
+    max-height: 80vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 10px;
+
+    .chat-cont {
+        border-radius: 10px;
+
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding: 5px;
+
+        overflow-y: auto;
+
+        width: 100%;
+    }
+
+    .message-cont {
+        grid-row: 2;
+        overflow: visible;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        width: 100%;
+    }
+}
