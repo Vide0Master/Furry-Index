@@ -1,26 +1,15 @@
 const link = (location.protocol === 'https:' ? 'wss' : 'ws') + `://${window.location.host}`
 
-console.log('wsLink: ' + link)
-
 const ws = new WebSocket(link)
 
 ws.addEventListener("close", (e) => {
-    console.warn("Соединение закрыто:", e.code, e.reason);
-
+    console.warn("WebSocket connection closed:", e.code, e.reason);
 });
 
 ws.addEventListener("error", (err) => {
-    console.error("Ошибка WebSocket:", err);
+    console.error("WebSocket error:", err);
 });
 
-ws.addEventListener("message", (e) => {
-    try {
-        const msg = JSON.parse(e.data);
-        console.log("← Получено:", msg);
-    } catch {
-        console.log("← Строка:", e.data);
-    }
-});
 
 function getCookie(name) {
     const cookies = document.cookie.split('; ');
@@ -55,8 +44,6 @@ class WSController {
 }
 
 ws.addEventListener("open", () => {
-    console.log("WebSocket открыт:", ws.readyState);
-
     WSController.updateRoute()
 });
 

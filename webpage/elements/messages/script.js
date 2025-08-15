@@ -49,7 +49,6 @@ export default class MessageBox extends Elem {
         }
 
         WSController.listen('newMessage', (data) => {
-            console.log(data)
             const msg = new MessageBlock(this.chatBox.element, data.message, handler)
             this.chatBox.element.prepend(msg.element)
             noMessages.switchVisible(false)
