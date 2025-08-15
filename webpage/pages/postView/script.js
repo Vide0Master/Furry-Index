@@ -15,6 +15,7 @@ import Router from "../../scripts/router.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import Favourites from "../../scripts/favouriteControl.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
+import MessageBox from "../../elements/messages/script.js";
 
 
 function capitalizeFirst(str) {
@@ -289,6 +290,8 @@ export async function render(params) {
     if (!PData.visible) {
         new Elem(null, postDataBlock.element).text = Language.lang.postView.hiddenLabel;
     }
+
+    const commentSection = new MessageBox(container.element, `/api/posts/${PData.id}/messages`)
 
     return container.element;
 }

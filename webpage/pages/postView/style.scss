@@ -1,7 +1,7 @@
 .post-view-container {
     min-width: 100%;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto auto;
     gap: 20px;
 
     @media (max-width: 700px) {
@@ -214,4 +214,6 @@
             }
         }
     }
+
+    .internal-message-box {}
 }

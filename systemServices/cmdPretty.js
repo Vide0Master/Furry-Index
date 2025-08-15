@@ -1,3 +1,4 @@
+const { text } = require("express");
 
 process.stdout.write('\x1B[?25l');
 
@@ -121,7 +122,8 @@ class cmd {
             POST: { text: "POST", color: "magenta" },
             PUT: { text: "PUT", color: "yellow" },
             PATCH: { text: "PATCH", color: "magenta" },
-            DELETE: { text: "DELETE", color: "red" }
+            DELETE: { text: "DELETE", color: "red" },
+            WS: { text: "WS", color: "green" }
         }
     }
 }

@@ -251,6 +251,16 @@ const LANG = {
                 "edited successfully"
             ]
         },
+        messages: {
+            noMsg: 'No messages... for now',
+            message: 'Message...',
+            send: 'Send',
+            messageElem: {
+                editedAt: 'Message edited at',
+                editMessage: 'Edit message',
+                removeMessage: 'Remove message'
+            }
+        },
         search: {
             label: "Search"
         },

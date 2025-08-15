@@ -80,3 +80,5 @@ server.listen(globalVariables.PORT, () => {
 });
 
 module.exports = { webServer: expressServer, wsServer: wss }
+
+require('./WebSocket')

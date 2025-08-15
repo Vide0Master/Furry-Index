@@ -17,7 +17,7 @@ import User from "../../scripts/userdata.js";
 import UserLabel from "../userLabel/script.js";
 
 export default class FileCard extends Elem {
-    constructor(file, isUploadable, parent, options = { remove: true }) {
+    constructor(file, isUploadable, parent, options = { remove: true, avatar: true }) {
         super('file-card', parent)
 
         if (isUploadable) {
@@ -155,7 +155,7 @@ export default class FileCard extends Elem {
                 }
             }
 
-            if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post && !User.data?.avatar?.file) {
+            if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post && !User.data?.avatar?.file && options.avatar) {
                 this.setAvatarBtn = new Button(Language.lang.elements.fileCard.useAsAvatar, this.element, null, async () => {
                     const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
@@ -180,7 +180,7 @@ export default class FileCard extends Elem {
                 }
 
                 this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, (e) => {
-                    if (e.shiftKey){
+                    if (e.shiftKey) {
                         this.delete(e)
                         return
                     }

@@ -96,7 +96,7 @@ export default class PostCard extends Elem {
                         new Alert.Simple(`${Language.lang.elements.postCard.editButtons.successRM[0]} "${postData.id}" ${Language.lang.elements.postCard.editButtons.successRM[1]}`, null, 5000, null, 'removed' + postData.id)
                         this.element.remove()
                     }
-                }, null, null, null, 'remove-post-confirm-' + postData.id)
+                }, null, null, 'remove-post-confirm-' + postData.id)
             })
 
             new Button(Language.lang.elements.postCard.editButtons.edit, buttonCont.element, null, () => {

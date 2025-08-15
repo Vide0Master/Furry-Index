@@ -1,5 +1,8 @@
+import BigTextField from "../../components/bigtextfield/script.js"
 import Button from "../../components/button/script.js"
 import Elem from "../../components/elem/script.js"
+import PasswordInput from "../../components/passwordinput/script.js"
+import TextInputLine from "../../components/textinputline/script.js"
 import Language from "../../scripts/language.js"
 
 const alertsContainer = new Elem('alerts-container', document.body)
@@ -12,7 +15,7 @@ class AlertComponent {
             alerts[id].highlight()
             return
         }
-        
+
         this.alertCont = new Elem('alert', alertsContainer.element)
 
         this.alertCont.element.style = 'animation: internal-show-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;'
@@ -80,8 +83,10 @@ class Simple extends AlertComponent {
 }
 
 class Confirm extends AlertComponent {
-    constructor(text, label, confirmCallback, cancelCallback, timeout, outlineColor, id) {
-        super(text, label, timeout, outlineColor, id)
+    constructor(text, label, confirmCallback, cancelCallback, outlineColor, id) {
+        super(text, label, null, outlineColor, id)
+
+        if (!this.alertCont) return
 
         this.confirmCallback = confirmCallback
         this.cancelCallback = cancelCallback
@@ -101,9 +106,43 @@ class Confirm extends AlertComponent {
     }
 }
 
+class Input extends AlertComponent {
+    constructor(text, label, confirmCallback, cancelCallback, inputType, value, outlineColor, id) {
+        super(text, label, null, outlineColor, id)
+
+        if (!this.alertCont) return
+
+        this.confirmCallback = confirmCallback
+        this.cancelCallback = cancelCallback
+
+        let input
+
+        switch (inputType) {
+            case 'bigField': new BigTextField('', this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ''; break;
+            case 'password': new PasswordInput('', this.alertCont.element, null, (v) => { input = v }).value = value ? value : ''; break;
+            case 'simple':
+            default: new TextInputLine('', this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ''
+        }
+
+        const buttonsRow = new Elem('buttons-row', this.alertCont.element)
+
+        this.okButton.element.remove()
+
+        new Button(Language.lang.features.alert.confirm.confirmButton, buttonsRow.element, null, () => {
+            if (typeof this.confirmCallback === "function") this.confirmCallback(input)
+            this.removeAlert()
+        }).element.focus()
+        new Button(Language.lang.features.alert.confirm.cancelButton, buttonsRow.element, null, () => {
+            if (typeof this.cancelCallback === "function") this.cancelCallback()
+            this.removeAlert()
+        })
+    }
+}
+
 class Alert {
     static Simple = Simple
     static Confirm = Confirm
+    static Input = Input
 }
 
 export default Alert

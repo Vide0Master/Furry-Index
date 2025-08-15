@@ -1,0 +1,65 @@
+.message-block-cont {
+    background-color: var(--message-bg);
+    color: var(--message-font);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    width: fit-content;
+
+    flex-shrink: 0;
+
+    .user-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+
+        .avatar-cont {
+            max-height: 20px;
+            max-width: 20px;
+            border-radius: 3px;
+            border: 1px solid var(--message-font);
+        }
+    }
+
+    .text {
+        width: fit-content;
+    }
+
+    .time-row {
+        font-size: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+
+        .edited-icon {
+            background-color: var(--message-font);
+        }
+
+        .sent-at {}
+
+        .control-row {
+            margin-left: auto;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 3px;
+
+            .icon-elem {
+                cursor: pointer;
+            }
+
+            .edit {
+                background-color: var(--ok-color);
+            }
+
+            .rm {
+                background-color: var(--nok-color);
+            }
+        }
+    }
+}

@@ -14,7 +14,7 @@
         transition: 0.2s;
         overflow: hidden;
 
-        min-width: 300px;
+        flex-grow: 1;
 
         &:focus,
         &:hover {

@@ -29,6 +29,7 @@ const apiFiles = scanRoutes(__dirname, __filename).map(v => "." + v)
 
 const { webServer } = require('../systemServices/webServer');
 const getUserBySessionCookie = require('../systemServices/getUserBySessionCookie');
+const WSController = require('../systemServices/WebSocket');
 
 const localRoutes = []
 
@@ -55,7 +56,7 @@ for (let i = 0; i < apiFiles.length; i++) {
 
     for (const method in module) {
         if (['ROUTE', 'PERMISSIONS'].includes(method)) continue
-        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+        if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'WS'].includes(method)) {
             cmd.bad(`Method ${method} is not allowed, skipping`, [cmd.preps.API])
             continue
         }
@@ -76,11 +77,14 @@ for (let i = 0; i < apiFiles.length; i++) {
     }
 }
 
-cmd.nested(routesNest, [cmd.preps.API])
-
 for (const routeID in localRoutes) {
     const route = localRoutes[routeID]
     const middlewares = []
+
+    if (route.METHOD == 'ws') {
+        WSController.registerListener(route.FUNCTION.name, route.FUNCTION.func)
+        continue
+    }
 
     if (route?.PERMISSIONS?.includes('REQUIRECOOKIE')) {
         middlewares.push(async (req, res, next) => {
@@ -111,7 +115,10 @@ for (const routeID in localRoutes) {
     middlewares.push(route.FUNCTION);
 
     webServer[route.METHOD](route.ROUTE, ...middlewares)
+
 }
+
+cmd.nested(routesNest, [cmd.preps.API])
 
 
 webServer.use((req, res) => {

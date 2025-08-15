@@ -1,3 +1,4 @@
+import WSController from '../scripts/ws.js'
 import Elem from '../components/elem/script.js';
 import Overlay from '../features/overlay/script.js';
 import staticRoutes from '../staticVariables/routerRoutes.js';
@@ -60,6 +61,7 @@ class Router {
         if (window.location.pathname + window.location.search !== path || force) {
             window.history.pushState({}, '', path);
             await this._loadRoute(path);
+            WSController.updateRoute()
         }
     }
 
@@ -120,11 +122,9 @@ class Router {
 
             const children = Array.from(this.container.children);
             for (const child of children) {
-                if (!child.matches('.internal-transition-block')) {
-                    // maybe some killer for event listeners? 
-                    // tf i'm talkin bout, nothing!!! xdddddddddddddd
-                    child.remove();
-                }
+                // maybe some killer for event listeners? 
+                // tf i'm talkin bout, nothing!!! xdddddddddddddd
+                child.remove();
             }
 
             this.container.appendChild(content);
