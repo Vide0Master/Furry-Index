@@ -12,7 +12,6 @@ import WSController from "../../../scripts/ws.js";
 export default class MessageBlock extends Elem {
     constructor(parent, data, handler) {
         super('message-block-cont', parent)
-        console.log(data)
 
         const userRow = new Elem('user-row', this.element)
 
