@@ -11,6 +11,7 @@ import User from "../../scripts/userdata.js";
 import UserLabel from "../../elements/userLabel/script.js";
 import Header from "../../components/header/script.js";
 import BasicCheck from "../../scripts/basicChecks.js";
+import Overlay from "../../features/overlay/script.js";
 
 export const tag = "register";
 export const tagLimit = 1;
@@ -21,18 +22,19 @@ export async function render(params) {
     const registerData = {
         username: "",
         password: "",
-        error: true,
+        error: [],
     }
 
+    registerData.error[0] = true
     new Elem('label', container.element).element.innerText = Language.lang.register.label
     const textInp = new TextInputLine(Language.lang.register.username.label, container.element, null, null,
         async (username) => {
             if (username == null) {
-                registerData.error = true
+                registerData.error[0] = true
                 return
             }
 
-            registerData.error = false
+            registerData.error[0] = false
             registerData.username = textInp.input.value
         })
 
@@ -62,14 +64,15 @@ export async function render(params) {
         return !result.taken
     })
 
+    registerData.error[1] = true
     const passFirst = new PasswordInput(Language.lang.register.passFirst.label, container.element, null,
         async (pass) => {
             if (pass == null) {
-                registerData.error = true
+                registerData.error[1] = true
                 return
             }
 
-            registerData.error = false
+            registerData.error[1] = false
         })
 
     passFirst.addCheck(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.chars, (val) => {
@@ -88,20 +91,81 @@ export async function render(params) {
         return BasicCheck.includesDigit(val)
     })
 
+    registerData.error[2] = true
     const passSecond = new PasswordInput(Language.lang.register.passSecond.label, container.element, null,
         async (pass) => {
             if (pass == null) {
-                registerData.error = true
+                registerData.error[2] = true
                 return
             }
 
-            registerData.error = false
+            registerData.error[2] = false
             registerData.password = pass
         })
 
     passSecond.addCheck(Language.lang.register.passSecond.error.notMatch, (val) => {
         return passFirst.input.value === val
     })
+
+    function processText(text, parent) {
+        const elem = new Elem('reg-info-cont', parent)
+        for (const textB of text) {
+            const block = new Elem('info-block', elem.element)
+
+            if (textB.label) {
+                const label = new Elem('label', block.element)
+                label.text = textB.label
+            }
+
+            if (typeof textB.text === 'string') {
+                const text = new Elem('text', block.element)
+                text.text = textB.text
+            } else if (typeof textB.text === 'object') {
+                for (const str of textB.text) {
+                    const text = new Elem('text', block.element)
+                    text.text = str
+                }
+            }
+        }
+        return elem
+    }
+
+
+    registerData.error[3] = true
+    const termsOfService = new SwitchInput(Language.lang.register.TOS, container.element, (val) => {
+        const overlay = new Overlay()
+        const txtElm = processText(Language.lang.TOS, overlay.element)
+        const accLine = new Elem(['info-block', 'acc'], txtElm.element)
+        new Elem('text', accLine.element).text = Language.lang.register.termsacc.label
+        new Button(Language.lang.register.termsacc.no, accLine.element, null, () => {
+            termsOfService.change(false)
+            registerData.error[3] = true
+            overlay.kill()
+        })
+        new Button(Language.lang.register.termsacc.yes, accLine.element, null, () => {
+            termsOfService.change(true)
+            registerData.error[3] = false
+            overlay.kill()
+        })
+    }, false, null, false)
+
+    registerData.error[4] = true
+    const privacyPolicy = new SwitchInput(Language.lang.register.PP, container.element, (val) => {
+        const overlay = new Overlay()
+        const txtElm = processText(Language.lang.PP, overlay.element)
+        const accLine = new Elem(['info-block', 'acc'], txtElm.element)
+        new Elem('text', accLine.element).text = Language.lang.register.termsacc.label
+        new Button(Language.lang.register.termsacc.no, accLine.element, null, () => {
+            privacyPolicy.change(false)
+            registerData.error[4] = true
+            overlay.kill()
+        })
+        new Button(Language.lang.register.termsacc.yes, accLine.element, null, () => {
+            privacyPolicy.change(true)
+            registerData.error[4] = false
+            overlay.kill()
+        })
+    }, false, null, false)
 
     const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, 'hidden')
 
@@ -114,9 +178,11 @@ export async function render(params) {
 
     new Button(Language.lang.register.label, container.element, null,
         async () => {
-            if (registerData.error) {
+            if (registerData.error.includes(true)) {
                 new Alert.Simple(Language.lang.register.error.fixForm, Language.lang.register.error.title, 5000, "#ff0000")
                 return
+            } else {
+                registerData.error = false
             }
 
             const registerResult = await API('POST', '/api/register', registerData)

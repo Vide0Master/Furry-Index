@@ -11,3 +11,33 @@
         font-size: 25px;
     }
 }
+
+.internal-overlay {
+    .reg-info-cont {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        overflow-y: auto;
+
+        .info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+
+            .label {
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+            .text {
+                max-width: 700px;
+            }
+
+            &.acc{
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+    }
+}
