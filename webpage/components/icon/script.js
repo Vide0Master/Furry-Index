@@ -4,6 +4,8 @@ export default class Icon extends Elem {
     constructor(iconName, parent, cname, size) {
         super('icon-elem', parent, 'div')
 
+        this.icon = iconName
+
         this.size = { x: 16, y: 16 }
         if (size) {
             const sizematch = size.match(/^(\d+)x(\d+)$/);
@@ -21,5 +23,14 @@ export default class Icon extends Elem {
         }
 
         if (parent) parent.appendChild(this.element)
+    }
+
+    get iconName(){
+        return this.icon
+    }
+
+    set iconName(iconName){
+        this.icon = iconName
+        this.element.style = `--width: ${this.size.x}px; --height: ${this.size.y}px; --iconURL: URL(/icons/${iconName}.svg);`
     }
 }
