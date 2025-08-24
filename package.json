@@ -8,7 +8,7 @@
         "dev": "prisma migrate dev && node index.js"
     },
     "author": "VideoMaster",
-    "license": "internal",
+    "license": "SEE LICENSE IN LICENSE.md",
     "dependencies": {
         "@prisma/client": "^6.12.0",
         "bcrypt": "^6.0.0",

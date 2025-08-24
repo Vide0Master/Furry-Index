@@ -105,6 +105,7 @@ export default async function makePostMaker(postData, editedCB) {
     if (PostData.files.length != 0) getFiles(postType.value, PostData.files)
 
     const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, 'custom', (val) => {
+        tagsField.input = tagsField.input.toLowerCase()
         const tags = val.split(' ').filter(tag => tag != '' && !tag.startsWith('#'))
         tagsField.setLimit(tags.length)
         PostData.tags = tags.map(tag => `${tag}`)
