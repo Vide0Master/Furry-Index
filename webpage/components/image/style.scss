@@ -7,6 +7,8 @@
     align-items: center;
     justify-content: center;
 
+    overflow: hidden;
+
     img {
         display: block;
         width: 100%;
@@ -67,6 +69,40 @@
                         opacity: 0;
                     }
                 }
+            }
+        }
+    }
+
+    .blur-overlay {
+        backdrop-filter: blur(20px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .text-block {
+            background-color:color-mix(in srgb, var(--background-s) 70%, transparent 30%) ;
+            padding: 10px;
+            border-radius: 20px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+
+            backdrop-filter: blur(10px);
+
+            .btn-row{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 5px;
             }
         }
     }

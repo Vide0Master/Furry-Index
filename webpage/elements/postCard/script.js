@@ -9,12 +9,15 @@ import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
 import Icon from "../../components/icon/script.js";
+import User from "../../scripts/userdata.js";
 
 export default class PostCard extends Elem {
     constructor(postData, parent, isInEditor = false, updateEditorCB) {
         super('post-card', parent)
 
         const previewContainer = new Elem('preview-container', this.element)
+
+        const isBlurred = !User.data && ['mature', 'questionable'].includes(postData.rating)
 
         switch (postData.type) {
             case 'imageGroup': {
@@ -24,13 +27,13 @@ export default class PostCard extends Elem {
 
                 const filesCount = postData.files.length <= 5 ? postData.files.length : 5
                 for (let i = 0; i < filesCount; i++) {
-                    const img = new Image(`/api/posts/${postData.id}/file/${postData.files[i].id}?thumbnail=500`, 'post-image', slidingCont.element)
+                    const img = new Image(`/api/posts/${postData.id}/file/${postData.files[i].id}?thumbnail=500`, 'post-image', slidingCont.element, isBlurred)
                     const width = 160
                     img.element.style = `--shift: ${width - (width / filesCount) - (width / filesCount * i)}px; --width-shift: ${(width / filesCount)}px;`
                 }
             }; break;
             default: {
-                new Image(`/api/posts/${postData.id}/file/${postData.files[0].id}?thumbnail=500`, 'post-image', previewContainer.element)
+                new Image(`/api/posts/${postData.id}/file/${postData.files[0].id}?thumbnail=500`, 'post-image', previewContainer.element, isBlurred)
             }; break;
         }
 

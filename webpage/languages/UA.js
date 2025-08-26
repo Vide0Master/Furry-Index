@@ -431,6 +431,13 @@ const LANG = {
         },
         dropdown: {
             label: "Обрати"
+        },
+        image: {
+            ageRestriction: {
+                label: "Вам є 18?",
+                no: "Ні",
+                yes: "Так"
+            }
         }
     },
     features: {

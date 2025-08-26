@@ -12,6 +12,7 @@ import UserLabel from "../../elements/userLabel/script.js";
 import Header from "../../components/header/script.js";
 import BasicCheck from "../../scripts/basicChecks.js";
 import Overlay from "../../features/overlay/script.js";
+import processText from "../../scripts/bigTextProcessor.js";
 
 export const tag = "register";
 export const tagLimit = 1;
@@ -106,30 +107,6 @@ export async function render(params) {
     passSecond.addCheck(Language.lang.register.passSecond.error.notMatch, (val) => {
         return passFirst.input.value === val
     })
-
-    function processText(text, parent) {
-        const elem = new Elem('reg-info-cont', parent)
-        for (const textB of text) {
-            const block = new Elem('info-block', elem.element)
-
-            if (textB.label) {
-                const label = new Elem('label', block.element)
-                label.text = textB.label
-            }
-
-            if (typeof textB.text === 'string') {
-                const text = new Elem('text', block.element)
-                text.text = textB.text
-            } else if (typeof textB.text === 'object') {
-                for (const str of textB.text) {
-                    const text = new Elem('text', block.element)
-                    text.text = str
-                }
-            }
-        }
-        return elem
-    }
-
 
     registerData.error[3] = true
     const termsOfService = new SwitchInput(Language.lang.register.TOS, container.element, (val) => {

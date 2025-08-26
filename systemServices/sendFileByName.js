@@ -5,9 +5,8 @@ const ffmpeg = require('fluent-ffmpeg')
 const sharp = require('sharp')
 const prisma = require('./prisma')
 
-const blurMult = 0.075
 
-module.exports = async function sendFileByName(res, filename, blur) {
+module.exports = async function sendFileByName(res, filename) {
     const req = res.req;
     const filePath = path.join(__dirname, '../file_storage', filename);
 
@@ -31,13 +30,6 @@ module.exports = async function sendFileByName(res, filename, blur) {
     const range = req.headers.range;
     const contentType = mime.lookup(filePath);
     const thumbnailHeight = parseInt(req.query?.thumbnail, 10);
-
-    const blurParam = typeof req.query.blur === 'string' ? req.query.blur.toLowerCase() : '';
-    const shouldBlur =
-        blur === true ||
-        blurParam === 'true' || blurParam === '1' || blurParam === 'yes';
-
-    const blurPower = Math.min(200, Math.max(0.3, Math.min(filestats.width || 1000, filestats.height || 1000, thumbnailHeight || 1000) * blurMult))
 
     if (thumbnailHeight && !isNaN(thumbnailHeight)) {
         if (contentType.startsWith('video/') || contentType === 'application/mp4') {
@@ -70,9 +62,6 @@ module.exports = async function sendFileByName(res, filename, blur) {
                 }
                 try {
                     let image = sharp(Buffer.concat(chunks)).resize({ height: thumbnailHeight });
-                    if (shouldBlur) {
-                        image = image.blur(blurPower);
-                    }
                     const resized = await image.jpeg().toBuffer();
 
                     if (!res.headersSent) {
@@ -94,9 +83,6 @@ module.exports = async function sendFileByName(res, filename, blur) {
         if (contentType.startsWith('image/')) {
             try {
                 let image = sharp().resize({ height: thumbnailHeight });
-                if (shouldBlur) {
-                    image = image.blur(blurPower);
-                }
 
                 const resizedStream = fs.createReadStream(filePath).pipe(image);
                 res.writeHead(200, { 'Content-Type': contentType });
@@ -110,9 +96,9 @@ module.exports = async function sendFileByName(res, filename, blur) {
         return res.status(400).send('Thumbnail preview not supported for this file type');
     }
 
-    if (contentType.startsWith('image/') && shouldBlur) {
+    if (contentType.startsWith('image/')) {
         try {
-            let image = sharp().blur(blurPower);
+            let image = sharp();
             const stream = fs.createReadStream(filePath).pipe(image);
             const outputBuffer = await streamToBuffer(stream);
 
@@ -125,10 +111,6 @@ module.exports = async function sendFileByName(res, filename, blur) {
             console.error('Full image blur error:', err);
             return res.status(500).send('Error processing image');
         }
-    }
-
-    if (contentType.endsWith('mp4') && shouldBlur) {
-        return res.status(403).send('Video is not available in blur')
     }
 
     if (range) {
