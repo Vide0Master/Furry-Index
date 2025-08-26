@@ -33,6 +33,11 @@ footer {
                 display: block;
             }
         }
+    }
 
+    .policies-cont{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
     }
 }

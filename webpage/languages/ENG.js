@@ -435,6 +435,13 @@ const LANG = {
         },
         dropdown: {
             label: 'Select'
+        },
+        image:{
+            ageRestriction:{
+                label:"Are you over 18?",
+                no:"No",
+                yes:"Yes"
+            }
         }
     },
     features: {

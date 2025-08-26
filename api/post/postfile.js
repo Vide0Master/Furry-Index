@@ -39,7 +39,5 @@ exports.GET = async (req, res) => {
         return
     }
 
-    const bypassCheck = req.query.bypass == 'true'
-
-    sendFileByName(res, file.file, !user && post.rating == 'mature' && !bypassCheck)
+    sendFileByName(res, file.file)
 }

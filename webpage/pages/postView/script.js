@@ -17,7 +17,6 @@ import Favourites from "../../scripts/favouriteControl.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
 import MessageBox from "../../elements/messages/script.js";
 
-
 function capitalizeFirst(str) {
     if (!str) return '';
     return str[0].toUpperCase() + str.slice(1);
@@ -99,7 +98,7 @@ function renderUploadData(owner, createdOn, parent) {
     uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(createdOn)}`;
 }
 
-function renderFileData(files, type, parent, postID, postimgContainer) {
+function renderFileData(files, type, parent, postID, postimgContainer, isBlurred) {
     let avg = { width: 0, height: 0, size: 0 };
     let count = files.length;
 
@@ -111,9 +110,9 @@ function renderFileData(files, type, parent, postID, postimgContainer) {
 
     files.forEach(file => {
         if (type === 'video') {
-            filesElems.push(new Video(`/api/posts/${postID}/file/${file.id}`, fileContainer.element))
+            filesElems.push(new Video(`/api/posts/${postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
         } else {
-            filesElems.push(new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', fileContainer.element))
+            filesElems.push(new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', fileContainer.element, isBlurred ? { text: true } : false))
         }
         avg.width += file.fileparams.width;
         avg.height += file.fileparams.height;
@@ -204,7 +203,9 @@ export async function render(params) {
     }
 
     if (['image', 'imageGroup', 'comic', 'video'].includes(PData.type)) {
-        renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer);
+        const isBlurred = !User.data && ['mature', 'questionable'].includes(PData.rating)
+
+        renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer, isBlurred);
     }
 
     const controlBlock = new Elem('control-block', postimgContainer.element)
