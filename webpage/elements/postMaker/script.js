@@ -74,7 +74,7 @@ export default async function makePostMaker(postData, editedCB) {
         for (const file of files.files) {
             const fcard = new FileCard(file, false, filesField.element, { remove: false })
 
-            switches[file.id] = new SwitchInput('Include', fcard.element, (state) => {
+            switches[file.id] = new SwitchInput(Language.lang.elements.postMaker.include, fcard.element, (state) => {
                 if (['image', 'video'].includes(type)) {
                     for (const id in switches) {
                         if (id == file.id) continue

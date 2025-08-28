@@ -80,11 +80,13 @@
                 cursor: default;
                 &:hover{
                     color: var(--font);
+                    background-color: color-mix(in srgb, var(--background) 90%, transparent 10%);
                 }
             }
 
             &:hover {
                 color: var(--font-hover);
+                background-color: color-mix(in srgb, var(--background-s) 50%, transparent 50%);
             }
         }
     }

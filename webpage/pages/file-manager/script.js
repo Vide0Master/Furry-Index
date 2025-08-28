@@ -7,11 +7,14 @@ import SearchField from "../../elements/searchfield/script.js";
 import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
+import User from "../../scripts/userdata.js";
 
 export const tag = "file-manager";
 export const tagLimit = 1;
 
-const itemsPerPage = 10
+const itemsPerPage = User.Settings.get('filesPerPage')
+
+console.log(User.Settings.get('postsPerPage'))
 
 export async function render(params) {
     const container = new Elem('file-manager-container')

@@ -3,10 +3,12 @@ import Elem from "../elem/script.js"
 import Icon from "../icon/script.js"
 
 export default class DropdownList extends Elem {
-    constructor(options, parent, placeholder, chcb) {
+    constructor(options, parent, placeholder, chcb, labelPrefix = '') {
         super('internal-dropdown', parent)
 
         this.options = options
+
+        this.labelPrefix = labelPrefix
 
         this.placeholderName = placeholder
 
@@ -25,7 +27,7 @@ export default class DropdownList extends Elem {
             this.createOption(option.name, option.value)
             if (option?.selected) {
                 this.currentOption = option.value
-                this.textLabel.text = option.name
+                this.textLabel.text = this.labelPrefix + option.name
             }
         }
 
@@ -49,7 +51,7 @@ export default class DropdownList extends Elem {
         if (enabled) {
             option.addEvent('click', () => {
                 this.currentOption = value
-                this.textLabel.text = name
+                this.textLabel.text = this.labelPrefix + name
                 this.element.classList.toggle('dd-visible', false)
                 if (this.chcb) this.chcb()
             })
@@ -65,7 +67,7 @@ export default class DropdownList extends Elem {
     set value(value) {
         this.currentOption = value
         if (value != 'placeholder') {
-            this.textLabel.text = this.options[this.options.findIndex(v => v.value == value)].name
+            this.textLabel.text = this.labelPrefix + this.options[this.options.findIndex(v => v.value == value)].name
         } else {
             this.textLabel.text = this.placeholderName
         }

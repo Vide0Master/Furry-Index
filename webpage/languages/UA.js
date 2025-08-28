@@ -265,7 +265,7 @@ const LANG = {
     },
     main: {
         welcome: "Вітаємо у",
-        featured: "Популярні пости"
+        latest: "Останні пости"
     },
     postView: {
         hiddenLabel: "Цей пост не відображається",
@@ -309,7 +309,8 @@ const LANG = {
                 ENG: "Англійська",
                 UA: "Українська",
                 RU: "російська"
-            }
+            },
+            postsPerPage: "Пости на сторінку"
         },
         user: {
             logout: "Вийти з",
@@ -331,7 +332,8 @@ const LANG = {
                     setsucc: "Успішно задано відображуване ім'я",
                     rmsucc: "Відображуване ім'я прибрано"
                 }
-            }
+            },
+            filesPerPage: "Файли на сторінку"
         }
     },
     components: {
@@ -407,6 +409,7 @@ const LANG = {
             tags: "Теги",
             createPost: "Створити",
             editPost: "Редагувати",
+            include: "Вкласти",
             successCreate: [
                 "Пост",
                 "успішно створено"

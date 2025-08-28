@@ -265,7 +265,7 @@ const LANG = {
     },
     main: {
         welcome: "Добро пожаловать в",
-        featured: "Популярные посты"
+        latest: "Последние посты"
     },
     postView: {
         hiddenLabel: "Этот пост не отображается",
@@ -309,7 +309,8 @@ const LANG = {
                 ENG: "Английский",
                 UA: "Украинский",
                 RU: "русский"
-            }
+            },
+            postsPerPage: "Посты на страницу"
         },
         user: {
             logout: "Выйти из",
@@ -331,7 +332,8 @@ const LANG = {
                     setsucc: "Успешно задано отображаемое имя",
                     rmsucc: "Отображаемое имя убрано"
                 }
-            }
+            },
+            filesPerPage: "Файлы на страницу"
         }
     },
     components: {
@@ -407,6 +409,7 @@ const LANG = {
             tags: "Теги",
             createPost: "Создать",
             editPost: "Редактировать",
+            include: "Вложить",
             successCreate: [
                 "Пост",
                 "успешно создан"
