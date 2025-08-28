@@ -11,7 +11,7 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 export const tag = "postmaster";
 export const tagLimit = 1;
 
-const itemsPerPage = 10
+const itemsPerPage = User.Settings.get('postsPerPage')
 
 export async function render(params) {
     const container = new Elem('postmaster-container')

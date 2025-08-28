@@ -4,11 +4,12 @@ import PostCard from "../../elements/postCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 import API from "../../scripts/api.js";
 import Favourites from "../../scripts/favouriteControl.js";
+import User from "../../scripts/userdata.js";
 
 export const tag = "search";
 export const tagLimit = 1;
 
-const itemsPerPage = 10
+const itemsPerPage = User.Settings.get('postsPerPage')
 
 export async function render(params) {
     const container = new Elem('search-container')

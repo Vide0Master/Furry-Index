@@ -17,7 +17,7 @@ export async function render(params) {
 
     new FurrIndexLogo(websiteLabel.element)
 
-    new Elem('bigLabel', container.element).text = Language.lang.main.featured
+    new Elem('bigLabel', container.element).text = Language.lang.main.latest
 
     const latestPosts = new Elem('latest-posts', container.element)
     const postsData = await API('GET', '/api/posts?t=10', null, true)

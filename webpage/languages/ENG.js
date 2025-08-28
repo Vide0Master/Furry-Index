@@ -244,7 +244,7 @@ const LANG = {
         TOS: "Terms Of Service",
         PP: "Privacy Policy",
         termsacc: {
-            label:'Do you agree with this terms?',
+            label: 'Do you agree with this terms?',
             no: 'No',
             yes: 'Yes'
         },
@@ -269,7 +269,7 @@ const LANG = {
     },
     main: {
         welcome: "Welcome to",
-        featured: "Featured posts",
+        latest: "Latest posts",
     },
     postView: {
         hiddenLabel: "This post is not visible",
@@ -313,7 +313,8 @@ const LANG = {
                 ENG: "English",
                 UA: "Ukrainian",
                 RU: "russian"
-            }
+            },
+            postsPerPage: "Posts per page"
         },
         user: {
             logout: "Log out from",
@@ -335,7 +336,8 @@ const LANG = {
                     setsucc: "Successfully set visible name",
                     rmsucc: "Successfully removed visible name",
                 }
-            }
+            },
+            filesPerPage: "Files per page"
         }
     },
     components: {
@@ -411,6 +413,7 @@ const LANG = {
             tags: "Tags",
             createPost: "Create",
             editPost: "Edit",
+            include: 'Include',
             successCreate: [
                 "Post",
                 "created successfully"
@@ -436,11 +439,11 @@ const LANG = {
         dropdown: {
             label: 'Select'
         },
-        image:{
-            ageRestriction:{
-                label:"Are you over 18?",
-                no:"No",
-                yes:"Yes"
+        image: {
+            ageRestriction: {
+                label: "Are you over 18?",
+                no: "No",
+                yes: "Yes"
             }
         }
     },

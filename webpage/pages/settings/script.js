@@ -49,6 +49,7 @@ export async function render(params) {
     //region Webpage Settings
     pages.webpage = new Elem('webpage-settings', container.element);
 
+    //region language
     new DropdownList(
         Language.availableLanguages.map((k) => ({
             name: Language.lang.settings.webpage.language[k],
@@ -58,6 +59,19 @@ export async function render(params) {
         pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
         })
+
+    //region item counts for posts
+    const itemCounts = [25, 50, 75, 100, 150, 200]
+    new DropdownList(itemCounts.map((v) => ({
+        name: v,
+        value: v,
+        selected: User.Settings.get('postsPerPage') == v
+    })),
+        pages.webpage.element, null, (v) => {
+            User.Settings.set('postsPerPage', v)
+        },
+        `${Language.lang.settings.webpage.postsPerPage}: `
+    )
 
     //region User Settings
     if (User.data) {
@@ -144,6 +158,20 @@ export async function render(params) {
         })
 
         removeVisibleNameBtn.moveAfter(setVisibleNameBtn.element)
+
+        //region item counts for files
+        // yes, i did not made another variable for this shit
+        // why shoud i duplicate varibles with same purpose of counting items on page?!
+        new DropdownList(itemCounts.map((v) => ({
+            name: v,
+            value: v,
+            selected: User.Settings.get('filesPerPage') == v
+        })),
+            pages.user.element, null, (v) => {
+                User.Settings.set('filesPerPage', v)
+            },
+            `${Language.lang.settings.user.filesPerPage}: `
+        )
     }
 
     return container.element;
