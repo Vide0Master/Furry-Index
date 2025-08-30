@@ -12,10 +12,10 @@ import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
 import makePostMaker from "../../elements/postMaker/script.js";
 import Router from "../../scripts/router.js";
-import SwitchInput from "../../components/switchinput/script.js";
 import Favourites from "../../scripts/favouriteControl.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
 import MessageBox from "../../elements/messages/script.js";
+import UserCard from "../../elements/userCard/script.js";
 
 function capitalizeFirst(str) {
     if (!str) return '';
@@ -24,155 +24,6 @@ function capitalizeFirst(str) {
 
 export const tag = "postView";
 export const tagLimit = 10;
-
-function renderTags(tags, parent) {
-    const groups = [];
-
-    for (const tag of tags) {
-        const basename = typeof tag.group?.basename === 'string'
-            ? tag.group.basename
-            : 'default';
-
-        const groupIndex = groups.findIndex(g => g.basename === basename);
-
-        if (groupIndex === -1) {
-            const groupObj = tag.group
-                ? { ...tag.group }
-                : {
-                    basename: 'default',
-                    name: { ENG: 'Tags', UA: 'Теги', RU: 'Теги' },
-                    priority: 0,
-                    color: '#5b34eb'
-                };
-
-            groupObj.tags = [{
-                name: tag.name,
-                count: tag.count,
-                group: {
-                    basename: groupObj.basename,
-                    name: groupObj.name,
-                    color: groupObj.color
-                }
-            }];
-
-            groups.push(groupObj);
-        } else {
-            const existing = groups[groupIndex];
-            existing.tags.push({
-                name: tag.name,
-                count: tag.count,
-                group: {
-                    basename: existing.basename,
-                    name: existing.name,
-                    color: existing.color
-                }
-            });
-        }
-    }
-
-    for (const group of groups) {
-        group.tags.sort((a, b) => b.count - a.count);
-    }
-
-    groups.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
-
-    const postTagsElem = new Elem('post-tags-column', parent);
-
-    for (const group of groups) {
-        const tagsBlock = new Elem('tags-block', postTagsElem.element);
-
-        new Elem('tag-group-label', tagsBlock.element).text = !!group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
-
-        for (const tag of group.tags) {
-            new Tag(tag, tagsBlock.element);
-        }
-    }
-}
-
-function renderUploadData(owner, createdOn, parent) {
-    const postUploadData = new Elem('post-upload-data', parent);
-    const uploadedBy = new Elem('owner', postUploadData.element);
-    new Elem('text', uploadedBy.element).text = Language.lang.postView.file.uploadedBy + ':'
-    new Link(owner.visiblename ? owner.visiblename : '@' + owner.username, `/profile/${owner.username}`, uploadedBy.element, true)
-    const uploadedOn = new Elem('when', postUploadData.element);
-    uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(createdOn)}`;
-}
-
-function renderFileData(files, type, parent, postID, postimgContainer, isBlurred) {
-    let avg = { width: 0, height: 0, size: 0 };
-    let count = files.length;
-
-    if (type === 'image' || type === 'video') count = 1;
-
-    const fileContainer = new Elem('files-cont', postimgContainer.element)
-
-    const filesElems = []
-
-    files.forEach(file => {
-        if (type === 'video') {
-            filesElems.push(new Video(`/api/posts/${postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
-        } else {
-            filesElems.push(new Image(`/api/posts/${postID}/file/${file.id}`, 'post-image', fileContainer.element, isBlurred ? { text: true } : false))
-        }
-        avg.width += file.fileparams.width;
-        avg.height += file.fileparams.height;
-        avg.size += file.fileparams.size;
-    });
-
-    if (filesElems.length > 1) {
-        for (let i = 1; i < filesElems.length; i++) {
-            filesElems[i].switchVisible(false)
-        }
-
-        const pageNav = new PageNavigator(filesElems.length, 1, fileContainer.element)
-
-        pageNav.addNavCB((page) => {
-            for (const elem of filesElems) {
-                elem.switchVisible(false)
-            }
-            filesElems[page - 1].switchVisible(true)
-            pageNav.renderButtons(filesElems.length, page)
-        })
-    }
-
-    avg.width = Math.floor(avg.width / count);
-    avg.height = Math.floor(avg.height / count);
-    avg.size = avg.size / count;
-
-    let resolution = `${avg.height}x${avg.width}px`;
-    let size = formatFileSize(avg.size);
-
-    if (type === 'imageGroup' || type === 'comic') {
-        resolution = `~${resolution}`;
-        size = `~${size}`;
-    }
-
-    new Elem(null, parent.element).text = `${Language.lang.postView.file.resolution}: ${resolution}`;
-    new Elem(null, parent.element).text = `${Language.lang.postView.file.size}: ${size}`;
-}
-
-function renderRating(ratingNm, dataBlock) {
-    const rating = { txt: ratingNm, clr: '' }
-    switch (ratingNm) {
-        case 'safe': {
-            rating.clr = 'greenyellow'
-            rating.txt = Language.lang.elements.postCard.rating.safe;
-        }; break;
-        case 'questionable': {
-            rating.clr = 'gold'
-            rating.txt = Language.lang.elements.postCard.rating.questionable;
-        }; break;
-        case 'mature': {
-            rating.clr = 'red'
-            rating.txt = Language.lang.elements.postCard.rating.mature;
-        }; break;
-    }
-
-    const ratingBlock = new Elem('rating-label-cont', dataBlock)
-    new Elem('label', ratingBlock.element).text = Language.lang.postView.rating
-
-    new TextLabel(rating.txt, ratingBlock.element, rating.clr, true)
-}
 
 export async function render(params) {
     const container = new Elem('post-view-container');
@@ -189,10 +40,41 @@ export async function render(params) {
     const PData = postData.post;
     const postDataBlock = new Elem('post-data-block', container.element);
 
-    renderTags(PData.tags, postDataBlock.element);
-    renderUploadData(PData.owner, PData.createdOn, postDataBlock.element);
-    renderRating(PData.rating, postDataBlock.element)
+    new UserCard(postDataBlock.element, PData.owner)
 
+    //render tags
+    renderTags(PData.tags, postDataBlock.element);
+
+
+    //region upload data
+    const postUploadData = new Elem('post-upload-data', postDataBlock.element);
+    const uploadedOn = new Elem('when', postUploadData.element);
+    uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(PData.createdOn)}`;
+
+
+    //region age rating
+    const rating = { txt: PData.rating, clr: '' }
+    switch (PData.rating) {
+        case 'safe': {
+            rating.clr = 'greenyellow'
+            rating.txt = Language.lang.elements.postCard.rating.safe;
+        }; break;
+        case 'questionable': {
+            rating.clr = 'gold'
+            rating.txt = Language.lang.elements.postCard.rating.questionable;
+        }; break;
+        case 'mature': {
+            rating.clr = 'red'
+            rating.txt = Language.lang.elements.postCard.rating.mature;
+        }; break;
+    }
+
+    const ageRatingBlock = new Elem('rating-label-cont', postDataBlock.element)
+    new Elem('label', ageRatingBlock.element).text = Language.lang.postView.rating
+    new TextLabel(rating.txt, ageRatingBlock.element, rating.clr, true)
+
+
+    //region post file data
     const fileDataContainer = new Elem('file-data-container', postDataBlock.element);
     const postimgContainer = new Elem('post-conatiner', container.element);
     const postLabel = new Elem('post-label', postimgContainer.element);
@@ -205,7 +87,56 @@ export async function render(params) {
     if (['image', 'imageGroup', 'comic', 'video'].includes(PData.type)) {
         const isBlurred = !User.data && ['mature', 'questionable'].includes(PData.rating)
 
-        renderFileData(PData.files, PData.type, fileDataContainer, params.postID, postimgContainer, isBlurred);
+        let avg = { width: 0, height: 0, size: 0 };
+        let count = PData.files.length;
+
+        if (['image', 'video'].includes(PData.type)) count = 1;
+
+        const fileContainer = new Elem('files-cont', postimgContainer.element)
+
+        const filesElems = []
+
+        PData.files.forEach(file => {
+            if (PData.type === 'video') {
+                filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
+            } else {
+                filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, 'post-image', fileContainer.element, isBlurred ? { text: true } : false))
+            }
+            avg.width += file.fileparams.width;
+            avg.height += file.fileparams.height;
+            avg.size += file.fileparams.size;
+        });
+
+        if (filesElems.length > 1) {
+            for (let i = 1; i < filesElems.length; i++) {
+                filesElems[i].switchVisible(false)
+            }
+
+            const pageNav = new PageNavigator(filesElems.length, 1, fileContainer.element)
+
+            pageNav.addNavCB((page) => {
+                for (const elem of filesElems) {
+                    elem.switchVisible(false)
+                }
+                filesElems[page - 1].switchVisible(true)
+                pageNav.renderButtons(filesElems.length, page)
+            })
+        }
+
+        avg.width = Math.floor(avg.width / count);
+        avg.height = Math.floor(avg.height / count);
+        avg.size = avg.size / count;
+
+        let resolution = `${avg.height}x${avg.width}px`;
+        let size = formatFileSize(avg.size);
+
+        if (PData.type === 'imageGroup' || PData.type === 'comic') {
+            resolution = `~${resolution}`;
+            size = `~${size}`;
+        }
+
+        new Elem(null, fileDataContainer.element).text = `${Language.lang.postView.file.resolution}: ${resolution}`;
+        new Elem(null, fileDataContainer.element).text = `${Language.lang.postView.file.size}: ${size}`;
     }
 
     const controlBlock = new Elem('control-block', postimgContainer.element)
@@ -295,4 +226,68 @@ export async function render(params) {
     const commentSection = new MessageBox(container.element, `/api/posts/${PData.id}/messages`)
 
     return container.element;
+}
+
+function renderTags(tags, parent) {
+    const groups = [];
+
+    for (const tag of tags) {
+        const basename = typeof tag.group?.basename === 'string'
+            ? tag.group.basename
+            : 'default';
+
+        const groupIndex = groups.findIndex(g => g.basename === basename);
+
+        if (groupIndex === -1) {
+            const groupObj = tag.group
+                ? { ...tag.group }
+                : {
+                    basename: 'default',
+                    name: { ENG: 'Tags', UA: 'Теги', RU: 'Теги' },
+                    priority: 0,
+                    color: '#5b34eb'
+                };
+
+            groupObj.tags = [{
+                name: tag.name,
+                count: tag.count,
+                group: {
+                    basename: groupObj.basename,
+                    name: groupObj.name,
+                    color: groupObj.color
+                }
+            }];
+
+            groups.push(groupObj);
+        } else {
+            const existing = groups[groupIndex];
+            existing.tags.push({
+                name: tag.name,
+                count: tag.count,
+                group: {
+                    basename: existing.basename,
+                    name: existing.name,
+                    color: existing.color
+                }
+            });
+        }
+    }
+
+    for (const group of groups) {
+        group.tags.sort((a, b) => b.count - a.count);
+    }
+
+    groups.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+
+    const postTagsElem = new Elem('post-tags-column', parent);
+
+    for (const group of groups) {
+        const tagsBlock = new Elem('tags-block', postTagsElem.element);
+
+        new Elem('tag-group-label', tagsBlock.element).text = !!group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
+
+        for (const tag of group.tags) {
+            new Tag(tag, tagsBlock.element);
+        }
+    }
 }

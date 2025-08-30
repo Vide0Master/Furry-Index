@@ -116,7 +116,7 @@ exports.PUT = async (req, res) => {
     if (req.body.tags) {
         let postTagsMap = new Map();
         for (const name of req.body.tags) {
-            postTagsMap.set(name, { where: { name }, create: { name } });
+            postTagsMap.set(name, { where: { name: name.toLowerCase() }, create: { name: name.toLowerCase() } });
         }
 
         if (req.body.files && req.body.files.length) {
