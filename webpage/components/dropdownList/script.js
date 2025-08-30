@@ -60,6 +60,12 @@ export default class DropdownList extends Elem {
         }
     }
 
+    selectOption(option) {
+        if (!this.options.some(v => v.value == option)) return
+        this.value = option
+        this.chcb()
+    }
+
     get value() {
         return this.currentOption
     }
