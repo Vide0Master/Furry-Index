@@ -6,6 +6,8 @@ export default class UserCard extends Elem {
     constructor(parent, userData, cardType = 'default') {
         super('internal-user-card', parent)
 
+        if (!['default', 'messageHeader'].includes(cardType)) return
+
         console.log(userData)
 
         if (userData.avatarID) {
@@ -16,10 +18,17 @@ export default class UserCard extends Elem {
 
         const sideBlock = new Elem('side-block', this.element)
 
-        if (userData.visiblename) {
-            new Elem(null, sideBlock.element).text = userData.visiblename
+        switch (cardType) {
+            case 'messageHeader': {
+                this.element.classList.add('message-header')
+                new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, 'user-link')
+            }; break;
+            default: {
+                if (userData.visiblename) {
+                    new Elem(null, sideBlock.element).text = userData.visiblename
+                }
+                new Link(`@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, 'user-link')
+            }; break;
         }
-
-        new Link(`@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, 'user-link')
     }
 }

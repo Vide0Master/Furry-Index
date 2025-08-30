@@ -1,10 +1,7 @@
 .message-block-cont {
-    background-color: var(--message-bg);
     color: var(--message-font);
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 5px;
     border-radius: 10px;
     width: fit-content;
 
@@ -25,10 +22,14 @@
     }
 
     .text {
-        width: fit-content;
+        padding: 5px;
+        background-color: var(--message-bg);
+        width: 100%;
     }
 
     .time-row {
+        background-color: var(--message-bg);
+        padding: 5px;
         font-size: 10px;
         display: flex;
         flex-direction: row;

@@ -7,21 +7,24 @@ import formatDate from "../../../scripts/formatDate.js";
 import Language from "../../../scripts/language.js";
 import User from "../../../scripts/userdata.js";
 import WSController from "../../../scripts/ws.js";
+import UserCard from "../../userCard/script.js";
 
 
 export default class MessageBlock extends Elem {
     constructor(parent, data, handler) {
         super('message-block-cont', parent)
 
-        const userRow = new Elem('user-row', this.element)
+        new UserCard(this.element, data.user, 'messageHeader')
 
-        if (data.user.avatarID) {
-            const avatarCont = new Elem('avatar-cont', userRow.element)
-            const userAvatar = new Image(`/api/profile/${data.user.username}/avatar?thumbnail=100`, 'avatar', avatarCont.element)
-        }
+        // const userRow = new Elem('user-row', this.element)
 
-        const usernameText = new Elem('username', userRow.element)
-        usernameText.text = data.user.visiblename != null ? data.user.visiblename : data.user.username
+        // if (data.user.avatarID) {
+        //     const avatarCont = new Elem('avatar-cont', userRow.element)
+        //     const userAvatar = new Image(`/api/profile/${data.user.username}/avatar?thumbnail=100`, 'avatar', avatarCont.element)
+        // }
+
+        // const usernameText = new Elem('username', userRow.element)
+        // usernameText.text = data.user.visiblename != null ? data.user.visiblename : data.user.username
 
         const textRow = new Elem('text', this.element)
         textRow.text = data.text
