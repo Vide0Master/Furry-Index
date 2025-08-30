@@ -10,7 +10,7 @@ const LANG = {
     BUILD: {
         dev: "DEVELOPMENT BUILD",
         eval: "EVALUATION BUILD",
-        sdb: "SEPARATE DATABASE PROVIDED"
+        rel: "RELEASE BUILD"
     },
     TOS: [
         {
