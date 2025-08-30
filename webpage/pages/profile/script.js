@@ -5,6 +5,7 @@ import API from "../../scripts/api.js";
 import Image from "../../components/image/script.js";
 import formatDate from "../../scripts/formatDate.js";
 import PostCard from "../../elements/postCard/script.js";
+import Link from "../../components/link/script.js";
 
 export const tag = "profile";
 export const tagLimit = 5;
@@ -33,6 +34,11 @@ export async function render(params) {
     }
 
     const userdatElem = new Elem('user-data', fdataBlock.element, 'div')
+
+    if (User.data.username == Pdata.username) {
+        const editprofile = new Link('', `/settings?t=user`, fdataBlock.element, true, 'edit-profile', 'edit')
+        editprofile.textElem.kill()
+    }
 
     if (Pdata.visiblename) new Elem('visible-name', userdatElem.element).text = Pdata.visiblename
     new Elem('user-name', userdatElem.element, 'div').text = '@' + Pdata.username
