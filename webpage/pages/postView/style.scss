@@ -23,7 +23,10 @@
             grid-row: 2;
         }
 
-        &>* {
+        .post-tags-column,
+        .post-upload-data,
+        .rating-label-cont,
+        .file-data-container {
             padding: 10px;
             border-radius: 10px;
             background-color: var(--background);
