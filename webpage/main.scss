@@ -38,16 +38,32 @@ body {
     gap: 10px;
 }
 
-.dev-build-info {
+.build-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    gap: 5px;
+    border-radius: 10px;
+    padding: 5px;
 
-    background-clip: text;
-    background-image: linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%);
-    color: transparent;
+    // background-clip: text;
+
+    // color: transparent;
 
     white-space: nowrap;
+
+    &.DEV {
+        background-image: linear-gradient(135deg, #FC466B 0%, #fb613f 100%);
+        color: #fff;
+    }
+
+    &.EVAL {
+        background-image: linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%);
+    }
+
+    &.REL {
+        background-image: linear-gradient(135deg, #46fc46 0%, #3F5EFB 100%);
+    }
 }
 
 .hidden {
