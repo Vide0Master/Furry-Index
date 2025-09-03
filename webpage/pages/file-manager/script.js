@@ -14,8 +14,6 @@ export const tagLimit = 1;
 
 const itemsPerPage = User.Settings.get('filesPerPage')
 
-console.log(User.Settings.get('postsPerPage'))
-
 export async function render(params) {
     const container = new Elem('file-manager-container')
 
@@ -63,9 +61,16 @@ export async function render(params) {
         return pagesCount.count
     }
 
-    renderFiles(currentTags, 0, itemsPerPage)
-
     const searchField = new SearchField(searchBar.element, '/api/files/tags')
+
+    const URLparams = new URLSearchParams(window.location.search)
+    const tagsParams = URLparams.get('tags')
+    if (tagsParams) {
+        currentTags = tagsParams.split('+').filter(v => v != '')
+        searchField.setSearch(currentTags.join(' '))
+    }
+
+    renderFiles(currentTags, 0, itemsPerPage)
 
     const pagesCount = Math.ceil((await getFilesCount(currentTags)) / itemsPerPage)
     const pageNav = new PageNavigator(pagesCount, 1, container.element)

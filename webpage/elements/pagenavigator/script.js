@@ -3,7 +3,7 @@ import Elem from "../../components/elem/script.js";
 const pageElems = 9
 
 export default class PageNavigator extends Elem {
-    constructor(pages, current, parent) {
+    constructor(pages, current, parent, preventQueryChange = false) {
         super('internal-page-navigator', parent);
 
         this.currentPage = current
@@ -23,6 +23,13 @@ export default class PageNavigator extends Elem {
 
         this.navigate = (page) => {
             this.currentPage = page
+
+            if (!preventQueryChange) {
+                const params = new URLSearchParams(window.location.search)
+                params.set("page", this.currentPage)
+                history.pushState({}, "", `${window.location.pathname}?${params}`)
+            }
+
             this.navCB.forEach(cb => cb(page))
         }
 

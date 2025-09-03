@@ -47,9 +47,16 @@ export async function render(params) {
         return pagesCount.count
     }
 
-    renderPosts(currentTags, 0, itemsPerPage)
-
     const searchField = new SearchField(headBar.element, '/api/posts/tags')
+
+    const URLparams = new URLSearchParams(window.location.search)
+    const tagsParams = URLparams.get('tags')
+    if (tagsParams) {
+        currentTags = tagsParams.split('+').filter(v => v != '')
+        searchField.setSearch(currentTags.join(' '))
+    }
+
+    renderPosts(currentTags, 0, itemsPerPage)
 
     const newPostButton = new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
         makePostMaker(null, () => { renderPosts(currentTags, 0, itemsPerPage) })

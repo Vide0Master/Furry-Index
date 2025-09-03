@@ -7,21 +7,14 @@ import formatDate from "../../../scripts/formatDate.js";
 import Language from "../../../scripts/language.js";
 import User from "../../../scripts/userdata.js";
 import WSController from "../../../scripts/ws.js";
+import UserCard from "../../userCard/script.js";
 
 
 export default class MessageBlock extends Elem {
     constructor(parent, data, handler) {
         super('message-block-cont', parent)
 
-        const userRow = new Elem('user-row', this.element)
-
-        if (data.user.avatarID) {
-            const avatarCont = new Elem('avatar-cont', userRow.element)
-            const userAvatar = new Image(`/api/profile/${data.user.username}/avatar?thumbnail=100`, 'avatar', avatarCont.element)
-        }
-
-        const usernameText = new Elem('username', userRow.element)
-        usernameText.text = data.user.visiblename != null ? data.user.visiblename : data.user.username
+        new UserCard(this.element, data.user, 'messageHeader')
 
         const textRow = new Elem('text', this.element)
         textRow.text = data.text
@@ -31,12 +24,12 @@ export default class MessageBlock extends Elem {
 
         const timeRow = new Elem('time-row', this.element)
 
-        const sent = new Elem('sent-at', timeRow.element)
-        sent.text = formatDate(data.sentAt)
-
         const editedIcon = new Icon('edit', timeRow.element, 'edited-icon', '10x10')
         editedIcon.title = `${Language.lang.elements.messages.messageElem.editedAt} ${formatDate(data.editedAt)}`
         editedIcon.switchVisible(data.sentAt != data.editedAt)
+
+        const sent = new Elem('sent-at', timeRow.element)
+        sent.text = formatDate(data.sentAt)
 
         WSController.listen(`messageUpdate-${data.id}`, (data) => {
             switch (data.action) {

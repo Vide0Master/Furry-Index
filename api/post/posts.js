@@ -64,14 +64,9 @@ exports.GET = async (req, res) => {
     }
 
     if (positiveTagNames.length > 0) {
-        processedFilters.push({
-            tags: {
-                some: {
-                    name: { in: positiveTagNames }
-                }
-            }
-        });
+        processedFilters.push({ AND: positiveTagNames.map(v => ({ tags: { some: { name: v } } })) });
     }
+
     if (negativeTagNames.length > 0) {
         processedFilters.push({
             NOT: {

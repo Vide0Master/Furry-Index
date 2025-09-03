@@ -26,4 +26,28 @@
             font-size: 12px;
         }
     }
+
+    &.message-header {
+        background-color: var(--background-s);
+        border-radius: 0;
+        gap: 5px;
+
+        .avatar-cont {
+            .avatar-border {
+                padding: 2px;
+                background-color: var(--background);
+                border-radius: 4px;
+
+                .internal-image-container {
+                    max-height: 15px;
+                    max-width: 15px;
+                    border-radius: 2px;
+                }
+            }
+        }
+
+        .side-block {
+            .user-link {}
+        }
+    }
 }
