@@ -109,7 +109,7 @@ export default class PostCard extends Elem {
 
         if (!isInEditor) {
             previewContainer.addEvent('click', () => {
-                Router.navigate(`/post/${postData.id}`, this.element)
+                Router.navigate(`/post/${postData.id}${window.location.search}`, this.element)
             })
         }
     }

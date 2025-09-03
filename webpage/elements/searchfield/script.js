@@ -3,19 +3,33 @@ import Icon from "../../components/icon/script.js";
 import Language from "../../scripts/language.js";
 import API from "../../scripts/api.js";
 import Tag from "../tag/script.js";
+import Link from "../../components/link/script.js";
 
 export default class SearchField extends Elem {
-    constructor(parent, autocompleteLink) {
+    constructor(parent, autocompleteLink, navigation) {
         super('internal-search-field', parent)
 
-        const searchInput = new Elem('search-field', this.element, 'input')
-        searchInput.element.type = 'text'
-        searchInput.element.placeholder = `${Language.lang.elements.search.label}...`
+        if (navigation?.prev) {
+            new Link('<', `/post/${navigation.prev}${window.location.search}`, this.element, true, 'nav-dir')
+        }
+
+        this.searchInput = new Elem('search-field', this.element, 'input')
+        this.searchInput.element.type = 'text'
+        this.searchInput.element.placeholder = `${Language.lang.elements.search.label}...`
+
+        this.setSearch = (text) => {
+            this.searchInput.element.value = text
+        }
 
         const searchIcon = new Icon('search', this.element, 'search-icon', "20x20")
 
+
+        if (navigation?.next) {
+            new Link('>', `/post/${navigation.next}${window.location.search}`, this.element, true, 'nav-dir')
+        }
+
         this.getTags = () => {
-            return searchInput.element.value.split(' ')
+            return this.searchInput.element.value.split(' ').filter(v => v != '')
         }
 
         this.callbacks = []
@@ -24,17 +38,17 @@ export default class SearchField extends Elem {
             this.callbacks.push(func)
         }
 
-        searchInput.addEvent('input', () => {
-            searchInput.element.value = searchInput.element.value.toLowerCase();
-        })
+        // this.searchInput.addEvent('input', () => {
+        //     this.searchInput.element.value = this.searchInput.element.value.toLowerCase();
+        // })
 
-        searchInput.addEvent('keydown', (e) => {
+        this.searchInput.addEvent('keydown', (e) => {
             switch (e.key) {
                 case 'Enter': {
                     if (typeof autocompleteLink !== 'string') this.startCallbacks();
                 }; break
                 case 'Escape': {
-                    searchInput.element.blur()
+                    this.searchInput.element.blur()
                 }; break
             }
         })
@@ -56,11 +70,11 @@ export default class SearchField extends Elem {
 
             let timeout
 
-            function getTagsList() {
-                return searchInput.element.value.split(' ').filter(tag => tag !== '')
+            const getTagsList = () => {
+                return this.searchInput.element.value.split(' ').filter(tag => tag !== '')
             }
 
-            searchInput.addEvent('keyup', async (e) => {
+            this.searchInput.addEvent('keyup', async (e) => {
                 if (['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) return
                 const tags = getTagsList()
 
@@ -96,11 +110,11 @@ export default class SearchField extends Elem {
                     autocompleteVisible(true)
                     recommendations.complete.sort((a, b) => b.count - a.count)
                     recommendations.complete.forEach((tag) => {
-                        const tagElem = new Tag(tag, autocompleteField.element)
+                        const tagElem = new Tag(tag, autocompleteField.element, true)
                         tagElem.addEvent('click', () => {
                             tags.pop()
                             tags.push(tag.name)
-                            searchInput.element.value = tags.join(' ') + ' '
+                            this.searchInput.element.value = tags.join(' ') + ' '
                             currentTag = 0
                             tagsAutocomp = []
 
@@ -112,7 +126,7 @@ export default class SearchField extends Elem {
                 }, 500)
             })
 
-            searchInput.addEvent('keydown', async (e) => {
+            this.searchInput.addEvent('keydown', async (e) => {
                 if (!['ArrowDown', 'ArrowUp', 'Enter'].includes(e.key)) return
 
                 const tags = getTagsList()
@@ -145,7 +159,7 @@ export default class SearchField extends Elem {
                         const selectedTag = tagsAutocomp[currentTag - 1].name
                         tags.pop()
                         tags.push(selectedTag)
-                        searchInput.element.value = tags.join(' ') + ' '
+                        this.searchInput.element.value = tags.join(' ') + ' '
                         currentTag = 0
                         tagsAutocomp = []
 
@@ -160,19 +174,30 @@ export default class SearchField extends Elem {
                 return
             })
 
-            searchInput.addEvent('focusout', () => {
+            this.searchInput.addEvent('focusout', () => {
                 setTimeout(() => {
                     autocompleteVisible(false)
                 }, 100)
             })
 
-            searchInput.addEvent('focusin', () => {
+            this.searchInput.addEvent('focusin', () => {
                 if (tagsAutocomp.length > 0) autocompleteVisible(true)
             })
         }
     }
 
     startCallbacks() {
-        this.callbacks.forEach((cb) => cb(this.getTags()))
+        const tags = this.getTags()
+        const params = new URLSearchParams(window.location.search)
+
+        if (tags.length) {
+            params.set("tags", `${tags.join('+')}`)
+        } else {
+            params.delete("tags")
+        }
+
+        history.pushState({}, "", `${window.location.pathname}?${params.toString().replace(/%2B/g, '+')}`)
+
+        this.callbacks.forEach((cb) => cb(tags))
     }
 }

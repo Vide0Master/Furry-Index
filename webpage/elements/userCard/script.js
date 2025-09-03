@@ -8,8 +8,6 @@ export default class UserCard extends Elem {
 
         if (!['default', 'messageHeader'].includes(cardType)) return
 
-        console.log(userData)
-
         if (userData.avatarID) {
             const avatarCont = new Elem('avatar-cont', this.element)
             const avatarBorder = new Elem('avatar-border', avatarCont.element)

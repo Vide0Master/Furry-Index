@@ -25,6 +25,7 @@ export default class Elem {
             this.element.classList.toggle('hidden', !state)
         }
 
+        // YOU GOTTA KILL EM ALL
         this.kill = () => {
             this.element.remove()
         }

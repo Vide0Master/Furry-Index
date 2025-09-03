@@ -1,8 +1,12 @@
 .tag-element {
     width: fit-content;
     padding: 4px 8px;
-    border: solid 2px var(--tag-color);
-    color: var(--tag-color);
+
+    --true-tag-color: color-mix(in srgb, var(--tag-color) 90%, #000 10%);
+    --font-hover: var(--true-tag-color);
+
+    border: solid 2px var(--true-tag-color);
+    color: var(--true-tag-color);
     border-radius: 100vh;
     font-size: 14px;
 
@@ -14,11 +18,38 @@
 
     transition: 0.2s;
 
+    cursor: default;
+
     .tag-name {
         width: fit-content;
+        color: var(--true-tag-color);
+
+        &.underlined {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        &.p-m{
+            font-weight: bold;
+        }
     }
 
-    .icon-elem{
-        background-color: var(--tag-color);
+    .icon-elem {
+        background-color: var(--true-tag-color);
+    }
+
+    &.interactible {
+        cursor: pointer;
+
+        &.active,
+        &:hover {
+            box-shadow: 0 0 10px var(--tag-color);
+            border-color: var(--tag-color);
+            color: var(--tag-color);
+
+            .tag-name {
+                color: var(--tag-color);
+            }
+        }
     }
 }

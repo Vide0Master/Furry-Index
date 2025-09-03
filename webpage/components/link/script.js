@@ -34,7 +34,7 @@ export default class Link extends Elem {
                 }; break;
             }
         } else {
-            console.error(this.element, Language.lang.cmd.errors.NOLINK)
+            console.error(this.element, Language.lang.cmd.erorrs.NOLINK)
         }
 
         if (internal) {

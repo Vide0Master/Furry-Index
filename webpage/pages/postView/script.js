@@ -16,6 +16,7 @@ import Favourites from "../../scripts/favouriteControl.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
 import MessageBox from "../../elements/messages/script.js";
 import UserCard from "../../elements/userCard/script.js";
+import SearchField from "../../elements/searchfield/script.js";
 
 function capitalizeFirst(str) {
     if (!str) return '';
@@ -74,9 +75,25 @@ export async function render(params) {
     new TextLabel(rating.txt, ageRatingBlock.element, rating.clr, true)
 
 
-    //region post file data
+    //region post files
     const fileDataContainer = new Elem('file-data-container', postDataBlock.element);
     const postimgContainer = new Elem('post-conatiner', container.element);
+
+    if (typeof params.query?.tags == 'string') {
+        const nav = await API('GET', `/api/posts/${params.postID}/navigation${window.location.search}`)
+        const searchNav = new SearchField(postimgContainer.element, '/api/posts/tags', nav)
+
+        const URLparams = new URLSearchParams(window.location.search)
+        const tagsParams = URLparams.get('tags')
+        if (tagsParams) {
+            searchNav.setSearch(tagsParams.split('+').filter(v => v != '').join(' '))
+        }
+
+        searchNav.addSearchCB((tags) => {
+            Router.navigate(`/search?tags=${tags.join('+')}`)
+        })
+    }
+
     const postLabel = new Elem('post-label', postimgContainer.element);
 
     new Elem('post-name', postLabel.element).text = PData.name;
@@ -96,12 +113,15 @@ export async function render(params) {
 
         const filesElems = []
 
+        //region post files render
         PData.files.forEach(file => {
             if (PData.type === 'video') {
                 filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
             } else {
                 filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, 'post-image', fileContainer.element, isBlurred ? { text: true } : false))
             }
+
+            //region post stats
             avg.width += file.fileparams.width;
             avg.height += file.fileparams.height;
             avg.size += file.fileparams.size;
@@ -112,7 +132,7 @@ export async function render(params) {
                 filesElems[i].switchVisible(false)
             }
 
-            const pageNav = new PageNavigator(filesElems.length, 1, fileContainer.element)
+            const pageNav = new PageNavigator(filesElems.length, 1, fileContainer.element, true)
 
             pageNav.addNavCB((page) => {
                 for (const elem of filesElems) {
@@ -141,6 +161,7 @@ export async function render(params) {
 
     const controlBlock = new Elem('control-block', postimgContainer.element)
 
+    //region rating
     const ratingBlock = new Elem('rating-block', controlBlock.element)
     const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
     const scoreText = new Elem('score-text', scoreTextCont.element)
@@ -186,6 +207,7 @@ export async function render(params) {
         downBtn.element.disabled = true
     }
 
+    //region fav
     let favstate = PData.myfav || (await Favourites.includes(PData.id))
 
     const favBtn = new Button(null, controlBlock.element, 'fav-btn')
@@ -211,6 +233,7 @@ export async function render(params) {
         if (cnt != null && typeof cnt == 'number') favCount.text = cnt
     })
 
+    //region edit
     if (PData.ownerid == User?.data?.id) {
         new Button(Language.lang.elements.postCard.editButtons.edit, controlBlock.element, null, () => {
             makePostMaker(PData, () => {
@@ -228,6 +251,7 @@ export async function render(params) {
     return container.element;
 }
 
+//region tag render
 function renderTags(tags, parent) {
     const groups = [];
 
@@ -287,7 +311,7 @@ function renderTags(tags, parent) {
         new Elem('tag-group-label', tagsBlock.element).text = !!group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
 
         for (const tag of group.tags) {
-            new Tag(tag, tagsBlock.element);
+            new Tag(tag, tagsBlock.element, true, `/search`);
         }
     }
 }

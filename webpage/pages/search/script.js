@@ -48,9 +48,22 @@ export async function render(params) {
         return pagesCount.count
     }
 
-    renderPosts(currentTags, 0, itemsPerPage)
-
     const searchField = new SearchField(container.element, '/api/posts/tags')
+
+    const URLparams = new URLSearchParams(window.location.search)
+    const tagsParams = URLparams.get('tags')
+    if (tagsParams) {
+        currentTags = tagsParams.split('+').filter(v => v != '')
+        searchField.setSearch(currentTags.join(' '))
+    }
+
+    const pageParam = URLparams.get('page')
+
+    renderPosts(currentTags, pageParam ? pageParam - 1 : 0, itemsPerPage)
+
+    if (!URLparams.has('tags')) URLparams.set('tags', '')
+    if (!URLparams.has('page')) URLparams.set('page', 1)
+    history.replaceState({}, "", `${window.location.pathname}?${URLparams}`)
 
     const pagesCount = Math.ceil((await getPostsCount(currentTags)) / itemsPerPage)
     const pageNav = new PageNavigator(pagesCount, 1, container.element)
