@@ -6,7 +6,6 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
-import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
 
 export const tag = "file-manager";
@@ -14,7 +13,7 @@ export const tagLimit = 1;
 
 const itemsPerPage = User.Settings.get('filesPerPage')
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('file-manager-container')
 
     let currentTags = []

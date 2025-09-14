@@ -1,5 +1,3 @@
-const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require("../../systemServices/prisma")
 const sendFileByName = require("../../systemServices/sendFileByName")
 

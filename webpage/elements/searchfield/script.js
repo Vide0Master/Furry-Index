@@ -166,7 +166,7 @@ export default class SearchField extends Elem {
                         autocompleteVisible(false)
                         autocompleteField.wipe()
                         return
-                    }; break;
+                    }; 
                 }
 
                 tagsAutocomp[currentTag - 1].elem.element.classList.toggle('active', true)

@@ -35,9 +35,23 @@ footer {
         }
     }
 
-    .policies-cont{
+    .policies-cont {
         display: flex;
         flex-direction: column;
         gap: 5px;
     }
+}
+
+.key-redeem-window {
+    background-color: var(--background-s);
+    border: 3px solid var(--outline);
+    border-radius: 20px;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .label {}
 }

@@ -5,6 +5,15 @@ export default class TextInputLine extends Elem {
     constructor(desc, parent, cname, type, chcb) {
         super('input-container', parent, 'div')
 
+        if (cname) {
+            switch (typeof cname) {
+                case "object": cname.forEach(element => {
+                    this.element.classList.add(element);
+                }); break;
+                case "string": this.element.classList.add(cname); break;
+            }
+        }
+
         this.input = new Elem(null, this.element, 'input').element
         this.input.placeholder = ' '
 
@@ -34,7 +43,7 @@ export default class TextInputLine extends Elem {
         this.testChecks = async (val) => {
             let failed = false
             for (const check of this.checks) {
-                if (!(await check(val))) failed == true
+                if (!(await check(val))) failed = true
             }
             return failed ? null : val
         }
@@ -70,7 +79,7 @@ export default class TextInputLine extends Elem {
                         label.textElement.text = typeof testRslt === 'string' ? `${text.nok} ${testRslt}` : text.nok
                 }
 
-                return typeof testRslt === 'text' ? false : testRslt
+                return typeof testRslt === 'boolean' ? testRslt : false
             })
         }
     }

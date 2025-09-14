@@ -118,24 +118,24 @@ export default async function makePostMaker(postData, editedCB) {
         tagsField.setLimit(0)
     }
 
-    const submitBtn = new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
+    new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
         switch (true) {
             case PostData.name.length == 0: {
                 new Alert.Simple('No name provided', 'Error', 3000, null, 'noname')
                 return
-            }; break;
+            }; 
             case PostData.rating.length == 0: {
                 new Alert.Simple('No rating selected', 'Error', 3000, null, 'norating')
                 return
-            }; break;
+            }; 
             case PostData.type.length == 0: {
                 new Alert.Simple('No type selected', 'Error', 3000, null, 'notype')
                 return
-            }; break;
+            }; 
             case PostData.files.length == 0: {
                 new Alert.Simple('No files selected', 'Error', 3000, null, 'nofiles')
                 return
-            }; break;
+            }; 
         }
 
         if (postData) {

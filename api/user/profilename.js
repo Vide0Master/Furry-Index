@@ -51,7 +51,7 @@ exports.PUT = async (req, res) => {
 
     if (data.avatarID) updateFileLastActivity(data.avatarID)
 
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
         where: {
             id: sessionUser.id
         },
@@ -86,7 +86,7 @@ exports.DELETE = async (req, res) => {
 
     if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
         where: {
             id: sessionUser.id
         },

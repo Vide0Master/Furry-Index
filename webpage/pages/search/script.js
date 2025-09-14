@@ -11,7 +11,7 @@ export const tagLimit = 1;
 
 const itemsPerPage = User.Settings.get('postsPerPage')
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('search-container')
 
     let currentTags = []

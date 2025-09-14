@@ -29,7 +29,7 @@ function generateHTMLImports(files) {
 
     files.forEach(file => {
         const ext = path.extname(file).toLowerCase();
-        const base = path.basename(file).toLowerCase();
+        // const base = path.basename(file).toLowerCase();
 
         if (ext === ".js") {
             result += `<script type="module" src="${file}"></script>\n`;

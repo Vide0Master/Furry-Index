@@ -11,7 +11,7 @@ export default class UserCard extends Elem {
         if (userData.avatarID) {
             const avatarCont = new Elem('avatar-cont', this.element)
             const avatarBorder = new Elem('avatar-border', avatarCont.element)
-            const avatar = new Image(`/api/profile/${userData.username}/avatar?thumbnail=300`, 'user-avatar', avatarBorder.element)
+            new Image(`/api/profile/${userData.username}/avatar?thumbnail=300`, 'user-avatar', avatarBorder.element)
         }
 
         const sideBlock = new Elem('side-block', this.element)

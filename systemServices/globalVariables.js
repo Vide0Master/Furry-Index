@@ -1,7 +1,9 @@
-const cfg = require('../config.json')
+const cfg = require('../config.json');
+const cmd = require('./cmdPretty.js');
 require('dotenv').config();
 
 const domain = 'vmtech.services'
+
 
 const constants = {
     DEVmode: process.env.ENVIROMENT == "DEV",
@@ -12,8 +14,18 @@ const constants = {
     mainAuthTokenKey: "FURRYINDEXUSERTOKEN",
     tempSessionTimeout: 5,
     version: cfg.version,
-    serverLink: ''
+    serverLink: '',
+    adminKey: ''
 }
+
+async function setAdminKey() {
+    const KC = require('./keyControl.js')
+    constants.adminKey = await KC.createKey('superadminassign', {}, true)
+    cmd.info(`Admin role key ${cmd.colorize(constants.adminKey, 'red')}`, [cmd.preps.System])
+    cmd.warn(cmd.colorize('DO NOT SHARE ADMIN KEY WITH ANYONE\nIT GIVES ALMOST UNRESTRICTED ACCES TO THE APP', 'red'), [cmd.preps.System])
+}
+
+setAdminKey()
 
 if (!process.env.PORT) {
     constants.PORT = 3000
@@ -35,3 +47,4 @@ switch (true) {
 }
 
 module.exports = constants
+

@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs/promises')
 const ffmpeg = require('fluent-ffmpeg')
 const sharp = require('sharp')
+const cmd = require('./cmdPretty')
 
 module.exports = async function processFileStats(id, onFinish, resultFlags = { convertedFromGif: false, videoReencoded: false, audioReencoded: false }, tags = []) {
     const filedata = await prisma.file.findUnique({ where: { id } })
@@ -18,7 +19,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
 
     try {
         stats.size = (await fs.stat(filepath)).size
-    } catch (err) {
+    } catch {
         return
     }
 
@@ -77,6 +78,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
                 await fs.unlink(filepath)
                 await fs.rename(tempPath, filepath)
             } catch (err) {
+                cmd.err(`Video processing interrupted: ` + err, [cmd.preps.System])
             }
 
             await markLocked(false)
@@ -112,6 +114,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
 
             resultFlags.convertedFromGif = true
         } catch (err) {
+            cmd.err(`Gif processing interrupted: ` + err, [cmd.preps.System])
         }
 
         await markLocked(false)
@@ -124,6 +127,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
             stats.width = meta.width
             stats.height = meta.height
         } catch (err) {
+            cmd.err(`Image processing interrupted: ` + err, [cmd.preps.System])
         }
     }
 
@@ -164,9 +168,6 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
 
     await markLocked(false)
     if (typeof onFinish === 'function') {
-        try {
-            await onFinish(resultFlags)
-        } catch (err) {
-        }
+        await onFinish(resultFlags)
     }
 }

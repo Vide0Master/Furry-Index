@@ -3,7 +3,7 @@ const fs = require('fs')
 const mime = require('mime-types')
 const ffmpeg = require('fluent-ffmpeg')
 const sharp = require('sharp')
-const prisma = require('./prisma')
+// const prisma = require('./prisma')
 
 
 module.exports = async function sendFileByName(res, filename) {
@@ -17,14 +17,14 @@ module.exports = async function sendFileByName(res, filename) {
         return res.status(404).send('File not found');
     }
 
-    const filestats = (await prisma.file.findUnique({
-        where: {
-            file: filename
-        },
-        select: {
-            fileparams: true
-        }
-    })).fileparams
+    // const filestats = (await prisma.file.findUnique({
+    //     where: {
+    //         file: filename
+    //     },
+    //     select: {
+    //         fileparams: true
+    //     }
+    // })).fileparams
 
     const fileSize = stat.size;
     const range = req.headers.range;

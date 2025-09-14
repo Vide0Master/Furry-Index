@@ -1,4 +1,3 @@
-const cmd = require('./cmdPretty')
 const prisma = require('./prisma')
 const processFileStats = require('./processFileStats')
 

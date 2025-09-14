@@ -52,7 +52,9 @@ ws.addEventListener("message", (e) => {
         const msg = JSON.parse(e.data);
         const cbs = WSController.listeners.filter(v => v.event == msg.event)
         cbs.forEach(v => { v.cb(msg.data) })
-    } catch { }
+    } catch (err) {
+        console.error('Error processing message:' + err)
+    }
 });
 
 export default WSController

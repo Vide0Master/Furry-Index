@@ -6,6 +6,7 @@ const path = require('path')
 const { formidable } = require('formidable')
 const prisma = require('../../systemServices/prisma')
 const fileDataProcessor = require('../../systemServices/processFileStats')
+const cmd = require("../../systemServices/cmdPretty")
 
 function getUploadHashHandle(Fhash, uname) {
     return Fhash + "!" + uname
@@ -131,7 +132,9 @@ exports.POST = async (req, res) => {
                     }, 1000);
 
                     chunkStorage[handle].id = filedata.id
-                } catch { }
+                } catch {
+                    cmd.err(`Error processing final file`, [cmd.preps.System])
+                }
             })
 
             return

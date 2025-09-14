@@ -1,7 +1,6 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Image from "../../components/image/script.js";
-import Link from "../../components/link/script.js";
 import Video from "../../components/video/script.js";
 import Tag from "../../elements/tag/script.js";
 import TextLabel from "../../elements/textLabel/script.js";
@@ -246,7 +245,7 @@ export async function render(params) {
         new Elem(null, postDataBlock.element).text = Language.lang.postView.hiddenLabel;
     }
 
-    const commentSection = new MessageBox(container.element, `/api/posts/${PData.id}/messages`)
+    new MessageBox(container.element, `/api/posts/${PData.id}/messages`)
 
     return container.element;
 }
@@ -308,7 +307,7 @@ function renderTags(tags, parent) {
     for (const group of groups) {
         const tagsBlock = new Elem('tags-block', postTagsElem.element);
 
-        new Elem('tag-group-label', tagsBlock.element).text = !!group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
+        new Elem('tag-group-label', tagsBlock.element).text = group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
 
         for (const tag of group.tags) {
             new Tag(tag, tagsBlock.element, true, `/search`);

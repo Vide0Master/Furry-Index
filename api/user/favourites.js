@@ -48,7 +48,7 @@ exports.PUT = async (req, res) => {
 
         return res.status(200).send('Updated user favs')
     } else {
-        const result = await prisma.favourite.create({
+        await prisma.favourite.create({
             data: {
                 userid: user.id,
                 postid: req.body.post
@@ -70,7 +70,7 @@ exports.DELETE = async (req, res) => {
 
     if (!req?.body?.post) return res.status(400).send('No post provided in body')
 
-    const result = await prisma.favourite.delete({
+    await prisma.favourite.delete({
         where: {
             userid_postid: {
                 userid: user.id,

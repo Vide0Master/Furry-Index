@@ -29,12 +29,20 @@ export default async function API(method, route, body, credentials = false) {
             for (const key in responseData) {
                 data[key] = responseData[key]
             }
-        } catch (err) { }
+        } catch {
+            if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
+                console.log('No json in response')
+            }
+        }
 
         try {
             const responseData = await response.text()
             data.TEXT = responseData
-        } catch (err) { }
+        } catch {
+            if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
+                console.log('No text in response')
+            }
+        }
 
         data.HTTPCODE = response.status
 

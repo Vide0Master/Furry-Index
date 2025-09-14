@@ -19,7 +19,7 @@ class AlertComponent {
         this.alertCont = new Elem('alert', alertsContainer.element)
 
         this.alertCont.element.style = 'animation: internal-show-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;'
-        const introTimeout = this.alertCont.element.addEventListener('animationend', (e) => {
+        this.alertCont.element.addEventListener('animationend', (e) => {
             if (e.target != this.alertCont.element) return
             this.alertCont.element.style = ''
         })
@@ -32,11 +32,6 @@ class AlertComponent {
         if (text) {
             this.alertText = new Elem('text', this.alertCont.element)
             this.alertText.text = text
-        }
-
-        let style = ''
-        if (outlineColor) {
-            style += `--alert-border-color: ${outlineColor}`
         }
 
         this.removeAlert = () => {

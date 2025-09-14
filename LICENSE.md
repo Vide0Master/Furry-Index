@@ -43,7 +43,7 @@ c) Remove or alter the Author attribution or the LICENSE file when distributing 
 ---
 
 ## 6. Trademark and Brand
-The Project name *“furdex”* and any associated logos, brand elements, and trademarks are the exclusive property of the Author. Use of the name or logos in advertising, product names, or distribution requires the Author’s prior written permission.  
+The Project name *“Furry-Index”* and any associated logos, brand elements, and trademarks are the exclusive property of the Author. Use of the name or logos in advertising, product names, or distribution requires the Author’s prior written permission.  
 
 ---
 

@@ -1,5 +1,4 @@
 import WSController from '../scripts/ws.js'
-import Elem from '../components/elem/script.js';
 import Overlay from '../features/overlay/script.js';
 import staticRoutes from '../staticVariables/routerRoutes.js';
 
