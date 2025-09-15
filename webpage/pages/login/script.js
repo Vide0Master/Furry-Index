@@ -7,7 +7,6 @@ import TextInputLine from "../../components/textinputline/script.js";
 import UserLabel from "../../elements/userLabel/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
-import BasicCheck from "../../scripts/basicChecks.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
 import User from "../../scripts/userdata.js";
@@ -15,7 +14,7 @@ import User from "../../scripts/userdata.js";
 export const tag = "login";
 export const tagLimit = 1;
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('login-container')
 
     const loginData = {
@@ -27,15 +26,15 @@ export async function render(params) {
 
     new Elem('label', container.element).element.innerText = Language.lang.login.mainLabel
 
-    const login = new TextInputLine(Language.lang.login.fields.username, container.element, null, 'text', async (value) => {
+    new TextInputLine(Language.lang.login.fields.username, container.element, null, 'text', async (value) => {
         loginData.login = value
     })
 
-    const pass = new PasswordInput(Language.lang.login.fields.password, container.element, null, async (value) => {
+    new PasswordInput(Language.lang.login.fields.password, container.element, null, async (value) => {
         loginData.password = value
     })
 
-    const rememberMe = new SwitchInput(Language.lang.login.fields.keepmeloggedin, container.element, (state) => {
+    new SwitchInput(Language.lang.login.fields.keepmeloggedin, container.element, (state) => {
         loginData.remember = state
     }, true)
 

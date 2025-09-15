@@ -1,6 +1,5 @@
 import Elem from "../../../components/elem/script.js";
 import Icon from "../../../components/icon/script.js";
-import Image from "../../../components/image/script.js";
 import Alert from "../../../features/alert/script.js";
 import API from "../../../scripts/api.js";
 import formatDate from "../../../scripts/formatDate.js";

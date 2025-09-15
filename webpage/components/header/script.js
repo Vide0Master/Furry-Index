@@ -1,7 +1,6 @@
 import Elem from '../elem/script.js'
 import Link from '../link/script.js'
 import UserLabel from '../../elements/userLabel/script.js'
-import lang from '../../languages/ENG.js'
 import Language from '../../scripts/language.js'
 import User from '../../scripts/userdata.js'
 import Icon from '../icon/script.js'

@@ -4,7 +4,6 @@ import Main from "./components/main/script.js"
 import AppInfo from "./scripts/appinfo.js"
 import Router from "./scripts/router.js"
 import User from "./scripts/userdata.js"
-import WSController from "./scripts/ws.js"
 
 //on dom load
 document.addEventListener('DOMContentLoaded', async () => {

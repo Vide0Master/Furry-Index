@@ -1,5 +1,3 @@
-const { text } = require("express");
-
 process.stdout.write('\x1B[?25l');
 
 const ANSI_COLORS = {

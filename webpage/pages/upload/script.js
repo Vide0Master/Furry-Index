@@ -8,7 +8,7 @@ import Language from "../../scripts/language.js";
 export const tag = "upload";
 export const tagLimit = 1;
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('upload-container')
 
     const upload = new UploadField(container.element)

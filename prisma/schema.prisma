@@ -25,6 +25,7 @@ model User {
     favourites           Favourite[]
     directChats          Chat[]
     userMessages         ChatMessage[]
+    roles                Role[]
 
     @@index([username, id])
 }
@@ -180,4 +181,25 @@ model ChatMessage {
     editedAt DateTime @default(now()) @updatedAt()
 
     @@index([id])
+}
+
+model ReddemableKey {
+    key      String  @id @unique
+    type     String
+    data     Json?
+    redeemed Boolean @default(false)
+
+    @@index([key])
+}
+
+model Role {
+    id          String  @unique @default(uuid())
+    type        String
+    userid      String
+    user        User    @relation(fields: [userid], references: [id])
+    roleIcon    String?
+    roleColor   String?
+    hiddable    Boolean @default(false)
+    hidden      Boolean @default(false)
+    specialData Json?
 }

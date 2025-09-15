@@ -21,7 +21,7 @@ export default class SwitchInput extends Elem {
             this.element.classList.add(cname)
         }
 
-        this.checkbox.addEventListener('change', (e) => {
+        this.checkbox.addEventListener('change', () => {
             if (!manuallyControlled) { this.change() } else { icon.iconName = this.checkbox.checked ? "check" : "cross" }
             if (chcb) chcb(this.checkbox.checked)
         })

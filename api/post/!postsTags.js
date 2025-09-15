@@ -19,7 +19,7 @@ exports.GET = async (req, res) => {
         case 'fav:': {
             return res.status(200).json({
                 complete: [
-                    !!user ?
+                    user ?
                         {
                             name: 'fav:server',
                             icon: 'wrench',

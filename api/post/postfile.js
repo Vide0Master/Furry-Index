@@ -1,12 +1,12 @@
-const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
+// const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
+// const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
 const sendFileByName = require("../../systemServices/sendFileByName")
 
 exports.ROUTE = '/api/posts/:postID/file/:fileID'
 
 exports.GET = async (req, res) => {
-    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
+    // const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
 
     const postID = req.params.postID
     const fileID = req.params.fileID

@@ -42,7 +42,7 @@ export default class MessageBox extends Elem {
 
             const txtInp = new BigTextField(Language.lang.elements.messages.message, this.messageBox.element)
 
-            const sendBtn = new Button(Language.lang.elements.messages.send, this.messageBox.element, 'null', async () => {
+            new Button(Language.lang.elements.messages.send, this.messageBox.element, 'null', async () => {
                 await API('POST', handler, { text: txtInp.input, specialData: {} })
                 txtInp.input = ''
             })

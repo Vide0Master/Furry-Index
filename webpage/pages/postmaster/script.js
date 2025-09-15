@@ -58,7 +58,7 @@ export async function render(params) {
 
     renderPosts(currentTags, 0, itemsPerPage)
 
-    const newPostButton = new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
+    new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
         makePostMaker(null, () => { renderPosts(currentTags, 0, itemsPerPage) })
     })
 

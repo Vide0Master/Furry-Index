@@ -19,7 +19,8 @@ module.exports = async function getUserBySessionCookie(cookie, exclude = []) {
                     avatarID: true,
                     createdAt: true,
                     privateprofileparams: true,
-                    globalprofileparams: true
+                    globalprofileparams: true,
+                    roles: true
                 }
             }
         }

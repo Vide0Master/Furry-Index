@@ -41,7 +41,17 @@ exports.GET = async (req, res) => {
             select: {
                 username: true,
                 visiblename: true,
-                avatarID: true
+                avatarID: true,
+                roles: {
+                    where: {
+                        hidden: false
+                    }, select: {
+                        id: true,
+                        roleColor: true,
+                        roleIcon: true,
+                        type: true
+                    }
+                }
             }
         }
     }

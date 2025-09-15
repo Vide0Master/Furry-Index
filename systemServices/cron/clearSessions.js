@@ -2,7 +2,7 @@ const cmd = require("../cmdPretty")
 const prisma = require("../prisma")
 
 
-async function checkExpiredSessions(params) {
+async function checkExpiredSessions() {
     const killedExpiredSessions = await prisma.session.deleteMany({
         where: {
             AND: [

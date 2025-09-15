@@ -17,7 +17,7 @@ import processText from "../../scripts/bigTextProcessor.js";
 export const tag = "register";
 export const tagLimit = 1;
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('register-container')
 
     const registerData = {
@@ -109,7 +109,7 @@ export async function render(params) {
     })
 
     registerData.error[3] = true
-    const termsOfService = new SwitchInput(Language.lang.register.TOS, container.element, (val) => {
+    const termsOfService = new SwitchInput(Language.lang.register.TOS, container.element, () => {
         const overlay = new Overlay()
         const txtElm = processText(Language.lang.TOS, overlay.element)
         const accLine = new Elem(['info-block', 'acc'], txtElm.element)
@@ -127,7 +127,7 @@ export async function render(params) {
     }, false, null, false)
 
     registerData.error[4] = true
-    const privacyPolicy = new SwitchInput(Language.lang.register.PP, container.element, (val) => {
+    const privacyPolicy = new SwitchInput(Language.lang.register.PP, container.element, () => {
         const overlay = new Overlay()
         const txtElm = processText(Language.lang.PP, overlay.element)
         const accLine = new Elem(['info-block', 'acc'], txtElm.element)

@@ -22,7 +22,17 @@ exports.GET = async (req, res) => {
                             id: true,
                             avatarID: true,
                             username: true,
-                            visiblename: true
+                            visiblename: true,
+                            roles: {
+                                where: {
+                                    hidden: false
+                                }, select: {
+                                    id: true,
+                                    roleColor: true,
+                                    roleIcon: true,
+                                    type: true
+                                }
+                            }
                         }
                     }
                 },

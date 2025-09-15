@@ -7,7 +7,7 @@ import Language from "../../scripts/language.js";
 export const tag = "main";
 export const tagLimit = 1;
 
-export async function render(params) {
+export async function render() {
     const container = new Elem('main-container')
 
     const websiteLabel = new Elem('FI-label', container.element)
