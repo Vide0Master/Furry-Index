@@ -16,6 +16,12 @@ services:
     networks:
       furry_index_net:
         ipv4_address: 172.28.0.10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/whatisthisbuild"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   postgres:
     image: postgres:17

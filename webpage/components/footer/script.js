@@ -50,7 +50,23 @@ new Link('Redeem key', () => {
     new Button('Redeem', redeemWindow.element, null, async () => {
         if (keyData) {
             const result = await API('POST', `/api/key/${keyData}`)
-            console.log(result)
+
+            switch (result.HTTPCODE) {
+                case 200: break;
+                case 404: {
+                    new Alert.Simple(`Key was not found`, 'Error', 5000, null, 'keynotfound')
+                }; return
+                case 405: {
+                    new Alert.Simple(`Key was already redeemed`, 'Error', 5000, null, 'keywasredeemed')
+                }; return
+            }
+
+            switch (result.key.type) {
+                case 'superadminassign': {
+                    new Alert.Simple(`Superadmin role assigned`, 'Success', 5000, null, 'superadminroleass')
+                }; break;
+            }
+
             overlay.kill()
         } else {
             new Alert.Simple('Fix errors in key', 'Error', 5000, null, 'redeemerror')

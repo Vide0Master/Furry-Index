@@ -42,7 +42,7 @@ const roleTemplates = {
     verifiedUser: {
         type: "verifiedUser",
         roleIcon: "shield-bolt",
-        roleColor: "#35e160ff",
+        roleColor: "#2626cdff",
         hiddable: false,
         permissions: []
     },
@@ -50,15 +50,14 @@ const roleTemplates = {
         type: "verifiedPaymentEntity",
         roleIcon: "shield-bolt",
         roleColor: "#4138e8ff",
-        hiddable: false,
+        hiddable: true,
+        hidden: true,
         permissions: []
     },
 }
 
 class roleController {
     static async assignRole(userid, role) {
-
-
         const roleDataDB = await prisma.role.findFirst({
             where: {
                 userid,
@@ -66,18 +65,22 @@ class roleController {
             }
         })
 
-        const newData = await prisma.role.upsert({
-            where: {
-                id: roleDataDB?.id,
-                userid
-            },
-            create: {
+        const roleData = this.getRole(role)
 
-            },
-            update: {
+        roleData.userid = userid
 
-            }
-        })
+        if (!roleDataDB && roleData) {
+            await prisma.role.create({
+                data: roleData
+            })
+        } else {
+            await prisma.role.update({
+                where: {
+                    id: roleDataDB?.id
+                },
+                data: roleData
+            })
+        }
     }
 
     static async removeRole(userid, role) {
@@ -90,6 +93,7 @@ class roleController {
 
     static getRole(name) {
         const requiredRole = roleTemplates[name]
+        if (requiredRole) delete requiredRole.permissions
         return requiredRole ? requiredRole : null
     }
 }

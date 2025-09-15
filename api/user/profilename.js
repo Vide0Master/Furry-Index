@@ -14,15 +14,23 @@ exports.GET = async (req, res) => {
             id: true,
             username: true,
             visiblename: true,
-            avatar: true,
+            avatarID: true,
             createdAt: true,
             globalprofileparams: true,
+            roles: {
+                where: {
+                    hidden: false
+                }, select: {
+                    id: true,
+                    roleColor: true,
+                    roleIcon: true,
+                    type: true
+                }
+            }
         }
     })
 
     if (!user) return res.status(404).send('User not found')
-
-    user.avatar = !!user.avatar
 
     res.status(200).json({ user })
 }

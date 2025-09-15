@@ -193,7 +193,7 @@ model ReddemableKey {
 }
 
 model Role {
-    id          String  @id @unique @default(uuid())
+    id          String  @unique @default(uuid())
     type        String
     userid      String
     user        User    @relation(fields: [userid], references: [id])
@@ -201,5 +201,5 @@ model Role {
     roleColor   String?
     hiddable    Boolean @default(false)
     hidden      Boolean @default(false)
-    permissions Json
+    specialData Json?
 }

@@ -19,11 +19,10 @@ exports.POST = async (req, res) => {
         return res.status(406).send("Key is malformed, key should be in format XXXXXX-XXXXXX-XXXXXX-XXXXXX")
     } else {
         const status = await keyControl.redeemKey(key, user.id)
-        console.log(status)
         if (status.code == 200) {
             return res.status(200).json({ key: status.key })
         } else {
-            return res.status(status).send(keyResponses[status.code])
+            return res.status(status.code).send(keyResponses[status.code])
         }
     }
 }

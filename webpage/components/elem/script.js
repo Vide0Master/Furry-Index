@@ -41,6 +41,22 @@ export default class Elem {
         this.onAnimationEnd = (cb) => {
             this.addEvent('animationend', cb, true)
         }
+
+        this.addClass = (c) => {
+            this.element.classList.add(c)
+        }
+
+        this.rmClass = (c) => {
+            this.element.classList.remove(c)
+        }
+
+        this.setStyleProperty = (prop, value) => {
+            this.element.style.setProperty(prop, value)
+        }
+
+        this.rmStyleProperty = (prop) => {
+            this.element.style.removeProperty(prop)
+        }
     }
 
     get text() {

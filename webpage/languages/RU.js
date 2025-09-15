@@ -441,6 +441,21 @@ const LANG = {
                 no: "Нет",
                 yes: "Да"
             }
+        },
+        roleLabel: {
+            superAdmin: "Администратор",
+            admin: "Администратор",
+            moderator: "Модератор",
+            artist: "Художник",
+            supporter: "Спонсор",
+            verifiedUser: {
+                lshort: "Подтверждён",
+                long: "Подтверждённый пользовтель"
+            },
+            verifiedPaymentEntity: {
+                lshort: "ППЛ",
+                long: "Проверенное платёжное лицо"
+            }
         }
     },
     features: {

@@ -445,6 +445,21 @@ const LANG = {
                 no: "No",
                 yes: "Yes"
             }
+        },
+        roleLabel: {
+            superAdmin: "Administrator",
+            admin: "Administrator",
+            moderator: "Moderator",
+            artist: "Artist",
+            supporter: "Supporter",
+            verifiedUser: {
+                lshort: "Verified",
+                long: "Verified user"
+            },
+            verifiedPaymentEntity: {
+                lshort: "VPE",
+                long: "Verified payment entity"
+            },
         }
     },
     features: {

@@ -77,16 +77,17 @@ class KeyController {
         switch (keyData.type) {
             case 'superadminassign': {
                 roleControl.assignRole(userid, 'superAdmin')
-                await prisma.role.create({
-                    data: {
-                        type: 'superAdmin',
-                        userid: userid,
-                        roleIcon: 'shield-bolt',
-                        roleColor: '#e5e838'
-                    }
-                })
             }; break;
         }
+
+        await prisma.reddemableKey.update({
+            where: {
+                key: key
+            },
+            data: {
+                redeemed: true
+            }
+        })
 
         keyData.redeemed = true
 
