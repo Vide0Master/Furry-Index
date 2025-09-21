@@ -46,16 +46,22 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Copy compose + .env.example via scp
+        run: |
+          scp -o StrictHostKeyChecking=no \
+            docker-compose.yml .env.example \
+            ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}/
+
       - name: Deploy on remote server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
             cd ${{ secrets.REMOTE_PATH }}
 
-            cp docker-compose.yml docker-compose.yml
-
             if [ ! -f ".env" ]; then
               cp .env.example .env
             fi
+
+            rm .env.example
 
             docker compose pull
 
