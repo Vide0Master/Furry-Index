@@ -2,3 +2,4 @@
 /file_storage/
 /.env
 /.github/
+.env.example
