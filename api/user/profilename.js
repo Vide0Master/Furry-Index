@@ -1,34 +1,13 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
+const getUserByUsername = require("../../systemServices/getUserByUsername")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
 
 exports.ROUTE = '/api/profile/:username'
 
 exports.GET = async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            username: req.params.username
-        },
-        select: {
-            id: true,
-            username: true,
-            visiblename: true,
-            avatarID: true,
-            createdAt: true,
-            globalprofileparams: true,
-            roles: {
-                where: {
-                    hidden: false
-                }, select: {
-                    id: true,
-                    roleColor: true,
-                    roleIcon: true,
-                    type: true
-                }
-            }
-        }
-    })
+    const user = await getUserByUsername(req.params.username)
 
     if (!user) return res.status(404).send('User not found')
 

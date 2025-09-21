@@ -4,6 +4,7 @@ import Link from "../../components/link/script.js"
 import RoleLabel from "../roleLabel/script.js"
 
 export default class UserCard extends Elem {
+    // eslint-disable-next-line no-unused-vars
     constructor(parent, userData, cardType = 'default', features = []) {
         super('internal-user-card', parent)
 

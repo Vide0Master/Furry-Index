@@ -65,30 +65,46 @@ class roleController {
             }
         })
 
-        const roleData = this.getRole(role)
+        const isRolePresent = this.testRole(role)
 
-        roleData.userid = userid
+        if (!isRolePresent) {
+            return
+        }
+
+        const roleData = {
+            userid,
+            type: role
+        }
 
         if (!roleDataDB && roleData) {
-            await prisma.role.create({
-                data: roleData
-            })
+            await prisma.role.create({ data: roleData })
         } else {
             await prisma.role.update({
-                where: {
-                    id: roleDataDB?.id
-                },
+                where: { id: roleDataDB?.id },
                 data: roleData
             })
         }
     }
 
     static async removeRole(userid, role) {
-
+        await prisma.role.delete({
+            where: {
+                userid,
+                type: role
+            }
+        })
     }
 
-    static testUserPermission(userid, permission) {
+    static async testUserPermission(userid, permission) {
+        const roles = await prisma.role.findMany({
+            where: {
+                userid
+            }
+        })
 
+        for (const role of roles) {
+            return roleTemplates[role.type].permissions.includes(permission)
+        }
     }
 
     static getRole(name) {
@@ -96,6 +112,12 @@ class roleController {
         if (requiredRole) delete requiredRole.permissions
         return requiredRole ? requiredRole : null
     }
+
+    static testRole(name) {
+        return roleTemplates[name] ? true : false
+    }
+
+    static roleTemplates = roleTemplates
 }
 
 module.exports = roleController

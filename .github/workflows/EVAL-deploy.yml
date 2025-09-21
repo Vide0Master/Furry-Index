@@ -37,41 +37,27 @@ jobs:
 
     needs: build-and-push
 
-    env:
-      ENVIROMENT: "EVAL"
-      FIPORT: "4100"
-      PGPORT: "11000"
-
     steps:
       - name: Checkout (again for copying compose file)
         uses: actions/checkout@v3
-
-      - name: Generate .env
-        run: |
-          echo "ENVIROMENT=${ENVIROMENT}" > .env
-          echo "PGPORT=${PGPORT}" >> .env
-          echo "FIPORT=${FIPORT}" >> .env
-
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy compose + .env via scp
-        run: |
-          scp -o StrictHostKeyChecking=no \
-            docker-compose.yml .env \
-            ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}/
-
       - name: Deploy on remote server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << 'EOF'
             cd ${{ secrets.REMOTE_PATH }}
+
+            cp docker-compose.yml docker-compose.yml
+
+            if [ ! -f ".env" ]; then
+              cp .env.example .env
+            fi
+
             docker compose pull
+
             docker compose up -d
           EOF

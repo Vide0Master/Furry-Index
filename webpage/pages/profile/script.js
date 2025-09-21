@@ -2,8 +2,6 @@ import Elem from "../../components/elem/script.js";
 import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
 import API from "../../scripts/api.js";
-import Image from "../../components/image/script.js";
-import formatDate from "../../scripts/formatDate.js";
 import PostCard from "../../elements/postCard/script.js";
 import Link from "../../components/link/script.js";
 import UserCard from "../../elements/userCard/script.js";
