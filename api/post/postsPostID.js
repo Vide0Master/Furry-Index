@@ -1,4 +1,5 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
+const getUserByID = require("../../systemServices/getUserByID")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
 const prisma = require('../../systemServices/prisma')
@@ -39,19 +40,7 @@ exports.GET = async (req, res) => {
         },
         owner: {
             select: {
-                username: true,
-                visiblename: true,
-                avatarID: true,
-                roles: {
-                    where: {
-                        hidden: false
-                    }, select: {
-                        id: true,
-                        roleColor: true,
-                        roleIcon: true,
-                        type: true
-                    }
-                }
+                id: true
             }
         }
     }
@@ -79,10 +68,11 @@ exports.GET = async (req, res) => {
         delete post.scores
     }
 
-
     if (user && post.favourites.some(v => v.userid == user.id)) post.myfav = true
 
     if (post.favourites) post.favourites = post.favourites.length
+
+    post.owner = await getUserByID(post.ownerid)
 
     res.status(200).json({ post })
 }

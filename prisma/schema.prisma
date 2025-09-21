@@ -197,9 +197,6 @@ model Role {
     type        String
     userid      String
     user        User    @relation(fields: [userid], references: [id])
-    roleIcon    String?
-    roleColor   String?
-    hiddable    Boolean @default(false)
     hidden      Boolean @default(false)
     specialData Json?
 }

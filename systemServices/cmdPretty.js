@@ -110,6 +110,8 @@ class cmd {
     static preps = {
         API: { text: "API", color: "brightYellow" },
         System: { text: "System", color: "green" },
+        config: { text: "Config", color: "brightYellow" },
+        env: { text: "ENV", color: "brightYellow" },
         fs: { text: 'FS', color: "green" },
         DB: { text: "Database", color: "red" },
         Debug: { text: "Debug", color: "red" },

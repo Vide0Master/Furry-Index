@@ -1,4 +1,5 @@
 
+const getUserByID = require("../../../systemServices/getUserByID")
 const getUserBySessionCookie = require("../../../systemServices/getUserBySessionCookie")
 const { mainAuthTokenKey } = require('../../../systemServices/globalVariables')
 const prisma = require("../../../systemServices/prisma")
@@ -16,26 +17,6 @@ exports.GET = async (req, res) => {
         },
         include: {
             chatMessages: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            avatarID: true,
-                            username: true,
-                            visiblename: true,
-                            roles: {
-                                where: {
-                                    hidden: false
-                                }, select: {
-                                    id: true,
-                                    roleColor: true,
-                                    roleIcon: true,
-                                    type: true
-                                }
-                            }
-                        }
-                    }
-                },
                 orderBy: {
                     sentAt: 'desc'
                 },
@@ -44,6 +25,12 @@ exports.GET = async (req, res) => {
             }
         }
     })
+
+    if (!chatData) return res.status(404).send('Chat not found')
+
+    for (const message of chatData.chatMessages) {
+        message.user = await getUserByID(message.userID)
+    }
 
     res.status(200).json({ chat: chatData })
 }
