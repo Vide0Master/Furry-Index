@@ -1,4 +1,4 @@
-import WSController from '../scripts/ws.js'
+import WSController from './ws.js'
 import Overlay from '../features/overlay/script.js';
 import staticRoutes from '../staticVariables/routerRoutes.js';
 
@@ -7,6 +7,7 @@ class Router {
     static containerSelector = 'main';
     static container = null;
     static _initialized = false;
+    static navListeners = []
 
     static init() {
         if (this._initialized) return;
@@ -56,11 +57,14 @@ class Router {
     static async navigate(path, killOverlays = true, force = false) {
         if (killOverlays) Overlay.clearOverlays()
 
+        this.execNavListeners(path)
+
         this.init();
         if (window.location.pathname + window.location.search !== path || force) {
             window.history.pushState({}, '', path);
             await this._loadRoute(path);
             WSController.updateRoute()
+            this.clrNavListeners()
         }
     }
 
@@ -131,6 +135,20 @@ class Router {
             console.error(`Error loading ${route.module}:`, err);
             this.container.innerHTML = `<p>Error loading page</p>`;
         }
+    }
+
+    static regNavListener(func, permanent = false) {
+        this.navListeners.push({ func, permanent })
+    }
+
+    static clrNavListeners() {
+        for (const i in this.navListeners) {
+            if (!this.navListeners[i].permanent) delete this.navListeners[i]
+        }
+    }
+
+    static execNavListeners(route) {
+        this.navListeners.forEach(v => v.func(route))
     }
 }
 

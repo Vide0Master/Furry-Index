@@ -4,6 +4,8 @@ import UserLabel from '../../elements/userLabel/script.js'
 import Language from '../../scripts/language.js'
 import User from '../../scripts/userdata.js'
 import Icon from '../icon/script.js'
+import DropdownList from '../dropdownList/script.js'
+import Router from '../../scripts/router.js'
 
 export default class Header {
     static render() {
@@ -37,6 +39,27 @@ export default class Header {
         this.fileManager = new Link(Language.lang.header.fileManager, '/file-manager', navRow.element, true, 'hidden', 'file')
         this.postMaster = new Link('✦ ' + Language.lang.header.postMaster, '/post-master', navRow.element, true)
 
+        const adminPages = []
+        if (User.testUserPermission('admin:news')) adminPages.push({ name: "News manager", value: "/admin/news" })
+        if (User.testUserPermission('admin:posts')) adminPages.push({ name: "Post manager", value: "/admin/posts" })
+        if (User.testUserPermission('admin:appeals')) adminPages.push({ name: "Appeals", value: "/admin/appeals" })
+        if (User.testUserPermission('admin:users')) adminPages.push({ name: "Users manager", value: "/admin/users" })
+
+        this.adminPanel = new DropdownList(
+            adminPages,
+            navRow.element,
+            'Admin panel',
+            (sel) => {
+                Router.navigate(sel)
+            },
+            'Admin panel: ')
+
+        this.adminPanel.icon.iconName = 'shield'
+
+        Router.regNavListener((route) => {
+            if (!this.adminPanel.options.some(v => v.value == route)) this.adminPanel.selectOption('placeholder')
+        }, true)
+
         UserLabel.append(this.element)
 
         this.checkUserLoginState()
@@ -44,7 +67,7 @@ export default class Header {
 
     static checkUserLoginState() {
         this.showLoggenInOptions(!!User.data)
-        this.showAdminOptions(false)
+        this.showAdminOptions(User.testUserPermission('admin', false))
     }
 
     static showLoggenInOptions(state) {
@@ -56,7 +79,7 @@ export default class Header {
     }
 
     static showAdminOptions(state) {
-        const loggenInOptions = []
+        const loggenInOptions = [this.adminPanel]
 
         for (const elem of loggenInOptions) {
             state ? elem.element.classList.remove("hidden") : elem.element.classList.add("hidden")

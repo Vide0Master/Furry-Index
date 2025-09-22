@@ -33,11 +33,20 @@ module.exports = async function getUserByID(id, exclude = []) {
             delete userData[field]
         }
 
-        for (const role of userData.roles) {
-            if (roleController.roleTemplates[role.type].roleColor) role.roleColor = roleController.roleTemplates[role.type].roleColor
-            if (roleController.roleTemplates[role.type].roleIcon) role.roleIcon = roleController.roleTemplates[role.type].roleIcon
-            if (!exclude.includes('rolePermissions')) {
+        if (!exclude.includes('rolePermissions')) {
+            if (!exclude.includes('rolePermissionsList')) {
+                userData.permissionsList = []
+            }
+
+            for (const role of userData.roles) {
+                if (roleController.roleTemplates[role.type].roleColor) role.roleColor = roleController.roleTemplates[role.type].roleColor
+                if (roleController.roleTemplates[role.type].roleIcon) role.roleIcon = roleController.roleTemplates[role.type].roleIcon
+
                 role.permissions = roleController.roleTemplates[role.type].permissions
+
+                if (!exclude.includes('rolePermissionsList')) role.permissions.forEach(v => {
+                    if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)
+                })
             }
         }
 

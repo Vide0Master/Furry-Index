@@ -9,7 +9,12 @@ const roleTemplates = {
         roleIcon: "shield-bolt",
         roleColor: "#e5e838ff",
         hiddable: false,
-        permissions: []
+        permissions: [
+            "admin:news",
+            "admin:posts",
+            "admin:appeals",
+            "admin:users"
+        ]
     },
     admin: {
         type: "admin",

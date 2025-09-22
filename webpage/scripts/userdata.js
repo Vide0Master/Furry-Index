@@ -53,6 +53,7 @@ class User {
             delete userRequestResult.HTTPCODE
             this.data = userRequestResult
             this.Settings.setStorage(userRequestResult.privateprofileparams || defaultSettings)
+
         } else {
             this.data = null
         }
@@ -66,6 +67,17 @@ class User {
 
     static loggedIn() {
         return this.data != null
+    }
+
+    static testUserPermission(permission, strict = true) {
+        // stupid ahh check
+        if (!this.data) return false
+
+        if (strict) {
+            return this.data.permissionsList.includes(permission);
+        } else {
+            return this.data.permissionsList.some(p => p.includes(permission));
+        }
     }
 }
 

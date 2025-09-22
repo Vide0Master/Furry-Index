@@ -13,7 +13,7 @@ export default class DropdownList extends Elem {
         this.placeholderName = placeholder
 
         const label = new Elem('label', this.element)
-        new Icon('list', label.element)
+        this.icon = new Icon('list', label.element)
         this.textLabel = new Elem('text-label', label.element)
         this.textLabel.text = placeholder ? placeholder : Language.lang.elements.dropdown.label
 
@@ -21,7 +21,8 @@ export default class DropdownList extends Elem {
 
         this.currentOption = 'placeholder'
 
-        this.createOption(placeholder ? placeholder : Language.lang.elements.dropdown.label, 'placeholder', false)
+        if (labelPrefix == '')
+            this.createOption(placeholder ? placeholder : Language.lang.elements.dropdown.label, 'placeholder', false)
 
         for (const option of options) {
             this.createOption(option.name, option.value)
@@ -61,9 +62,13 @@ export default class DropdownList extends Elem {
     }
 
     selectOption(option) {
-        if (!this.options.some(v => v.value == option)) return
-        this.value = option
-        this.chcb()
+        if (!this.options.some(v => v.value == option) && option != 'placeholder') return
+        if (option == 'placeholder') {
+            this.textLabel.text = this.placeholderName
+        } else {
+            this.value = option
+            this.chcb()
+        }
     }
 
     get value() {

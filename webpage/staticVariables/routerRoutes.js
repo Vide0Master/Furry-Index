@@ -12,6 +12,10 @@ const routes = [
     { path: '/post-master/:postID', module: '/pages/postmaster/script.js' },
     { path: '/post/:postID', module: '/pages/postView/script.js' },
     { path: '/search', module: '/pages/search/script.js' },
+    { path: '/admin/news', module: '/pages/adminNews/script.js' },
+    { path: '/admin/posts', module: '/pages/adminPosts/script.js' },
+    { path: '/admin/appeals', module: '/pages/adminAppeals/script.js' },
+    { path: '/admin/users', module: '/pages/adminUsers/script.js' },
 ]
 
 export default routes

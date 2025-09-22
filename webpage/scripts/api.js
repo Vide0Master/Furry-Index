@@ -35,15 +35,6 @@ export default async function API(method, route, body, credentials = false) {
             }
         }
 
-        try {
-            const responseData = await response.text()
-            data.TEXT = responseData
-        } catch {
-            if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
-                console.log('No text in response')
-            }
-        }
-
         data.HTTPCODE = response.status
 
         if (AppInfo.appData.isDev || AppInfo.appData.isEval) {

@@ -58,7 +58,7 @@ export async function render(params) {
         })),
         pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
-        })
+    }, Language.lang.settings.webpage.language.label+': ')
 
     //region item counts for posts
     const itemCounts = [25, 50, 75, 100, 150, 200]
