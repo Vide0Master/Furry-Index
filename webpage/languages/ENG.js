@@ -7,11 +7,6 @@ const LANG = {
             NOLINK: "Does not have link assigned"
         }
     },
-    BUILD: {
-        dev: "DEVELOPMENT BUILD",
-        eval: "EVALUATION BUILD",
-        rel: "RELEASE BUILD"
-    },
     TOS: [
         {
             label: "Furry Index Terms of Service",
@@ -338,6 +333,19 @@ const LANG = {
                 }
             },
             filesPerPage: "Files per page"
+        }
+    },
+    keyRedeem: {
+        label: "Redeem key",
+        malformedKey: "Correct key",
+        redeem: "Redeem",
+        err: {
+            notFound: "Key was not found",
+            redeemed: "Key was already redeemed",
+            fix: 'Fix errors in key'
+        },
+        succ: {
+            superadminassign: "Superadmin role assigned"
         }
     },
     components: {

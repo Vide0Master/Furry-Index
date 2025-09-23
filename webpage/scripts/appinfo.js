@@ -41,8 +41,8 @@ function createDevInfoBanner(appinfo) {
 
     devBuildInfo.element.classList.add(txt)
 
-    new Elem('main-text', devBuildInfo.element).text = 'Running Furry-Index engine'
-    new Elem('version', devBuildInfo.element).text = txt + ' v' + appinfo.version
+    const txtCont = new Elem('txt-cont', devBuildInfo.element)
 
-    devBuildInfo.title = Language.lang.BUILD[txt.toLocaleLowerCase()]
+    new Elem('main-text', txtCont.element).text = 'Running FING'
+    new Elem('version', txtCont.element).text = txt + ' v' + appinfo.version
 }

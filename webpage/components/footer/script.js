@@ -35,41 +35,41 @@ new Link(Language.lang.register.PP, () => {
     processText(Language.lang.PP, overlay.element)
 }, policyes.element, false, null, 'file')
 
-new Link('Redeem key', () => {
+new Link(Language.lang.keyRedeem.label, () => {
     const overlay = new Overlay()
     const redeemWindow = new Elem('key-redeem-window', overlay.element)
-    new Elem('label', redeemWindow.element).text = 'Redeem key'
+    new Elem('label', redeemWindow.element).text = Language.lang.keyRedeem.label
     let keyData = null
     const keyField = new TextInputLine('XXXXXX-XXXXXX-XXXXXX-XXXXXX', redeemWindow.element, 'redeem-field', null, async (val) => {
         keyData = val
     })
-    keyField.addCheck('Malformed key', (val) => {
+    keyField.addCheck(Language.lang.keyRedeem.malformedKey, (val) => {
         const regex = /^[A-Z0-9]{6}(?:-[A-Z0-9]{6}){3}$/;
         return regex.test(val)
     })
-    new Button('Redeem', redeemWindow.element, null, async () => {
+    new Button(Language.lang.keyRedeem.redeem, redeemWindow.element, null, async () => {
         if (keyData) {
             const result = await API('POST', `/api/key/${keyData}`)
 
             switch (result.HTTPCODE) {
                 case 200: break;
                 case 404: {
-                    new Alert.Simple(`Key was not found`, 'Error', 5000, null, 'keynotfound')
+                    new Alert.Simple(Language.lang.keyRedeem.err.notFound, 'Error', 5000, null, 'keynotfound')
                 }; return
                 case 405: {
-                    new Alert.Simple(`Key was already redeemed`, 'Error', 5000, null, 'keywasredeemed')
+                    new Alert.Simple(Language.lang.keyRedeem.err.redeemed, 'Error', 5000, null, 'keywasredeemed')
                 }; return
             }
 
             switch (result.key.type) {
                 case 'superadminassign': {
-                    new Alert.Simple(`Superadmin role assigned`, 'Success', 5000, null, 'superadminroleass')
+                    new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, 'Success', 5000, null, 'superadminroleass')
                 }; break;
             }
 
             overlay.kill()
         } else {
-            new Alert.Simple('Fix errors in key', 'Error', 5000, null, 'redeemerror')
+            new Alert.Simple(Language.lang.keyRedeem.err.fix, 'Error', 5000, null, 'redeemerror')
         }
     })
 }, Footer.element, false, null, 'key')
