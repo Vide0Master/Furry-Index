@@ -4,7 +4,7 @@ import Link from "../../components/link/script.js";
 import Language from "../../scripts/language.js";
 
 function capitalizeFirst(str) {
-    if (!str) return '';
+    if (!str) return "";
     return str[0].toUpperCase() + str.slice(1);
 }
 
@@ -19,32 +19,32 @@ function capitalizeFirst(str) {
 // good luck understanding this :D
 export default class Tag extends Elem {
     constructor(tagData, parent, interactable = false, searchLink) {
-        super('tag-element', parent)
+        super("tag-element", parent)
 
-        if (tagData.icon) new Icon(tagData.icon, this.element, null, '14x14')
+        if (tagData.icon) new Icon(tagData.icon, this.element, null, "14x14")
 
         if (searchLink) {
             const params = new URLSearchParams(window.location.search)
 
-            const tags = (params.get('tags') || '').split(' ').filter(v => v != '').map(v => v.trim())
+            const tags = (params.get("tags") || "").split(" ").filter(v => v != "").map(v => v.trim())
 
             const includedInSearch = tags.includes(tagData.name)
 
             if (!includedInSearch && tags.length > 0) {
-                new Link('+', `${searchLink}?tags=${tags.concat([tagData.name]).join('+')}`, this.element, true, ['tag-name', 'p-m'])
-                new Link('-', `${searchLink}?tags=${tags.concat(['-' + tagData.name]).join('+')}`, this.element, true, ['tag-name', 'p-m'])
+                new Link("+", `${searchLink}?tags=${tags.concat([tagData.name]).join("+")}`, this.element, true, ["tag-name", "p-m"])
+                new Link("-", `${searchLink}?tags=${tags.concat(["-" + tagData.name]).join("+")}`, this.element, true, ["tag-name", "p-m"])
             }
 
-            const lnkRslt = new Link(tagData.name, `${searchLink}?tags=${tagData.name}`, this.element, true, 'tag-name')
+            const lnkRslt = new Link(tagData.name, `${searchLink}?tags=${tagData.name}`, this.element, true, "tag-name")
             if (includedInSearch) {
-                lnkRslt.element.classList.add('underlined')
+                lnkRslt.element.classList.add("underlined")
             }
         } else {
-            const text = new Elem('tag-name', this.element)
+            const text = new Elem("tag-name", this.element)
             text.text = tagData.name
         }
 
-        if (tagData.count) new Elem('count', this.element).text = tagData.count
+        if (tagData.count) new Elem("count", this.element).text = tagData.count
 
         if (tagData.group) {
             this.element.title = tagData?.group.name[Language.currentLang] ? tagData.group.name[Language.currentLang] : capitalizeFirst(tagData.group.basename)
@@ -55,6 +55,6 @@ export default class Tag extends Elem {
             this.element.style = `--tag-color: #5b34eb;`
         }
 
-        if (interactable) this.element.classList.add('interactible')
+        if (interactable) this.element.classList.add("interactible")
     }
 }

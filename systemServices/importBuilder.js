@@ -17,7 +17,7 @@ function scanFiles(dir, excludeFile = null, baseDir = dir, filesArr = []) {
             scanFiles(fullPath, excludeFile, baseDir, filesArr);
         } else {
             const relativePath = path.relative(baseDir, fullPath);
-            filesArr.push('/' + relativePath.replace(/\\/g, '/'));
+            filesArr.push("/" + relativePath.replace(/\\/g, "/"));
         }
     });
 
@@ -44,7 +44,7 @@ function generateHTMLImports(files) {
 }
 
 function renderHTMLImports() {
-    const scannedFiles = scanFiles('./webpage');
+    const scannedFiles = scanFiles("./webpage");
     const html = generateHTMLImports(scannedFiles);
     return html
 }

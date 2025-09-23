@@ -1,7 +1,7 @@
-const cfg = require('../config.json');
-require('dotenv').config();
+const cfg = require("../config.json");
+require("dotenv").config();
 
-const domain = 'vmtech.services'
+const domain = "vmtech.services"
 
 
 const constants = {
@@ -13,7 +13,7 @@ const constants = {
     mainAuthTokenKey: "FURRYINDEXUSERTOKEN",
     tempSessionTimeout: 5,
     version: cfg.version,
-    serverLink: ''
+    serverLink: ""
 }
 
 if (!process.env.PORT) {
@@ -24,15 +24,15 @@ if (!process.env.PORT) {
 }
 
 switch (true) {
-    case constants.DEVmode: {
-        constants.serverLink = 'polygon-3k.' + domain
-    }; break;
-    case constants.EVALmode: {
-        constants.serverLink = 'furry-index-eval.' + domain
-    }; break;
-    default: {
-        constants.serverLink = 'furry-index.' + domain
-    }; break;
+case constants.DEVmode: {
+    constants.serverLink = "polygon-3k." + domain
+}; break;
+case constants.EVALmode: {
+    constants.serverLink = "furry-index-eval." + domain
+}; break;
+default: {
+    constants.serverLink = "furry-index." + domain
+}; break;
 }
 
 module.exports = constants

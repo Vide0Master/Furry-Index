@@ -5,7 +5,7 @@ import PasswordInput from "../../components/passwordinput/script.js"
 import TextInputLine from "../../components/textinputline/script.js"
 import Language from "../../scripts/language.js"
 
-const alertsContainer = new Elem('alerts-container', document.body)
+const alertsContainer = new Elem("alerts-container", document.body)
 
 const alerts = {}
 
@@ -16,27 +16,27 @@ class AlertComponent {
             return
         }
 
-        this.alertCont = new Elem('alert', alertsContainer.element)
+        this.alertCont = new Elem("alert", alertsContainer.element)
 
-        this.alertCont.element.style = 'animation: internal-show-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;'
-        this.alertCont.element.addEventListener('animationend', (e) => {
+        this.alertCont.element.style = "animation: internal-show-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;"
+        this.alertCont.element.addEventListener("animationend", (e) => {
             if (e.target != this.alertCont.element) return
-            this.alertCont.element.style = ''
+            this.alertCont.element.style = ""
         })
 
         if (label) {
-            this.alertLabel = new Elem('label', this.alertCont.element)
+            this.alertLabel = new Elem("label", this.alertCont.element)
             this.alertLabel.text = label
         }
 
         if (text) {
-            this.alertText = new Elem('text', this.alertCont.element)
+            this.alertText = new Elem("text", this.alertCont.element)
             this.alertText.text = text
         }
 
         this.removeAlert = () => {
-            this.alertCont.element.style = 'animation: internal-hide-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;'
-            this.alertCont.element.addEventListener('animationend', (e) => {
+            this.alertCont.element.style = "animation: internal-hide-alert 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;"
+            this.alertCont.element.addEventListener("animationend", (e) => {
                 if (e.target != this.alertCont.element) return
                 this.alertCont.element.remove()
                 delete alerts[id]
@@ -44,10 +44,10 @@ class AlertComponent {
         }
 
         this.highlight = () => {
-            this.alertCont.element.style = 'animation: internal-shake-alert 0.4s linear forwards;'
-            this.alertCont.element.addEventListener('animationend', (e) => {
+            this.alertCont.element.style = "animation: internal-shake-alert 0.4s linear forwards;"
+            this.alertCont.element.addEventListener("animationend", (e) => {
                 if (e.target != this.alertCont.element) return
-                this.alertCont.element.style = ''
+                this.alertCont.element.style = ""
             })
         }
 
@@ -57,14 +57,14 @@ class AlertComponent {
             alert: this
         }
 
-        this.okButton = new Button('OK', this.alertCont.element, null, this.removeAlert)
+        this.okButton = new Button("OK", this.alertCont.element, null, this.removeAlert)
 
         if (timeout) {
-            this.timeoutBar = new Elem('timeout-bar', this.alertCont.element)
+            this.timeoutBar = new Elem("timeout-bar", this.alertCont.element)
             const timer = typeof timeout == "number" ? timeout : 5000
             this.timeoutBar.element.style = `--hide-time: ${timer}ms;`
 
-            this.timeoutBar.element.addEventListener('animationend', () => {
+            this.timeoutBar.element.addEventListener("animationend", () => {
                 this.removeAlert()
             })
         }
@@ -86,7 +86,7 @@ class Confirm extends AlertComponent {
         this.confirmCallback = confirmCallback
         this.cancelCallback = cancelCallback
 
-        const buttonsRow = new Elem('buttons-row', this.alertCont.element)
+        const buttonsRow = new Elem("buttons-row", this.alertCont.element)
 
         this.okButton.element.remove()
 
@@ -113,13 +113,13 @@ class Input extends AlertComponent {
         let input
 
         switch (inputType) {
-            case 'bigField': new BigTextField('', this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ''; break;
-            case 'password': new PasswordInput('', this.alertCont.element, null, (v) => { input = v }).value = value ? value : ''; break;
-            case 'simple':
-            default: new TextInputLine('', this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ''
+        case "bigField": new BigTextField("", this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ""; break;
+        case "password": new PasswordInput("", this.alertCont.element, null, (v) => { input = v }).value = value ? value : ""; break;
+        case "simple":
+        default: new TextInputLine("", this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ""
         }
 
-        const buttonsRow = new Elem('buttons-row', this.alertCont.element)
+        const buttonsRow = new Elem("buttons-row", this.alertCont.element)
 
         this.okButton.element.remove()
 

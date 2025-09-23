@@ -6,7 +6,7 @@ import Router from "./scripts/router.js"
 import User from "./scripts/userdata.js"
 
 //on dom load
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
     await AppInfo.getAppInfo()
     await User.updateUserData()
     Header.render()

@@ -11,16 +11,16 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 export const tag = "postmaster";
 export const tagLimit = 1;
 
-const itemsPerPage = User.Settings.get('postsPerPage')
+const itemsPerPage = User.Settings.get("postsPerPage")
 
 export async function render(params) {
-    const container = new Elem('postmaster-container')
+    const container = new Elem("postmaster-container")
 
     let currentTags = []
 
-    const headBar = new Elem('head-bar', container.element)
+    const headBar = new Elem("head-bar", container.element)
 
-    const postsField = new Elem('posts-field', container.element)
+    const postsField = new Elem("posts-field", container.element)
 
     async function renderPosts(tags = [], page = 0, take = itemsPerPage) {
         postsField.wipe()
@@ -28,13 +28,13 @@ export async function render(params) {
 
         const fullTags = [...tags, `author:${User.data.username}`]
 
-        if (fullTags) req.push(`tags=${fullTags.join('+')}`)
+        if (fullTags) req.push(`tags=${fullTags.join("+")}`)
         if (page) req.push(`p=${page}`)
         if (take) req.push(`t=${take}`)
 
-        const query = req.length > 0 ? `?${req.join('&')}` : ''
+        const query = req.length > 0 ? `?${req.join("&")}` : ""
 
-        const postsResp = await API('GET', `/api/posts${query}`)
+        const postsResp = await API("GET", `/api/posts${query}`)
 
         for (const post of postsResp.posts) {
             new PostCard(post, postsField.element, true, () => { renderPosts(currentTags, 0, itemsPerPage) })
@@ -43,17 +43,17 @@ export async function render(params) {
 
     async function getPostsCount(tags = []) {
         const fullTags = [...tags, `author:${User.data.username}`]
-        const pagesCount = await API('GET', `/api/posts?count=true${fullTags.length > 0 ? `&tags=${fullTags.join('+')}` : ''}`)
+        const pagesCount = await API("GET", `/api/posts?count=true${fullTags.length > 0 ? `&tags=${fullTags.join("+")}` : ""}`)
         return pagesCount.count
     }
 
-    const searchField = new SearchField(headBar.element, '/api/posts/tags')
+    const searchField = new SearchField(headBar.element, "/api/posts/tags")
 
     const URLparams = new URLSearchParams(window.location.search)
-    const tagsParams = URLparams.get('tags')
+    const tagsParams = URLparams.get("tags")
     if (tagsParams) {
-        currentTags = tagsParams.split('+').filter(v => v != '')
-        searchField.setSearch(currentTags.join(' '))
+        currentTags = tagsParams.split("+").filter(v => v != "")
+        searchField.setSearch(currentTags.join(" "))
     }
 
     renderPosts(currentTags, 0, itemsPerPage)
@@ -66,7 +66,7 @@ export async function render(params) {
     const pageNav = new PageNavigator(pagesCount, 1, container.element)
 
     async function loadPost(postid) {
-        const postdata = await API('GET', `/api/posts/${postid}`)
+        const postdata = await API("GET", `/api/posts/${postid}`)
         makePostMaker(postdata.post, () => { renderPosts(currentTags, 0, itemsPerPage) })
     }
 

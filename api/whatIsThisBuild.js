@@ -1,6 +1,6 @@
-const globalVariables = require('../systemServices/globalVariables')
+const globalVariables = require("../systemServices/globalVariables")
 
-exports.ROUTE = '/api/whatisthisbuild'
+exports.ROUTE = "/api/whatisthisbuild"
 
 exports.GET = async (req, res) => {
     res.status(200).json({

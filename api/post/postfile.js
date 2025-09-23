@@ -1,9 +1,9 @@
 // const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 // const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const prisma = require("../../systemServices/prisma")
 const sendFileByName = require("../../systemServices/sendFileByName")
 
-exports.ROUTE = '/api/posts/:postID/file/:fileID'
+exports.ROUTE = "/api/posts/:postID/file/:fileID"
 
 exports.GET = async (req, res) => {
     // const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
@@ -21,7 +21,7 @@ exports.GET = async (req, res) => {
     })
 
     if(!post) {
-        res.status(404).send('Post not found')
+        res.status(404).send("Post not found")
         return
     }
 
@@ -35,7 +35,7 @@ exports.GET = async (req, res) => {
     })
 
     if(!file) {
-        res.status(404).send('File not found')
+        res.status(404).send("File not found")
         return
     }
 

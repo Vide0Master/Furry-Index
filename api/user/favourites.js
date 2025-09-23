@@ -1,10 +1,10 @@
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
 const prisma = require("../../systemServices/prisma")
 
-exports.ROUTE = '/api/favourites'
+exports.ROUTE = "/api/favourites"
 
-exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
+exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
@@ -39,14 +39,14 @@ exports.GET = async (req, res) => {
 exports.PUT = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    if (!req?.body?.post && !req?.body?.posts) return res.status(400).send('No post provided in body')
+    if (!req?.body?.post && !req?.body?.posts) return res.status(400).send("No post provided in body")
 
     if (req.body.posts) {
         await prisma.favourite.createMany({
             data: req.body.posts.map(id => ({ userid: user.id, postid: id }))
         })
 
-        return res.status(200).send('Updated user favs')
+        return res.status(200).send("Updated user favs")
     } else {
         await prisma.favourite.create({
             data: {
@@ -68,7 +68,7 @@ exports.PUT = async (req, res) => {
 exports.DELETE = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    if (!req?.body?.post) return res.status(400).send('No post provided in body')
+    if (!req?.body?.post) return res.status(400).send("No post provided in body")
 
     await prisma.favourite.delete({
         where: {

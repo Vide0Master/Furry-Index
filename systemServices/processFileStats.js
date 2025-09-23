@@ -1,9 +1,9 @@
-const prisma = require('./prisma')
-const path = require('path')
-const fs = require('fs/promises')
-const ffmpeg = require('fluent-ffmpeg')
-const sharp = require('sharp')
-const cmd = require('./cmdPretty')
+const prisma = require("./prisma")
+const path = require("path")
+const fs = require("fs/promises")
+const ffmpeg = require("fluent-ffmpeg")
+const sharp = require("sharp")
+const cmd = require("./cmdPretty")
 
 module.exports = async function processFileStats(id, onFinish, resultFlags = { convertedFromGif: false, videoReencoded: false, audioReencoded: false }, tags = []) {
     const filedata = await prisma.file.findUnique({ where: { id } })
@@ -12,7 +12,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
     }
 
     const originalFile = filedata.file
-    const filepath = path.resolve(__dirname, '../file_storage', originalFile)
+    const filepath = path.resolve(__dirname, "../file_storage", originalFile)
     const fileExt = path.extname(originalFile).slice(1).toLowerCase()
 
     const stats = {}
@@ -27,7 +27,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
         await prisma.file.update({ where: { id }, data: { locked: value } })
     }
 
-    if (['mp4', 'webm', 'mkv'].includes(fileExt)) {
+    if (["mp4", "webm", "mkv"].includes(fileExt)) {
         let metadata
         try {
             metadata = await new Promise((resolve, reject) => {
@@ -40,21 +40,21 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
             return
         }
 
-        const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-        const audioStream = metadata.streams.find(s => s.codec_type === 'audio')
+        const videoStream = metadata.streams.find(s => s.codec_type === "video")
+        const audioStream = metadata.streams.find(s => s.codec_type === "audio")
         const format = metadata.format
 
-        if (audioStream) tags.push({ name: 'sound' })
+        if (audioStream) tags.push({ name: "sound" })
 
         stats.width = videoStream?.width || null
         stats.height = videoStream?.height || null
         stats.duration = format?.duration || null
 
-        const videoCodec = videoStream?.codec_name || 'none'
-        const audioCodec = audioStream?.codec_name || 'none'
+        const videoCodec = videoStream?.codec_name || "none"
+        const audioCodec = audioStream?.codec_name || "none"
 
-        const unsupportedVideo = !['h264'].includes(videoCodec)
-        const unsupportedAudio = !!audioStream && !['aac'].includes(audioCodec)
+        const unsupportedVideo = !["h264"].includes(videoCodec)
+        const unsupportedAudio = !!audioStream && !["aac"].includes(audioCodec)
 
         resultFlags.videoReencoded = unsupportedVideo
         resultFlags.audioReencoded = unsupportedAudio
@@ -62,16 +62,16 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
         if (unsupportedVideo || unsupportedAudio) {
             await markLocked(true)
 
-            const tempPath = filepath + '.tmp.mp4'
+            const tempPath = filepath + ".tmp.mp4"
 
             try {
                 await new Promise((resolve, reject) => {
                     ffmpeg(filepath)
-                        .videoCodec('libx264')
-                        .audioCodec('aac')
-                        .outputOptions(['-movflags faststart', '-pix_fmt yuv420p'])
-                        .on('end', resolve)
-                        .on('error', reject)
+                        .videoCodec("libx264")
+                        .audioCodec("aac")
+                        .outputOptions(["-movflags faststart", "-pix_fmt yuv420p"])
+                        .on("end", resolve)
+                        .on("error", reject)
                         .save(tempPath)
                 })
 
@@ -84,20 +84,20 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
             await markLocked(false)
             return await processFileStats(id, onFinish)
         }
-        tags.push({ name: 'animated' })
-    } else if (fileExt === 'gif') {
+        tags.push({ name: "animated" })
+    } else if (fileExt === "gif") {
         await markLocked(true)
 
-        const tempPath = filepath.replace(/\.gif$/, '.temp.mp4')
-        const finalPath = filepath.replace(/\.gif$/, '.mp4')
+        const tempPath = filepath.replace(/\.gif$/, ".temp.mp4")
+        const finalPath = filepath.replace(/\.gif$/, ".mp4")
 
         try {
             await new Promise((resolve, reject) => {
                 ffmpeg(filepath)
-                    .outputOptions(['-movflags faststart', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2'])
-                    .videoCodec('libx264')
-                    .on('end', resolve)
-                    .on('error', reject)
+                    .outputOptions(["-movflags faststart", "-pix_fmt yuv420p", "-vf scale=trunc(iw/2)*2:trunc(ih/2)*2"])
+                    .videoCodec("libx264")
+                    .on("end", resolve)
+                    .on("error", reject)
                     .save(tempPath)
             })
 
@@ -107,7 +107,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
             await prisma.file.update({
                 where: { id },
                 data: {
-                    filetype: 'mp4',
+                    filetype: "mp4",
                     file: path.basename(finalPath)
                 }
             })
@@ -120,7 +120,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
         await markLocked(false)
         return await processFileStats(id, onFinish, resultFlags, tags)
     } else {
-        tags.push({ name: 'image' })
+        tags.push({ name: "image" })
         try {
             const image = sharp(filepath)
             const meta = await image.metadata()
@@ -133,26 +133,26 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
 
     if (stats.duration) {
         switch (true) {
-            case stats.duration > 600: {
-                tags.push({ name: 'absurd_playtime' })
-            }; break;
-            case stats.duration > 60: {
-                tags.push({ name: 'long_playtime' })
-            }; break;
-            case stats.duration <= 60: {
-                tags.push({ name: 'short_playtime' })
-            }; break;
+        case stats.duration > 600: {
+            tags.push({ name: "absurd_playtime" })
+        }; break;
+        case stats.duration > 60: {
+            tags.push({ name: "long_playtime" })
+        }; break;
+        case stats.duration <= 60: {
+            tags.push({ name: "short_playtime" })
+        }; break;
         }
     }
 
     if (stats.width && stats.height) {
         switch (true) {
-            case stats.height > 2160: {
-                tags.push({ name: 'absurd_res' })
-            }; break;
-            case stats.height > 1080: {
-                tags.push({ name: 'high_res' })
-            }; break;
+        case stats.height > 2160: {
+            tags.push({ name: "absurd_res" })
+        }; break;
+        case stats.height > 1080: {
+            tags.push({ name: "high_res" })
+        }; break;
         }
     }
 
@@ -167,7 +167,7 @@ module.exports = async function processFileStats(id, onFinish, resultFlags = { c
     })
 
     await markLocked(false)
-    if (typeof onFinish === 'function') {
+    if (typeof onFinish === "function") {
         await onFinish(resultFlags)
     }
 }

@@ -1,6 +1,6 @@
 const prisma = require("./prisma");
-const crypto = require('crypto')
-const roleControl = require('./userRoleControl')
+const crypto = require("crypto")
+const roleControl = require("./userRoleControl")
 
 function generateKey() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -75,9 +75,9 @@ class KeyController {
         }
 
         switch (keyData.type) {
-            case 'superadminassign': {
-                roleControl.assignRole(userid, 'superAdmin')
-            }; break;
+        case "superadminassign": {
+            roleControl.assignRole(userid, "superAdmin")
+        }; break;
         }
 
         await prisma.reddemableKey.update({

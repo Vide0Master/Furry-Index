@@ -9,23 +9,23 @@ import MessageBlock from "./messageBlock/script.js";
 
 export default class MessageBox extends Elem {
     constructor(parent, handler) {
-        super('internal-message-box', parent)
+        super("internal-message-box", parent)
 
         this.msgHandler = handler
 
-        this.chatBox = new Elem('chat-cont', this.element)
+        this.chatBox = new Elem("chat-cont", this.element)
 
-        const noMessages = new Elem('no-msg-txt', this.chatBox.element)
+        const noMessages = new Elem("no-msg-txt", this.chatBox.element)
         noMessages.text = Language.lang.elements.messages.noMsg
 
         const getMessages = async (page, take) => {
             const params = new URLSearchParams();
-            if (page) params.append('page', page);
-            if (take) params.append('take', take);
+            if (page) params.append("page", page);
+            if (take) params.append("take", take);
 
             const url = `${handler}?${params.toString()}`;
 
-            const chat = await API('get', url);
+            const chat = await API("get", url);
 
             if (chat.chat?.chatMessages) {
                 for (const msg of chat.chat.chatMessages) {
@@ -38,17 +38,17 @@ export default class MessageBox extends Elem {
         getMessages()
 
         if (User.data) {
-            this.messageBox = new Elem('message-cont', this.element)
+            this.messageBox = new Elem("message-cont", this.element)
 
             const txtInp = new BigTextField(Language.lang.elements.messages.message, this.messageBox.element)
 
-            new Button(Language.lang.elements.messages.send, this.messageBox.element, 'null', async () => {
-                await API('POST', handler, { text: txtInp.input, specialData: {} })
-                txtInp.input = ''
+            new Button(Language.lang.elements.messages.send, this.messageBox.element, "null", async () => {
+                await API("POST", handler, { text: txtInp.input, specialData: {} })
+                txtInp.input = ""
             })
         }
 
-        WSController.listen('newMessage', (data) => {
+        WSController.listen("newMessage", (data) => {
             const msg = new MessageBlock(this.chatBox.element, data.message, handler)
             this.chatBox.element.prepend(msg.element)
             noMessages.switchVisible(false)

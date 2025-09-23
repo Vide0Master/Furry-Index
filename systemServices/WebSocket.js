@@ -1,7 +1,7 @@
-const crypto = require('crypto')
-const cmd = require('./cmdPretty.js')
-const getUserBySessionCookie = require('./getUserBySessionCookie.js')
-const ws = require('./webServer.js').wsServer
+const crypto = require("crypto")
+const cmd = require("./cmdPretty.js")
+const getUserBySessionCookie = require("./getUserBySessionCookie.js")
+const ws = require("./webServer.js").wsServer
 
 class WSController {
     static clients = {}
@@ -37,21 +37,21 @@ class WSController {
     static processListener(name, data) {
         if (!this.listeners[name]) {
             cmd.bad(`Listener ${name} was not found`)
-            return { err: 'NOLISTENER' }
+            return { err: "NOLISTENER" }
         }
 
         this.listeners[name](data)
     }
 }
 
-ws.on('connection', (uws) => {
+ws.on("connection", (uws) => {
     const wsSessionId = crypto.randomUUID()
     WSController.clients[wsSessionId] = {
         ws: uws,
-        location: '/'
+        location: "/"
     }
 
-    uws.on('message', async (data) => {
+    uws.on("message", async (data) => {
         try {
             const requset = JSON.parse(data.toString())
 
@@ -60,8 +60,8 @@ ws.on('connection', (uws) => {
             processedReq.data = requset.payload
 
             switch (requset.tData.action) {
-                case 'updateRoute': WSController.clients[wsSessionId].location = processedReq.data.route; break;
-                default: WSController.processListener(requset.tData.action, processedReq); break;
+            case "updateRoute": WSController.clients[wsSessionId].location = processedReq.data.route; break;
+            default: WSController.processListener(requset.tData.action, processedReq); break;
             }
         } catch (e) {
             cmd.err(`User request failed` + e, [cmd.preps.ws])

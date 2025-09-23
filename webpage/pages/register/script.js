@@ -18,7 +18,7 @@ export const tag = "register";
 export const tagLimit = 1;
 
 export async function render() {
-    const container = new Elem('register-container')
+    const container = new Elem("register-container")
 
     const registerData = {
         username: "",
@@ -27,7 +27,7 @@ export async function render() {
     }
 
     registerData.error[0] = true
-    new Elem('label', container.element).element.innerText = Language.lang.register.label
+    new Elem("label", container.element).element.innerText = Language.lang.register.label
     const textInp = new TextInputLine(Language.lang.register.username.label, container.element, null, null,
         async (username) => {
             if (username == null) {
@@ -56,12 +56,12 @@ export async function render() {
         if (rslt.length == 0) {
             return true
         } else {
-            return `(${rslt.join(', ')})`
+            return `(${rslt.join(", ")})`
         }
     })
 
     textInp.addCheck(Language.lang.register.username.error.taken, async (val) => {
-        const result = await API('GET', `/api/register?username=${val}`)
+        const result = await API("GET", `/api/register?username=${val}`)
         return !result.taken
     })
 
@@ -112,8 +112,8 @@ export async function render() {
     const termsOfService = new SwitchInput(Language.lang.register.TOS, container.element, () => {
         const overlay = new Overlay()
         const txtElm = processText(Language.lang.TOS, overlay.element)
-        const accLine = new Elem(['info-block', 'acc'], txtElm.element)
-        new Elem('text', accLine.element).text = Language.lang.register.termsacc.label
+        const accLine = new Elem(["info-block", "acc"], txtElm.element)
+        new Elem("text", accLine.element).text = Language.lang.register.termsacc.label
         new Button(Language.lang.register.termsacc.no, accLine.element, null, () => {
             termsOfService.change(false)
             registerData.error[3] = true
@@ -130,8 +130,8 @@ export async function render() {
     const privacyPolicy = new SwitchInput(Language.lang.register.PP, container.element, () => {
         const overlay = new Overlay()
         const txtElm = processText(Language.lang.PP, overlay.element)
-        const accLine = new Elem(['info-block', 'acc'], txtElm.element)
-        new Elem('text', accLine.element).text = Language.lang.register.termsacc.label
+        const accLine = new Elem(["info-block", "acc"], txtElm.element)
+        new Elem("text", accLine.element).text = Language.lang.register.termsacc.label
         new Button(Language.lang.register.termsacc.no, accLine.element, null, () => {
             privacyPolicy.change(false)
             registerData.error[4] = true
@@ -144,10 +144,10 @@ export async function render() {
         })
     }, false, null, false)
 
-    const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, 'hidden')
+    const rememberMe = new SwitchInput(Language.lang.register.rememberMe.label, container.element, null, false, "hidden")
 
     const autologin = new SwitchInput(Language.lang.register.autologin.label, container.element, (value) => {
-        rememberMe.element.classList.toggle('hidden', !value)
+        rememberMe.element.classList.toggle("hidden", !value)
         if (!value) rememberMe.change(false)
     }, false)
 
@@ -162,11 +162,11 @@ export async function render() {
                 registerData.error = false
             }
 
-            const registerResult = await API('POST', '/api/register', registerData)
+            const registerResult = await API("POST", "/api/register", registerData)
 
             if (registerResult.HTTPCODE == 200) {
                 if (autologin.checkbox.checked) {
-                    const loginResult = await API('POST', '/api/login', {
+                    const loginResult = await API("POST", "/api/login", {
                         login: registerData.username,
                         password: registerData.password,
                         remember: rememberMe.checkbox.checked,
@@ -174,18 +174,18 @@ export async function render() {
 
                     if (loginResult.HTTPCODE == 200) {
                         await User.updateUserData()
-                        new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, '#109f10')
+                        new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, "#109f10")
                         UserLabel.checkUserData()
                         Header.checkUserLoginState()
                         Router.navigate(`/profile/${User.data.username}`)
                     } else {
-                        new Alert.Simple(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, 'loginerr')
+                        new Alert.Simple(Language.lang.login.error.title, Language.lang.login.error.message, 5000, null, "loginerr")
                     }
                 } else {
-                    new Alert.Simple(Language.lang.register.success[0], Language.lang.register.success[1], 5000, null, 'registersucc')
+                    new Alert.Simple(Language.lang.register.success[0], Language.lang.register.success[1], 5000, null, "registersucc")
                 }
             } else {
-                new Alert.Simple(Language.lang.register.error.title, Language.lang.register.error.message, 5000, null, 'registererror')
+                new Alert.Simple(Language.lang.register.error.title, Language.lang.register.error.message, 5000, null, "registererror")
             }
         })
 

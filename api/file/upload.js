@@ -1,20 +1,20 @@
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const fs = require('fs')
-const os = require('os')
-const path = require('path')
-const { formidable } = require('formidable')
-const prisma = require('../../systemServices/prisma')
-const fileDataProcessor = require('../../systemServices/processFileStats')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const fs = require("fs")
+const os = require("os")
+const path = require("path")
+const { formidable } = require("formidable")
+const prisma = require("../../systemServices/prisma")
+const fileDataProcessor = require("../../systemServices/processFileStats")
 const cmd = require("../../systemServices/cmdPretty")
 
 function getUploadHashHandle(Fhash, uname) {
     return Fhash + "!" + uname
 }
 
-exports.ROUTE = '/api/upload'
+exports.ROUTE = "/api/upload"
 
-exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
+exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
 const chunkStorage = {}
 
@@ -22,17 +22,17 @@ exports.GET = async (req, res) => {
     const userToken = req.cookies[mainAuthTokenKey]
     const user = await getUserBySessionCookie(userToken)
     const fileHash = req.query.hash
-    if (!fileHash) return res.status(400).send('No hash provided')
+    if (!fileHash) return res.status(400).send("No hash provided")
 
     const filetype = req.query.filetype
-    if (!filetype) return res.status(400).send('No filetype provided')
+    if (!filetype) return res.status(400).send("No filetype provided")
 
     const internalHash = getUploadHashHandle(fileHash, user.username)
 
     const uploadHandle = chunkStorage[internalHash]
 
-    if (req.query.process == 'start') {
-        if (!uploadHandle) res.status('404').send('No handle found')
+    if (req.query.process == "start") {
+        if (!uploadHandle) res.status("404").send("No handle found")
 
         if (uploadHandle.timeout) {
             clearTimeout(uploadHandle.timeout)
@@ -47,7 +47,7 @@ exports.GET = async (req, res) => {
     }
 
     const segmentsCount = req.query.segments
-    if (!segmentsCount) return res.status(400).send('No segments count provided')
+    if (!segmentsCount) return res.status(400).send("No segments count provided")
 
     if (uploadHandle) {
         res.status(300).json({ handle: internalHash })
@@ -60,14 +60,14 @@ exports.GET = async (req, res) => {
         res.status(200).json({ handle: internalHash })
     }
 
-    return
+    
 }
 
 exports.POST = async (req, res) => {
     const userToken = req.cookies[mainAuthTokenKey]
     const user = await getUserBySessionCookie(userToken)
 
-    if (!user) return res.status(401).send('Unauthorized')
+    if (!user) return res.status(401).send("Unauthorized")
 
     const form = formidable({
         multiples: false,
@@ -77,20 +77,20 @@ exports.POST = async (req, res) => {
 
     form.parse(req, async (err, fields, files) => {
         if (err) {
-            console.error('Form parsing error:', err)
-            return res.status(500).send('Form parsing error')
+            console.error("Form parsing error:", err)
+            return res.status(500).send("Form parsing error")
         }
 
         const { segmentID, handle } = fields
         const fileEntry = Array.isArray(files.segment) ? files.segment[0] : files.segment
 
         if (!fileEntry || !fileEntry.filepath || segmentID === undefined || !handle) {
-            return res.status(400).send('Missing segment, segmentID, or handle')
+            return res.status(400).send("Missing segment, segmentID, or handle")
         }
 
         const upload = chunkStorage[handle]
         if (!upload) {
-            return res.status(404).send('Upload handle not found')
+            return res.status(404).send("Upload handle not found")
         }
 
         const chunkIndex = parseInt(segmentID)
@@ -100,7 +100,7 @@ exports.POST = async (req, res) => {
         const allSegmentsUploaded = Object.keys(upload.segments).length == upload.segmentsCount
 
         if (allSegmentsUploaded) {
-            const outputDir = path.join(__dirname, '../../file_storage')
+            const outputDir = path.join(__dirname, "../../file_storage")
             fs.mkdirSync(outputDir, { recursive: true })
 
             const savePath = path.join(outputDir, upload.filename)
@@ -115,7 +115,7 @@ exports.POST = async (req, res) => {
                     const filedata = await prisma.file.create({
                         data: {
                             file: upload.filename,
-                            filetype: upload.filename.split('.').pop() || 'unknown',
+                            filetype: upload.filename.split(".").pop() || "unknown",
                             ownerid: user.id,
                             fileparams: {},
                             locked: true
@@ -125,7 +125,7 @@ exports.POST = async (req, res) => {
                         }
                     })
 
-                    res.status(200).send('Builded!')
+                    res.status(200).send("Builded!")
 
                     chunkStorage[handle].timeout = setTimeout(() => {
                         fileDataProcessor(filedata.id)
@@ -140,6 +140,6 @@ exports.POST = async (req, res) => {
             return
         }
 
-        return res.status(202).send('Segment accepted')
+        return res.status(202).send("Segment accepted")
     })
 }

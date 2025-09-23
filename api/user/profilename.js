@@ -1,22 +1,22 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const getUserByUsername = require("../../systemServices/getUserByUsername")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
 
-exports.ROUTE = '/api/profile/:username'
+exports.ROUTE = "/api/profile/:username"
 
 exports.GET = async (req, res) => {
     const user = await getUserByUsername(req.params.username)
 
-    if (!user) return res.status(404).send('User not found')
+    if (!user) return res.status(404).send("User not found")
 
     res.status(200).json({ user })
 }
 
 exports.PUT = async (req, res) => {
     const sessionUser = await getUserBySessionCookie(req.cookies[mainAuthTokenKey])
-    if (sessionUser.username !== req.params.username) return res.status(403).send('You are not authorized to modify this user')
+    if (sessionUser.username !== req.params.username) return res.status(403).send("You are not authorized to modify this user")
     const varialbes = {
         visiblename: true,
         avatarID: true,
@@ -32,7 +32,7 @@ exports.PUT = async (req, res) => {
 
     for (const datVar in data) {
         const check = varialbes[datVar]
-        if (typeof check != 'boolean') return res.status(400).send(`Invalid variable [${datVar}]`)
+        if (typeof check != "boolean") return res.status(400).send(`Invalid variable [${datVar}]`)
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
     }
 
@@ -45,12 +45,12 @@ exports.PUT = async (req, res) => {
         data
     })
 
-    return res.status(200).send('Profile updated successfully')
+    return res.status(200).send("Profile updated successfully")
 }
 
 exports.DELETE = async (req, res) => {
     const sessionUser = await getUserBySessionCookie(req.cookies[mainAuthTokenKey])
-    if (sessionUser.username !== req.params.username) return res.status(403).send('You are not authorized to modify this user')
+    if (sessionUser.username !== req.params.username) return res.status(403).send("You are not authorized to modify this user")
     const varialbes = {
         visiblename: true,
         avatarID: true,
@@ -66,7 +66,7 @@ exports.DELETE = async (req, res) => {
 
     for (const datVar in data) {
         const check = varialbes[datVar]
-        if (typeof check != 'boolean') return res.status(400).send(`Invalid variable [${datVar}]`)
+        if (typeof check != "boolean") return res.status(400).send(`Invalid variable [${datVar}]`)
         if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
         data[datVar] ? data[datVar] = null : delete data[datVar]
     }
@@ -80,5 +80,5 @@ exports.DELETE = async (req, res) => {
         data
     })
 
-    return res.status(200).send('Profile updated successfully')
+    return res.status(200).send("Profile updated successfully")
 }

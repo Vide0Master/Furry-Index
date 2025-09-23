@@ -4,21 +4,21 @@ import Icon from "../icon/script.js"
 
 export default class Link extends Elem {
     constructor(text, link, parent, internal = true, cname, icon) {
-        super(cname, parent, 'a')
+        super(cname, parent, "a")
 
         if (icon) {
             this.icon = new Icon(icon, this.element)
         }
 
-        this.textElem = new Elem('link-text', this.element)
+        this.textElem = new Elem("link-text", this.element)
         this.textElem.text = text ? text : ""
 
         if (parent) parent.appendChild(this.element)
 
         if (cname) {
-            if (typeof cname === 'object') {
+            if (typeof cname === "object") {
                 for (const cn of cname)
-                    this.element.className += ' ' + cn
+                    this.element.className += " " + cn
             } else {
                 this.element.className = cname
             }
@@ -26,21 +26,21 @@ export default class Link extends Elem {
 
         if (link) {
             switch (typeof link) {
-                case 'function': {
-                    this.addEvent('click', link)
-                }; break;
-                default: {
-                    this.element.href = link
-                }; break;
+            case "function": {
+                this.addEvent("click", link)
+            }; break;
+            default: {
+                this.element.href = link
+            }; break;
             }
         } else {
             console.error(this.element, Language.lang.cmd.erorrs.NOLINK)
         }
 
         if (internal) {
-            this.element.setAttribute('internal', 'true')
+            this.element.setAttribute("internal", "true")
         } else {
-            this.element.setAttribute('external', 'true')
+            this.element.setAttribute("external", "true")
         }
     }
 

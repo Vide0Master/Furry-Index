@@ -11,62 +11,62 @@ import User from "../../scripts/userdata.js";
 export const tag = "file-manager";
 export const tagLimit = 1;
 
-const itemsPerPage = User.Settings.get('filesPerPage')
+const itemsPerPage = User.Settings.get("filesPerPage")
 
 export async function render() {
-    const container = new Elem('file-manager-container')
+    const container = new Elem("file-manager-container")
 
     let currentTags = []
 
-    const searchBar = new Elem('search-bar', container.element)
+    const searchBar = new Elem("search-bar", container.element)
 
-    const fileField = new Elem('files-container', container.element)
+    const fileField = new Elem("files-container", container.element)
 
     async function renderFiles(tags, page = 0, take = itemsPerPage) {
         fileField.wipe()
         const req = []
 
-        if (tags) req.push(`tags=${tags.join('+')}`)
+        if (tags) req.push(`tags=${tags.join("+")}`)
         if (page) req.push(`p=${page}`)
         if (take) req.push(`t=${take}`)
 
-        const query = req.length > 0 ? `?${req.join('&')}` : ''
+        const query = req.length > 0 ? `?${req.join("&")}` : ""
 
-        const filesResp = await API('GET', `/api/files${query}`)
+        const filesResp = await API("GET", `/api/files${query}`)
         for (const file of filesResp.files) {
             const fcard = new FileCard(file, false, fileField.element,
                 { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true }
             )
 
-            fcard.image.image.setAttribute('draggable', 'false')
+            fcard.image.image.setAttribute("draggable", "false")
 
-            fcard.image.addEvent('click', () => {
+            fcard.image.addEvent("click", () => {
                 const overlay = new Overlay()
-                const scrollCont = new Elem('file-manager-preview-scroll-cont', overlay.element)
+                const scrollCont = new Elem("file-manager-preview-scroll-cont", overlay.element)
                 switch (true) {
-                    case ['mp4', 'webm', 'mkv'].includes(file.filetype): {
-                        new Video(`/file/${file.id}`, scrollCont.element)
-                    }; break
-                    default: {
-                        new Image(`/file/${file.id}`, 'file image', scrollCont.element)
-                    }; break
+                case ["mp4", "webm", "mkv"].includes(file.filetype): {
+                    new Video(`/file/${file.id}`, scrollCont.element)
+                }; break
+                default: {
+                    new Image(`/file/${file.id}`, "file image", scrollCont.element)
+                }; break
                 }
             })
         }
     }
 
     async function getFilesCount(tags) {
-        const pagesCount = await API('GET', `/api/files?count=true${tags.length > 0 ? `&tags=${tags.join('+')}` : ''}`)
+        const pagesCount = await API("GET", `/api/files?count=true${tags.length > 0 ? `&tags=${tags.join("+")}` : ""}`)
         return pagesCount.count
     }
 
-    const searchField = new SearchField(searchBar.element, '/api/files/tags')
+    const searchField = new SearchField(searchBar.element, "/api/files/tags")
 
     const URLparams = new URLSearchParams(window.location.search)
-    const tagsParams = URLparams.get('tags')
+    const tagsParams = URLparams.get("tags")
     if (tagsParams) {
-        currentTags = tagsParams.split('+').filter(v => v != '')
-        searchField.setSearch(currentTags.join(' '))
+        currentTags = tagsParams.split("+").filter(v => v != "")
+        searchField.setSearch(currentTags.join(" "))
     }
 
     renderFiles(currentTags, 0, itemsPerPage)

@@ -1,5 +1,5 @@
-const prisma = require('../../systemServices/prisma')
-const bcrypt = require('bcrypt');
+const prisma = require("../../systemServices/prisma")
+const bcrypt = require("bcrypt");
 
 exports.ROUTE = "/api/register";
 
@@ -7,11 +7,11 @@ exports.POST = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        if (!username || typeof username !== 'string') {
-            return res.status(400).json({ error: 'Username is required and must be a string' });
+        if (!username || typeof username !== "string") {
+            return res.status(400).json({ error: "Username is required and must be a string" });
         }
-        if (!password || typeof password !== 'string') {
-            return res.status(400).json({ error: 'Password is required and must be a string' });
+        if (!password || typeof password !== "string") {
+            return res.status(400).json({ error: "Password is required and must be a string" });
         }
 
         const existingUser = await prisma.user.findUnique({
@@ -19,7 +19,7 @@ exports.POST = async (req, res) => {
         });
 
         if (existingUser) {
-            return res.status(409).json({ error: 'Username already taken' });
+            return res.status(409).json({ error: "Username already taken" });
         }
 
         const saltRounds = 10;
@@ -35,7 +35,7 @@ exports.POST = async (req, res) => {
         return res.status(200).json({ user: newUser });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Internal server error' });
+        return res.status(500).json({ error: "Internal server error" });
     }
 };
 

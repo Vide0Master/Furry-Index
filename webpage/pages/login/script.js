@@ -15,18 +15,18 @@ export const tag = "login";
 export const tagLimit = 1;
 
 export async function render() {
-    const container = new Elem('login-container')
+    const container = new Elem("login-container")
 
     const loginData = {
-        login: '',
-        password: '',
+        login: "",
+        password: "",
         remember: true,
         error: false
     }
 
-    new Elem('label', container.element).element.innerText = Language.lang.login.mainLabel
+    new Elem("label", container.element).element.innerText = Language.lang.login.mainLabel
 
-    new TextInputLine(Language.lang.login.fields.username, container.element, null, 'text', async (value) => {
+    new TextInputLine(Language.lang.login.fields.username, container.element, null, "text", async (value) => {
         loginData.login = value
     })
 
@@ -39,21 +39,21 @@ export async function render() {
     }, true)
 
     new Button(Language.lang.login.button, container.element, null, async () => {
-        const loginResult = await API('POST', '/api/login', loginData)
+        const loginResult = await API("POST", "/api/login", loginData)
         switch (loginResult.HTTPCODE) {
-            case 404: {
-                new Alert.Simple(Language.lang.login.errors.wrongUsername,null,null,null,'wrongUname')
-            }; break;
-            case 401: {
-                new Alert.Simple(Language.lang.login.errors.wrondPassword, null, null, null, 'wrongPass')
-            }; break;
-            case 200: {
-                await User.updateUserData()
-                new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, '#109f10')
-                UserLabel.checkUserData()
-                Header.checkUserLoginState()
-                Router.navigate('/profile')
-            }; break
+        case 404: {
+            new Alert.Simple(Language.lang.login.errors.wrongUsername,null,null,null,"wrongUname")
+        }; break;
+        case 401: {
+            new Alert.Simple(Language.lang.login.errors.wrondPassword, null, null, null, "wrongPass")
+        }; break;
+        case 200: {
+            await User.updateUserData()
+            new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, "#109f10")
+            UserLabel.checkUserData()
+            Header.checkUserLoginState()
+            Router.navigate("/profile")
+        }; break
         }
     })
 

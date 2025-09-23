@@ -1,5 +1,5 @@
-const roleController = require('../systemServices/userRoleControl')
-const prisma = require('./prisma')
+const roleController = require("../systemServices/userRoleControl")
+const prisma = require("./prisma")
 
 module.exports = async function getUserByID(id, exclude = []) {
     const userData = await prisma.user.findUnique({
@@ -33,8 +33,8 @@ module.exports = async function getUserByID(id, exclude = []) {
             delete userData[field]
         }
 
-        if (!exclude.includes('rolePermissions')) {
-            if (!exclude.includes('rolePermissionsList')) {
+        if (!exclude.includes("rolePermissions")) {
+            if (!exclude.includes("rolePermissionsList")) {
                 userData.permissionsList = []
             }
 
@@ -44,7 +44,7 @@ module.exports = async function getUserByID(id, exclude = []) {
 
                 role.permissions = roleController.roleTemplates[role.type].permissions
 
-                if (!exclude.includes('rolePermissionsList')) role.permissions.forEach(v => {
+                if (!exclude.includes("rolePermissionsList")) role.permissions.forEach(v => {
                     if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)
                 })
             }

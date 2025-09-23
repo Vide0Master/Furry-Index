@@ -49,21 +49,21 @@ function bumpVersion(ver, choice) {
     let [major, minor, patch] = baseVer.split(".").map(n => parseInt(n, 10));
 
     switch (choice) {
-        case "1": {
-            suffix = incrementSuffix(suffix);
-            return `${baseVer}-${suffix}`;
-        }
-        case "2": {
-            return `${major}.${minor}.${patch + 1}`;
-        }
-        case "3": {
-            return `${major}.${minor + 1}.0`;
-        }
-        case "4": {
-            return `${major + 1}.0.0`;
-        }
-        default:
-            return null;
+    case "1": {
+        suffix = incrementSuffix(suffix);
+        return `${baseVer}-${suffix}`;
+    }
+    case "2": {
+        return `${major}.${minor}.${patch + 1}`;
+    }
+    case "3": {
+        return `${major}.${minor + 1}.0`;
+    }
+    case "4": {
+        return `${major + 1}.0.0`;
+    }
+    default:
+        return null;
     }
 }
 

@@ -1,4 +1,4 @@
-const link = (location.protocol === 'https:' ? 'wss' : 'ws') + `://${window.location.host}`
+const link = (location.protocol === "https:" ? "wss" : "ws") + `://${window.location.host}`
 
 const ws = new WebSocket(link)
 
@@ -12,9 +12,9 @@ ws.addEventListener("error", (err) => {
 
 
 function getCookie(name) {
-    const cookies = document.cookie.split('; ');
+    const cookies = document.cookie.split("; ");
     for (let cookie of cookies) {
-        const [key, value] = cookie.split('=');
+        const [key, value] = cookie.split("=");
         if (key === name) return decodeURIComponent(value);
     }
     return null;
@@ -25,7 +25,7 @@ class WSController {
         ws.send(JSON.stringify({
             tData: {
                 action,
-                sessionID: getCookie('FURRYINDEXUSERTOKEN')
+                sessionID: getCookie("FURRYINDEXUSERTOKEN")
             },
             payload: data
         }))
@@ -38,7 +38,7 @@ class WSController {
     }
 
     static updateRoute() {
-        this.send('updateRoute', { route: location.pathname })
+        this.send("updateRoute", { route: location.pathname })
         this.listeners = this.listeners.filter(listener => listener.permanent);
     }
 }
@@ -53,7 +53,7 @@ ws.addEventListener("message", (e) => {
         const cbs = WSController.listeners.filter(v => v.event == msg.event)
         cbs.forEach(v => { v.cb(msg.data) })
     } catch (err) {
-        console.error('Error processing message:' + err)
+        console.error("Error processing message:" + err)
     }
 });
 

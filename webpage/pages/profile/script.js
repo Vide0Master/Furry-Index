@@ -10,35 +10,35 @@ export const tag = "profile";
 export const tagLimit = 5;
 
 export async function render(params) {
-    const container = new Elem('profile-container')
+    const container = new Elem("profile-container")
 
     if (!params.username) {
-        new Elem(null, container.element, 'div').text = Language.lang.profile.noUsername
+        new Elem(null, container.element, "div").text = Language.lang.profile.noUsername
         return container.element
     }
 
-    const profileDataRequest = await API('GET', `/api/profile/${params.username}`)
+    const profileDataRequest = await API("GET", `/api/profile/${params.username}`)
     if (profileDataRequest.HTTPCODE != 200) {
-        new Elem(null, container.element, 'div').text = Language.lang.profile.noProfile
+        new Elem(null, container.element, "div").text = Language.lang.profile.noProfile
         return container.element
     }
 
     const Pdata = profileDataRequest.user
 
-    const userCard = new UserCard(container.element, Pdata, 'default', [])
+    const userCard = new UserCard(container.element, Pdata, "default", [])
 
     if (User.data.username == Pdata.username) {
-        const editprofile = new Link('', `/settings?t=user`, userCard.element, true, 'edit-profile', 'edit')
+        const editprofile = new Link("", `/settings?t=user`, userCard.element, true, "edit-profile", "edit")
         editprofile.textElem.kill()
     }
 
 
-    const latestPostsCont = new Elem('latest-posts-cont', container.element)
-    new Elem('latest-posts-title', latestPostsCont.element).text = Language.lang.profile.latestPosts
-    const latestPosts = new Elem('latest-posts', latestPostsCont.element)
+    const latestPostsCont = new Elem("latest-posts-cont", container.element)
+    new Elem("latest-posts-title", latestPostsCont.element).text = Language.lang.profile.latestPosts
+    const latestPosts = new Elem("latest-posts", latestPostsCont.element)
 
     async function getUserLatestPosts() {
-        const posts = await API('GET', `/api/posts?tags=author:${Pdata.username}&t=5`)
+        const posts = await API("GET", `/api/posts?tags=author:${Pdata.username}&t=5`)
         for (const post of posts.posts) {
             new PostCard(post, latestPosts.element, false)
         }

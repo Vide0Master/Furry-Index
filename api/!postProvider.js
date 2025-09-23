@@ -1,8 +1,8 @@
-const constants = require('../systemServices/globalVariables')
-const htmlImports = require('../systemServices/importBuilder')
-const prisma = require('../systemServices/prisma')
+const constants = require("../systemServices/globalVariables")
+const htmlImports = require("../systemServices/importBuilder")
+const prisma = require("../systemServices/prisma")
 
-exports.ROUTE = '/post/:postID'
+exports.ROUTE = "/post/:postID"
 
 exports.GET = async (req, res) => {
 
@@ -31,7 +31,7 @@ exports.GET = async (req, res) => {
         page +=
 `\n<meta property="og:type" content="website" />
 <meta property="og:title" content="${post.name}" />
-${post.description ? `<meta property="og:description" content="${post.description}" />` : ''}
+${post.description ? `<meta property="og:description" content="${post.description}" />` : ""}
 <meta property="og:image" content="https://${constants.serverLink}/api/posts/${post.id}/file/${post.files[0].id}?thumbnail=600" />
 <meta property="og:url" content="https://${constants.serverLink}/posts/${post.id}" />`
     }

@@ -11,13 +11,13 @@ const languages = {
 class Language {
     static availableLanguages = Object.keys(languages)
 
-    static currentLang = localStorage.getItem('language') || 'ENG'
+    static currentLang = localStorage.getItem("language") || "ENG"
 
     static lang = languages[this.currentLang]
 
     static setLanguage(lang, reload = true) {
         if (!this.availableLanguages.includes(lang)) return
-        localStorage.setItem('language', lang)
+        localStorage.setItem("language", lang)
         this.currentLang = lang
         this.lang = languages[this.currentLang]
 
@@ -25,15 +25,15 @@ class Language {
     }
 }
 
-const browserLanguage = navigator.language.split('-')[0]
+const browserLanguage = navigator.language.split("-")[0]
 
 const langsInternal = {
-    en: 'ENG',
-    ru: 'RU',
-    ua: 'UA'
+    en: "ENG",
+    ru: "RU",
+    ua: "UA"
 }
 
-if (Object.keys(langsInternal).includes(browserLanguage) && !localStorage.getItem('language'))
+if (Object.keys(langsInternal).includes(browserLanguage) && !localStorage.getItem("language"))
     Language.setLanguage(langsInternal[browserLanguage], false)
 
 export default Language

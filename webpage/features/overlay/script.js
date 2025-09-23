@@ -4,12 +4,12 @@ const overlays = []
 
 export default class Overlay extends Elem {
     constructor() {
-        super('internal-overlay', document.body)
+        super("internal-overlay", document.body)
         this.disablePageScroll()
 
         overlays.push(this)
 
-        this.element.addEventListener('click', (e) => {
+        this.element.addEventListener("click", (e) => {
             if (e.target != this.element) return
             this.element.remove()
             this.enablePageScroll()
@@ -17,11 +17,11 @@ export default class Overlay extends Elem {
     }
 
     disablePageScroll() {
-        document.body.classList.add('disable-scroll')
+        document.body.classList.add("disable-scroll")
     }
 
     enablePageScroll() {
-        document.body.classList.remove('disable-scroll')
+        document.body.classList.remove("disable-scroll")
     }
 
     static clearOverlays(){

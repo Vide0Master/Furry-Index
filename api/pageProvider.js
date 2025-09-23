@@ -1,5 +1,5 @@
-const constants = require('../systemServices/globalVariables')
-const htmlImports = require('../systemServices/importBuilder')
+const constants = require("../systemServices/globalVariables")
+const htmlImports = require("../systemServices/importBuilder")
 
 exports.ROUTE = /^(?!\/api(?:\/|$)).*/
 

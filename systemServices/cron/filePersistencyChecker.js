@@ -1,7 +1,7 @@
-const prisma = require('../prisma.js')
-const removeFile = require('../removeFile.js');
-const path = require('path');
-const cmd = require('../cmdPretty.js');
+const prisma = require("../prisma.js")
+const removeFile = require("../removeFile.js");
+const path = require("path");
+const cmd = require("../cmdPretty.js");
 
 const delay = new Date();
 delay.setDate(delay.getDate() - 1);

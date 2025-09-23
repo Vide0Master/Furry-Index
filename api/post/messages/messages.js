@@ -1,11 +1,11 @@
 
 const getUserByID = require("../../../systemServices/getUserByID")
 const getUserBySessionCookie = require("../../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../../systemServices/globalVariables')
+const { mainAuthTokenKey } = require("../../../systemServices/globalVariables")
 const prisma = require("../../../systemServices/prisma")
 const WSController = require("../../../systemServices/WebSocket")
 
-exports.ROUTE = '/api/posts/:postID/messages'
+exports.ROUTE = "/api/posts/:postID/messages"
 
 exports.GET = async (req, res) => {
     const page = req.query.p ? parseInt(req.query.p) : 0;
@@ -18,7 +18,7 @@ exports.GET = async (req, res) => {
         include: {
             chatMessages: {
                 orderBy: {
-                    sentAt: 'desc'
+                    sentAt: "desc"
                 },
                 take,
                 skip: page * take
@@ -26,7 +26,7 @@ exports.GET = async (req, res) => {
         }
     })
 
-    if (!chatData) return res.status(404).send('Chat not found')
+    if (!chatData) return res.status(404).send("Chat not found")
 
     for (const message of chatData.chatMessages) {
         message.user = await getUserByID(message.userID)
@@ -41,12 +41,12 @@ exports.POST = async (req, res) => {
     const chat = await prisma.chat.upsert({
         where: {
             postID: req.params.postID,
-            linkType: 'post'
+            linkType: "post"
         },
         update: {},
         create: {
             postID: req.params.postID,
-            linkType: 'post'
+            linkType: "post"
         }
     })
 
@@ -72,7 +72,7 @@ exports.POST = async (req, res) => {
     if (msg) {
         res.status(200).send()
 
-        WSController.broadcast('newMessage', { message: msg }, `/post/${req.params.postID}`)
+        WSController.broadcast("newMessage", { message: msg }, `/post/${req.params.postID}`)
     } else {
         res.status(500).send()
     }
@@ -101,7 +101,7 @@ exports.PUT = async (req, res) => {
     if (upd) {
         res.status(200).send()
 
-        WSController.broadcast(`messageUpdate-${req.body.msgID}`, { newText: req.body.newText, action: 'edit' }, `/post/${req.params.postID}`)
+        WSController.broadcast(`messageUpdate-${req.body.msgID}`, { newText: req.body.newText, action: "edit" }, `/post/${req.params.postID}`)
     } else {
         res.status(500).send()
     }
@@ -127,7 +127,7 @@ exports.DELETE = async (req, res) => {
     if (rmrslt) {
         res.status(200).send()
 
-        WSController.broadcast(`messageUpdate-${req.body.msgID}`, { action: 'delete' }, `/post/${req.params.postID}`)
+        WSController.broadcast(`messageUpdate-${req.body.msgID}`, { action: "delete" }, `/post/${req.params.postID}`)
     } else {
         res.status(500).send()
     }

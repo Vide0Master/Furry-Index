@@ -4,22 +4,22 @@ import Elem from "../elem/script.js";
 import Icon from "../icon/script.js";
 
 export default class UploadField extends Elem  {
-    constructor(parent, accept = ['.png', '.jpg', '.gif', '.mp4']) {
-        super('upload-field', parent, 'div');
+    constructor(parent, accept = [".png", ".jpg", ".gif", ".mp4"]) {
+        super("upload-field", parent, "div");
 
-        this.input =new Elem(null, this.element, 'input').element;
-        this.input.type = 'file';
+        this.input =new Elem(null, this.element, "input").element;
+        this.input.type = "file";
 
-        if (accept) this.input.accept = accept.join(', ')
+        if (accept) this.input.accept = accept.join(", ")
         this.input.multiple = true;
-        this.input.style.display = 'none';
+        this.input.style.display = "none";
 
-        this.dropZone = document.createElement('div');
-        this.dropZone.className = 'upload-drop-zone';
+        this.dropZone = document.createElement("div");
+        this.dropZone.className = "upload-drop-zone";
 
-        new Elem('label', this.dropZone).text = `${Language.lang.components.upload.field}\n${accept.join(', ')}`
+        new Elem("label", this.dropZone).text = `${Language.lang.components.upload.field}\n${accept.join(", ")}`
 
-        new Icon('upload', this.dropZone, null, '30x30')
+        new Icon("upload", this.dropZone, null, "30x30")
 
         this.element.appendChild(this.dropZone);
         this.element.appendChild(this.input);
@@ -28,19 +28,19 @@ export default class UploadField extends Elem  {
             parent.appendChild(this.element);
         }
 
-        this.dropZone.addEventListener('click', () => this.input.click());
-        this.input.addEventListener('change', () => this.handleFiles(this.input.files));
+        this.dropZone.addEventListener("click", () => this.input.click());
+        this.input.addEventListener("change", () => this.handleFiles(this.input.files));
 
-        this.dropZone.addEventListener('dragover', e => {
+        this.dropZone.addEventListener("dragover", e => {
             e.preventDefault();
-            this.dropZone.classList.add('hover');
+            this.dropZone.classList.add("hover");
         });
-        this.dropZone.addEventListener('dragleave', () => {
-            this.dropZone.classList.remove('hover');
+        this.dropZone.addEventListener("dragleave", () => {
+            this.dropZone.classList.remove("hover");
         });
-        this.dropZone.addEventListener('drop', e => {
+        this.dropZone.addEventListener("drop", e => {
             e.preventDefault();
-            this.dropZone.classList.remove('hover');
+            this.dropZone.classList.remove("hover");
             this.handleFiles(e.dataTransfer.files);
         });
 
@@ -56,8 +56,8 @@ export default class UploadField extends Elem  {
 
         for (const file of files) {
             const type = file.type;
-            const isImage = type.startsWith('image/');
-            const isVideo = type.startsWith('video/');
+            const isImage = type.startsWith("image/");
+            const isVideo = type.startsWith("video/");
 
             if (!isImage && !isVideo) {
                 new Alert.Simple(`${Language.lang.components.upload.errors.file} "${file.name}" ${Language.lang.components.upload.errors.unsupportedType}: ${type}`)
