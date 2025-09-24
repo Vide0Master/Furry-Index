@@ -1,0 +1,59 @@
+name: Lint on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+      - evaluation
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v3
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: |
+          npx eslint . --ext .js,.ts --format json -o eslint-report.json || true
+
+      - name: Fail on ESLint errors
+        run: |
+          node -e "
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('eslint-report.json'));
+            const hasError = report.some(f => f.messages.some(m => m.severity === 2));
+            if (hasError) {
+              console.error('ESLint errors detected');
+              process.exit(1);
+            }
+          "
+
+      - name: Fail on ESLint warnings in main branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          node -e "
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('eslint-report.json'));
+            const hasWarning = report.some(f => f.messages.some(m => m.severity === 1));
+            if (hasWarning) {
+              console.error('ESLint warnings detected');
+              process.exit(1);
+            }
+          "
+
+      - name: Annotate ESLint results
+        uses: DerLev/eslint-annotations@v2
+        with:
+          eslint-report: eslint-report.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
