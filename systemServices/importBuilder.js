@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-
 function scanFiles(dir, excludeFile = null, baseDir = dir, filesArr = []) {
     const files = fs.readdirSync(dir);
 
@@ -29,7 +28,6 @@ function generateHTMLImports(files) {
 
     files.forEach(file => {
         const ext = path.extname(file).toLowerCase();
-        // const base = path.basename(file).toLowerCase();
 
         if (ext === ".js") {
             result += `<script type="module" src="${file}"></script>\n`;
@@ -49,4 +47,6 @@ function renderHTMLImports() {
     return html
 }
 
-module.exports = renderHTMLImports
+const staticHtmlImports = renderHTMLImports()
+
+module.exports = { renderHTMLImports, staticHtmlImports }
