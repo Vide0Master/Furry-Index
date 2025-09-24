@@ -14,7 +14,7 @@ export default class Header {
         body.appendChild(this.element)
 
         const listDisp = new Elem("burger-menu-button", this.element)
-        const listDispIcon = new Icon("list", listDisp.element)
+        new Icon("list", listDisp.element)
 
         const navRow = new Elem("nav-row", this.element, "nav")
 
@@ -22,15 +22,15 @@ export default class Header {
             navRow.element.classList.toggle("open", true)
         })
 
-        navRow.addEvent("click", () => {
-            navRow.element.classList.toggle("open", false)
-        })
-
         document.addEventListener("click", (e) => {
-            if (![navRow.element, listDisp.element, listDispIcon.element].includes(e.target)) {
+            if (!navRow.element.contains(e.target) && !listDisp.element.contains(e.target)) {
                 navRow.element.classList.toggle("open", false)
             }
         })
+
+        Router.regNavListener(() => {
+            navRow.element.classList.toggle("open", false)
+        }, true)
 
         this.main = new Link(Language.lang.header.main, "/", navRow.element)
         this.search = new Link(Language.lang.header.search, "/search", navRow.element, true, null, "search")

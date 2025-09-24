@@ -21,14 +21,22 @@ const roleTemplates = {
         roleIcon: "shield",
         roleColor: "#e83838ff",
         hiddable: false,
-        permissions: []
+        permissions: [
+            "admin:news",
+            "admin:posts",
+            "admin:appeals",
+            "admin:users"
+        ]
     },
     moderator: {
         type: "moderator",
         roleIcon: "shield",
         roleColor: "#ab32ccff",
         hiddable: false,
-        permissions: []
+        permissions: [
+            "admin:posts",
+            "admin:appeals"
+        ]
     },
     artist: {
         type: "artist",

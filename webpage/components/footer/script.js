@@ -28,11 +28,13 @@ new Elem("gthb-link-text", githubLink.element).text = "GitHub"
 const policyes = new Elem("policies-cont", Footer.element)
 new Link(Language.lang.register.TOS, () => {
     const overlay = new Overlay()
-    processText(Language.lang.TOS, overlay.element)
+    const regCont = processText(Language.lang.TOS, overlay.element)
+    new Button("OK", regCont.element, "info-block", () => { overlay.kill() })
 }, policyes.element, false, null, "file")
 new Link(Language.lang.register.PP, () => {
     const overlay = new Overlay()
-    processText(Language.lang.PP, overlay.element)
+    const regCont = processText(Language.lang.PP, overlay.element)
+    new Button("OK", regCont.element, "info-block", () => { overlay.kill() })
 }, policyes.element, false, null, "file")
 
 new Link(Language.lang.keyRedeem.label, () => {
@@ -52,19 +54,19 @@ new Link(Language.lang.keyRedeem.label, () => {
             const result = await API("POST", `/api/key/${keyData}`)
 
             switch (result.HTTPCODE) {
-            case 200: break;
-            case 404: {
-                new Alert.Simple(Language.lang.keyRedeem.err.notFound, "Error", 5000, null, "keynotfound")
-            }; return
-            case 405: {
-                new Alert.Simple(Language.lang.keyRedeem.err.redeemed, "Error", 5000, null, "keywasredeemed")
-            }; return
+                case 200: break;
+                case 404: {
+                    new Alert.Simple(Language.lang.keyRedeem.err.notFound, "Error", 5000, null, "keynotfound")
+                }; return
+                case 405: {
+                    new Alert.Simple(Language.lang.keyRedeem.err.redeemed, "Error", 5000, null, "keywasredeemed")
+                }; return
             }
 
             switch (result.key.type) {
-            case "superadminassign": {
-                new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, "Success", 5000, null, "superadminroleass")
-            }; break;
+                case "superadminassign": {
+                    new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, "Success", 5000, null, "superadminroleass")
+                }; break;
             }
 
             overlay.kill()
