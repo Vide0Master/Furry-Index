@@ -17,37 +17,37 @@ export const tag = "settings";
 export const tagLimit = 1;
 
 export async function render(params) {
-    const container = new Elem('settings-container')
+    const container = new Elem("settings-container")
 
     const pages = {}
 
-    const settingsRow = new Elem('settings-selector-row', container.element)
-    new Elem('label', settingsRow.element).text = Language.lang.settings.label
+    const settingsRow = new Elem("settings-selector-row", container.element)
+    new Elem("label", settingsRow.element).text = Language.lang.settings.label
 
     const ddlist = new DropdownList([
         {
             name: Language.lang.settings.typeSwitch.webpage,
-            value: 'webpage',
+            value: "webpage",
             selected: true
         },
         {
             name: Language.lang.settings.typeSwitch.user,
-            value: 'user'
+            value: "user"
         }
     ], settingsRow.element, Language.lang.settings.typeSwitch.placeholder, (value) => {
         for (const page in pages) {
             if (pages[page].element && value == page) {
-                pages[page].element.classList.toggle('hidden', false)
+                pages[page].element.classList.toggle("hidden", false)
             } else {
-                pages[page].element.classList.toggle('hidden', true)
+                pages[page].element.classList.toggle("hidden", true)
             }
         }
     });
 
-    if (!User.data) { ddlist.element.classList.add('hidden'); }
+    if (!User.data) { ddlist.element.classList.add("hidden"); }
 
     //region Webpage Settings
-    pages.webpage = new Elem('webpage-settings', container.element);
+    pages.webpage = new Elem("webpage-settings", container.element);
 
     //region language
     new DropdownList(
@@ -58,30 +58,30 @@ export async function render(params) {
         })),
         pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
-        })
+        }, Language.lang.settings.webpage.language.label+": ")
 
     //region item counts for posts
     const itemCounts = [25, 50, 75, 100, 150, 200]
     new DropdownList(itemCounts.map((v) => ({
         name: v,
         value: v,
-        selected: User.Settings.get('postsPerPage') == v
+        selected: User.Settings.get("postsPerPage") == v
     })),
-        pages.webpage.element, null, (v) => {
-            User.Settings.set('postsPerPage', v)
-        },
-        `${Language.lang.settings.webpage.postsPerPage}: `
+    pages.webpage.element, null, (v) => {
+        User.Settings.set("postsPerPage", v)
+    },
+    `${Language.lang.settings.webpage.postsPerPage}: `
     )
 
     //region User Settings
     if (User.data) {
-        pages.user = new Elem(['user-settings', 'hidden'], container.element);
+        pages.user = new Elem(["user-settings", "hidden"], container.element);
 
         //region logout
         new Button(`${Language.lang.settings.user.logout} ${User.data.username}`, pages.user.element, null, async () => {
             const username = User.data.username
             User.unlogin(async () => {
-                Router.navigate('/')
+                Router.navigate("/")
                 UserLabel.checkUserData()
                 Header.checkUserLoginState()
             })
@@ -89,11 +89,11 @@ export async function render(params) {
         })
 
         //region avatar control
-        const avatarLine = new Elem('avatar-line', pages.user.element)
+        const avatarLine = new Elem("avatar-line", pages.user.element)
 
         const rmAvatar = new Button(Language.lang.settings.user.removeAvatar, avatarLine.element, null, async () => {
             new Alert.Confirm(Language.lang.settings.user.removeAvatarAlert, null, async () => {
-                const rmResult = await API('DELETE', `/api/profile/${User.data.username}`, { avatarID: true })
+                const rmResult = await API("DELETE", `/api/profile/${User.data.username}`, { avatarID: true })
                 if (rmResult.HTTPCODE == 200) {
                     await User.updateUserData()
                     UserLabel.checkUserData()
@@ -101,18 +101,18 @@ export async function render(params) {
                 }
             })
         })
-        if (!User.data.avatar) rmAvatar.element.classList.toggle('hidden', true)
+        if (!User.data.avatar) rmAvatar.element.classList.toggle("hidden", true)
 
         const selAvatar = new Button(Language.lang.settings.user.selectAvatar, avatarLine.element, null, async () => {
             const overlay = new Overlay()
-            const avatarSelector = new Elem('avatar-selector', overlay.element)
-            const files = await API('GET', '/api/files?inuse=false&tags=image&t=5')
-            new Elem('label', avatarSelector.element).text = Language.lang.settings.user.selectAvatar
-            const fileList = new Elem('file-list', avatarSelector.element)
+            const avatarSelector = new Elem("avatar-selector", overlay.element)
+            const files = await API("GET", "/api/files?inuse=false&tags=image&t=5")
+            new Elem("label", avatarSelector.element).text = Language.lang.settings.user.selectAvatar
+            const fileList = new Elem("file-list", avatarSelector.element)
             for (const file of files.files) {
                 const fileElem = new FileCard(file, false, fileList.element, { remove: false, avatar: false })
                 new Button(Language.lang.settings.user.selectBtn, fileElem.element, null, async () => {
-                    const avatarSetResult = await API('PUT', `/api/profile/${User.data.username}`, { avatarID: file.id })
+                    const avatarSetResult = await API("PUT", `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
                         overlay.element.click()
                         await User.updateUserData()
@@ -123,34 +123,34 @@ export async function render(params) {
             }
 
             if (files.files.length == 0) {
-                const noFilesLabel = new Elem('no-files-label', avatarSelector.element)
+                const noFilesLabel = new Elem("no-files-label", avatarSelector.element)
                 new Elem(null, noFilesLabel.element).text = Language.lang.settings.user.noAvatarFiles
-                new Link(Language.lang.settings.user.uploadFile, '/upload', noFilesLabel.element, true, null, 'upload')
+                new Link(Language.lang.settings.user.uploadFile, "/upload", noFilesLabel.element, true, null, "upload")
             }
         })
         rmAvatar.moveAfter(selAvatar.element)
 
         //region visible name
-        const visibleNameLine = new Elem('visible-name-cont', pages.user.element)
+        const visibleNameLine = new Elem("visible-name-cont", pages.user.element)
         const txtField = new TextInputLine(Language.lang.settings.user.visibleName.label, visibleNameLine.element)
         if (User.data.visiblename) txtField.value = User.data.visiblename
 
         const removeVisibleNameBtn = new Button(Language.lang.settings.user.visibleName.rmBtn, visibleNameLine.element, null, async () => {
-            const reqResult = await API('DELETE', `/api/profile/${User.data.username}`, { visiblename: true })
+            const reqResult = await API("DELETE", `/api/profile/${User.data.username}`, { visiblename: true })
             if (reqResult.HTTPCODE == 200) {
-                new Alert.Simple(Language.lang.settings.user.visibleName.result.rmsucc, null, 5000, null, 'usernmset')
+                new Alert.Simple(Language.lang.settings.user.visibleName.result.rmsucc, null, 5000, null, "usernmset")
                 await User.updateUserData()
                 UserLabel.updateUserData()
-                txtField.value = ''
+                txtField.value = ""
                 removeVisibleNameBtn.switchVisible(false)
             }
         })
         removeVisibleNameBtn.switchVisible(!!User.data.visiblename)
 
         const setVisibleNameBtn = new Button(Language.lang.settings.user.visibleName.setBtn, visibleNameLine.element, null, async () => {
-            const reqResult = await API('PUT', `/api/profile/${User.data.username}`, { visiblename: txtField.value })
+            const reqResult = await API("PUT", `/api/profile/${User.data.username}`, { visiblename: txtField.value })
             if (reqResult.HTTPCODE == 200) {
-                new Alert.Simple(Language.lang.settings.user.visibleName.result.setsucc, null, 5000, null, 'usernmset')
+                new Alert.Simple(Language.lang.settings.user.visibleName.result.setsucc, null, 5000, null, "usernmset")
                 await User.updateUserData()
                 UserLabel.updateUserData()
                 removeVisibleNameBtn.switchVisible(true)
@@ -165,16 +165,16 @@ export async function render(params) {
         new DropdownList(itemCounts.map((v) => ({
             name: v,
             value: v,
-            selected: User.Settings.get('filesPerPage') == v
+            selected: User.Settings.get("filesPerPage") == v
         })),
-            pages.user.element, null, (v) => {
-                User.Settings.set('filesPerPage', v)
-            },
-            `${Language.lang.settings.user.filesPerPage}: `
+        pages.user.element, null, (v) => {
+            User.Settings.set("filesPerPage", v)
+        },
+        `${Language.lang.settings.user.filesPerPage}: `
         )
     }
 
-    if (['webpage', 'user'].includes(params?.query?.t)) ddlist.selectOption(params?.query?.t)
+    if (["webpage", "user"].includes(params?.query?.t)) ddlist.selectOption(params?.query?.t)
 
     return container.element;
 }

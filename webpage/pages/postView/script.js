@@ -18,7 +18,7 @@ import UserCard from "../../elements/userCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 
 function capitalizeFirst(str) {
-    if (!str) return '';
+    if (!str) return "";
     return str[0].toUpperCase() + str.slice(1);
 }
 
@@ -26,11 +26,11 @@ export const tag = "postView";
 export const tagLimit = 10;
 
 export async function render(params) {
-    const container = new Elem('post-view-container');
-    const postData = await API('GET', `/api/posts/${params.postID}`);
+    const container = new Elem("post-view-container");
+    const postData = await API("GET", `/api/posts/${params.postID}`);
 
     if (postData.HTTPCODE !== 200) {
-        const errorElem = new Elem('error', container.element);
+        const errorElem = new Elem("error", container.element);
         errorElem.text = postData.HTTPCODE === 403
             ? Language.lang.postView.errors.noAccess
             : Language.lang.postView.errors.default;
@@ -38,7 +38,7 @@ export async function render(params) {
     }
 
     const PData = postData.post;
-    const postDataBlock = new Elem('post-data-block', container.element);
+    const postDataBlock = new Elem("post-data-block", container.element);
 
     new UserCard(postDataBlock.element, PData.owner)
 
@@ -47,77 +47,77 @@ export async function render(params) {
 
 
     //region upload data
-    const postUploadData = new Elem('post-upload-data', postDataBlock.element);
-    const uploadedOn = new Elem('when', postUploadData.element);
+    const postUploadData = new Elem("post-upload-data", postDataBlock.element);
+    const uploadedOn = new Elem("when", postUploadData.element);
     uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(PData.createdOn)}`;
 
 
     //region age rating
-    const rating = { txt: PData.rating, clr: '' }
+    const rating = { txt: PData.rating, clr: "" }
     switch (PData.rating) {
-        case 'safe': {
-            rating.clr = 'greenyellow'
-            rating.txt = Language.lang.elements.postCard.rating.safe;
-        }; break;
-        case 'questionable': {
-            rating.clr = 'gold'
-            rating.txt = Language.lang.elements.postCard.rating.questionable;
-        }; break;
-        case 'mature': {
-            rating.clr = 'red'
-            rating.txt = Language.lang.elements.postCard.rating.mature;
-        }; break;
+    case "safe": {
+        rating.clr = "greenyellow"
+        rating.txt = Language.lang.elements.postCard.rating.safe;
+    }; break;
+    case "questionable": {
+        rating.clr = "gold"
+        rating.txt = Language.lang.elements.postCard.rating.questionable;
+    }; break;
+    case "mature": {
+        rating.clr = "red"
+        rating.txt = Language.lang.elements.postCard.rating.mature;
+    }; break;
     }
 
-    const ageRatingBlock = new Elem('rating-label-cont', postDataBlock.element)
-    new Elem('label', ageRatingBlock.element).text = Language.lang.postView.rating
+    const ageRatingBlock = new Elem("rating-label-cont", postDataBlock.element)
+    new Elem("label", ageRatingBlock.element).text = Language.lang.postView.rating
     new TextLabel(rating.txt, ageRatingBlock.element, rating.clr, true)
 
 
     //region post files
-    const fileDataContainer = new Elem('file-data-container', postDataBlock.element);
-    const postimgContainer = new Elem('post-conatiner', container.element);
+    const fileDataContainer = new Elem("file-data-container", postDataBlock.element);
+    const postimgContainer = new Elem("post-conatiner", container.element);
 
-    if (typeof params.query?.tags == 'string') {
-        const nav = await API('GET', `/api/posts/${params.postID}/navigation${window.location.search}`)
-        const searchNav = new SearchField(postimgContainer.element, '/api/posts/tags', nav)
+    if (typeof params.query?.tags == "string") {
+        const nav = await API("GET", `/api/posts/${params.postID}/navigation${window.location.search}`)
+        const searchNav = new SearchField(postimgContainer.element, "/api/posts/tags", nav)
 
         const URLparams = new URLSearchParams(window.location.search)
-        const tagsParams = URLparams.get('tags')
+        const tagsParams = URLparams.get("tags")
         if (tagsParams) {
-            searchNav.setSearch(tagsParams.split('+').filter(v => v != '').join(' '))
+            searchNav.setSearch(tagsParams.split("+").filter(v => v != "").join(" "))
         }
 
         searchNav.addSearchCB((tags) => {
-            Router.navigate(`/search?tags=${tags.join('+')}`)
+            Router.navigate(`/search?tags=${tags.join("+")}`)
         })
     }
 
-    const postLabel = new Elem('post-label', postimgContainer.element);
+    const postLabel = new Elem("post-label", postimgContainer.element);
 
-    new Elem('post-name', postLabel.element).text = PData.name;
+    new Elem("post-name", postLabel.element).text = PData.name;
     if (PData.description.length > 0) {
-        new Elem('post-description', postLabel.element).text = PData.description;
+        new Elem("post-description", postLabel.element).text = PData.description;
     }
 
-    if (['image', 'imageGroup', 'comic', 'video'].includes(PData.type)) {
-        const isBlurred = !User.data && ['mature', 'questionable'].includes(PData.rating)
+    if (["image", "imageGroup", "comic", "video"].includes(PData.type)) {
+        const isBlurred = !User.data && ["mature", "questionable"].includes(PData.rating)
 
         let avg = { width: 0, height: 0, size: 0 };
         let count = PData.files.length;
 
-        if (['image', 'video'].includes(PData.type)) count = 1;
+        if (["image", "video"].includes(PData.type)) count = 1;
 
-        const fileContainer = new Elem('files-cont', postimgContainer.element)
+        const fileContainer = new Elem("files-cont", postimgContainer.element)
 
         const filesElems = []
 
         //region post files render
         PData.files.forEach(file => {
-            if (PData.type === 'video') {
+            if (PData.type === "video") {
                 filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
             } else {
-                filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, 'post-image', fileContainer.element, isBlurred ? { text: true } : false))
+                filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, "post-image", fileContainer.element, isBlurred ? { text: true } : false))
             }
 
             //region post stats
@@ -149,7 +149,7 @@ export async function render(params) {
         let resolution = `${avg.height}x${avg.width}px`;
         let size = formatFileSize(avg.size);
 
-        if (PData.type === 'imageGroup' || PData.type === 'comic') {
+        if (PData.type === "imageGroup" || PData.type === "comic") {
             resolution = `~${resolution}`;
             size = `~${size}`;
         }
@@ -158,44 +158,44 @@ export async function render(params) {
         new Elem(null, fileDataContainer.element).text = `${Language.lang.postView.file.size}: ${size}`;
     }
 
-    const controlBlock = new Elem('control-block', postimgContainer.element)
+    const controlBlock = new Elem("control-block", postimgContainer.element)
 
     //region rating
-    const ratingBlock = new Elem('rating-block', controlBlock.element)
-    const scoreTextCont = new Elem('score-text-cont', ratingBlock.element)
-    const scoreText = new Elem('score-text', scoreTextCont.element)
-    const upBtn = new Button('▲', ratingBlock.element, 'btn-up', () => { updateScore('up') })
-    const downBtn = new Button('▼', ratingBlock.element, 'btn-down', () => { updateScore('down') })
+    const ratingBlock = new Elem("rating-block", controlBlock.element)
+    const scoreTextCont = new Elem("score-text-cont", ratingBlock.element)
+    const scoreText = new Elem("score-text", scoreTextCont.element)
+    const upBtn = new Button("▲", ratingBlock.element, "btn-up", () => { updateScore("up") })
+    const downBtn = new Button("▼", ratingBlock.element, "btn-down", () => { updateScore("down") })
 
     scoreTextCont.moveAfter(upBtn.element)
 
     function setScore(val) {
         scoreText.text = val
-        scoreText.element.classList.remove('up', 'down')
-        scoreText.element.classList.add(parseInt(val) >= 0 ? 'up' : 'down')
+        scoreText.element.classList.remove("up", "down")
+        scoreText.element.classList.add(parseInt(val) >= 0 ? "up" : "down")
     }
 
     setScore(PData.score)
 
-    let currentType = ''
+    let currentType = ""
 
     function setButtonState(state) {
         currentType = state
-        upBtn.element.classList.toggle('active', false)
-        downBtn.element.classList.toggle('active', false)
-        if (state == 'up') upBtn.element.classList.toggle('active', true)
-        if (state == 'down') downBtn.element.classList.toggle('active', true)
+        upBtn.element.classList.toggle("active", false)
+        downBtn.element.classList.toggle("active", false)
+        if (state == "up") upBtn.element.classList.toggle("active", true)
+        if (state == "down") downBtn.element.classList.toggle("active", true)
     }
 
     setButtonState(PData.ownscore)
 
     async function updateScore(type) {
         if (currentType == type) {
-            const resp = await API('DELETE', `/api/post/${PData.id}/score`)
+            const resp = await API("DELETE", `/api/post/${PData.id}/score`)
             setButtonState(resp.state)
             setScore(resp.score)
         } else {
-            const resp = await API('POST', `/api/post/${PData.id}/score`, { type })
+            const resp = await API("POST", `/api/post/${PData.id}/score`, { type })
             setButtonState(resp.state)
             setScore(resp.score)
         }
@@ -209,13 +209,13 @@ export async function render(params) {
     //region fav
     let favstate = PData.myfav || (await Favourites.includes(PData.id))
 
-    const favBtn = new Button(null, controlBlock.element, 'fav-btn')
-    new Elem('heart', favBtn.element).text = '❤︎'
-    const favCount = new Elem('fav-count', favBtn.element)
+    const favBtn = new Button(null, controlBlock.element, "fav-btn")
+    new Elem("heart", favBtn.element).text = "❤︎"
+    const favCount = new Elem("fav-count", favBtn.element)
     favCount.text = PData.favourites
-    favBtn.element.classList.toggle('faved', favstate)
+    favBtn.element.classList.toggle("faved", favstate)
 
-    favBtn.addEvent('click', async () => {
+    favBtn.addEvent("click", async () => {
         let cnt = null
         if (!favstate) {
             cnt = await Favourites.add(PData.id)
@@ -223,13 +223,13 @@ export async function render(params) {
             cnt = await Favourites.rm(PData.id)
         }
 
-        if (cnt !== true && typeof cnt != 'number') return
+        if (cnt !== true && typeof cnt != "number") return
 
         favstate = !favstate
 
-        favBtn.element.classList.toggle('faved', favstate)
+        favBtn.element.classList.toggle("faved", favstate)
 
-        if (cnt != null && typeof cnt == 'number') favCount.text = cnt
+        if (cnt != null && typeof cnt == "number") favCount.text = cnt
     })
 
     //region edit
@@ -255,9 +255,9 @@ function renderTags(tags, parent) {
     const groups = [];
 
     for (const tag of tags) {
-        const basename = typeof tag.group?.basename === 'string'
+        const basename = typeof tag.group?.basename === "string"
             ? tag.group.basename
-            : 'default';
+            : "default";
 
         const groupIndex = groups.findIndex(g => g.basename === basename);
 
@@ -265,10 +265,10 @@ function renderTags(tags, parent) {
             const groupObj = tag.group
                 ? { ...tag.group }
                 : {
-                    basename: 'default',
-                    name: { ENG: 'Tags', UA: 'Теги', RU: 'Теги' },
+                    basename: "default",
+                    name: { ENG: "Tags", UA: "Теги", RU: "Теги" },
                     priority: 0,
-                    color: '#5b34eb'
+                    color: "#5b34eb"
                 };
 
             groupObj.tags = [{
@@ -302,12 +302,12 @@ function renderTags(tags, parent) {
 
     groups.sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
 
-    const postTagsElem = new Elem('post-tags-column', parent);
+    const postTagsElem = new Elem("post-tags-column", parent);
 
     for (const group of groups) {
-        const tagsBlock = new Elem('tags-block', postTagsElem.element);
+        const tagsBlock = new Elem("tags-block", postTagsElem.element);
 
-        new Elem('tag-group-label', tagsBlock.element).text = group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
+        new Elem("tag-group-label", tagsBlock.element).text = group.name[Language.currentLang] ? group.name[Language.currentLang] : capitalizeFirst(group.basename);
 
         for (const tag of group.tags) {
             new Tag(tag, tagsBlock.element, true, `/search`);

@@ -1,28 +1,28 @@
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
 
-exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
+exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
-exports.ROUTE = '/api/files/tags'
+exports.ROUTE = "/api/files/tags"
 
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey])
 
-    if (!req.query?.q) return res.status(400).send('No text provided!')
+    if (!req.query?.q) return res.status(400).send("No text provided!")
 
     const tagsMatch = await prisma.tag.findMany({
         where: {
             name: {
                 startsWith: req.query.q,
-                mode: 'insensitive'
+                mode: "insensitive"
             },
-            groupname: 'meta'
+            groupname: "meta"
         },
         include: {
             group: true
         },
-        orderBy: { name: 'asc' },
+        orderBy: { name: "asc" },
         take: 10
     })
 

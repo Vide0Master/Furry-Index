@@ -3,11 +3,34 @@ import Footer from "../components/footer/script.js";
 import API from "./api.js";
 import Language from "./language.js";
 
+function createDevInfoBanner(appinfo) {
+    const devBuildInfo = new Elem("build-info", Footer.element)
+    let txt = ""
+    switch (true) {
+    case appinfo.isDev: {
+        txt = "DEV"
+    }; break;
+    case appinfo.isEval: {
+        txt = "EVAL"
+    }; break;
+    default: {
+        txt = "REL"
+    }; break;
+    }
+
+    devBuildInfo.element.classList.add(txt)
+
+    const txtCont = new Elem("txt-cont", devBuildInfo.element)
+
+    new Elem("main-text", txtCont.element).text = "Running FING"
+    new Elem("version", txtCont.element).text = txt + " v" + appinfo.version
+}
+
 export default class AppInfo {
     static appData = {}
 
     static async getAppInfo() {
-        const appinf = await API('GET', '/api/whatisthisbuild')
+        const appinf = await API("GET", "/api/whatisthisbuild")
         delete appinf.HTTPCODE
         delete appinf.TEXT
         this.appData = appinf
@@ -22,27 +45,4 @@ export default class AppInfo {
 
         createDevInfoBanner(this.appData)
     }
-}
-
-function createDevInfoBanner(appinfo) {
-    const devBuildInfo = new Elem('build-info', Footer.element)
-    let txt = ''
-    switch (true) {
-        case appinfo.isDev: {
-            txt = "DEV"
-        }; break;
-        case appinfo.isEval: {
-            txt = "EVAL"
-        }; break;
-        default: {
-            txt = "REL"
-        }; break;
-    }
-
-    devBuildInfo.element.classList.add(txt)
-
-    new Elem('main-text', devBuildInfo.element).text = 'Running Furry-Index engine'
-    new Elem('version', devBuildInfo.element).text = txt + ' v' + appinfo.version
-
-    devBuildInfo.title = Language.lang.BUILD[txt.toLocaleLowerCase()]
 }

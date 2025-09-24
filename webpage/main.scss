@@ -39,28 +39,49 @@ body {
 }
 
 .build-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    border-radius: 10px;
-    padding: 5px;
+    position: relative;
+    border-radius: 6px;
+    padding: 3px;
 
-    white-space: nowrap;
-
-    &.DEV {
-        background-image: linear-gradient(135deg, #FC466B 0%, #fb613f 100%);
-        color: #fff;
+    &::before {
+        content: "";
+        position: absolute;
+        transform: rotate(0deg) scale(3);
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        animation: BI-rotate 6s linear infinite;
     }
 
-    &.EVAL {
-        background-image: linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%);
-        color: #fff;
+    &.DEV::before {
+        background-image: linear-gradient(0deg, #FC466B 0%, #FC466B 50%, #fb613f 50%, #fb613f 100%);
     }
 
-    &.REL {
-        background-image: linear-gradient(135deg, #46fc46 0%, #3F5EFB 100%);
-        color: #fff;
+    &.EVAL::before {
+        background-image: linear-gradient(0deg, #FC466B 0%, #FC466B 50%, #3F5EFB 50%, #3F5EFB 100%);
+    }
+
+    &.REL::before {
+        background-image: linear-gradient(0deg, #46fc46 0%, #46fc46 50%, #3F5EFB 50%, #3F5EFB 100%);
+    }
+
+    @keyframes BI-rotate {
+        to {
+            transform: rotate(360deg) scale(3);
+        }
+    }
+
+    .txt-cont {
+        position: relative;
+        white-space: nowrap;
+        background-color: var(--background);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        padding: 5px;
+        border-radius: 3px;
     }
 }
 

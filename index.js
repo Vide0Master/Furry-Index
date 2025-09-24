@@ -1,10 +1,10 @@
-const sysConfig = require('./config.json')
-const globalVariables = require('./systemServices/globalVariables')
-const cmd = require('./systemServices/cmdPretty')
+const sysConfig = require("./config.json")
+const globalVariables = require("./systemServices/globalVariables")
+const cmd = require("./systemServices/cmdPretty")
 
 async function init() {
     if (globalVariables.compactIntro) {
-        cmd.log(cmd.colorize('\n✦ Furry-Index ✦', 'brightCyan'))
+        cmd.log(cmd.colorize("\n✦ Furry-Index ✦", "brightCyan"))
     } else {
         const label = [
             " ________                                               ______                  __                     ",
@@ -22,11 +22,11 @@ async function init() {
         ]
 
         for (const line of label) {
-            cmd.log(cmd.colorize(line, 'brightCyan'))
+            cmd.log(cmd.colorize(line, "brightCyan"))
         }
     }
 
-    cmd.log(cmd.colorize(`Version: ${sysConfig.version}\n`, 'brightCyan'))
+    cmd.log(cmd.colorize(`Version: ${sysConfig.version}\n`, "brightCyan"))
 
     let ENVError = false
 
@@ -53,7 +53,7 @@ async function init() {
     if (ENVError) return
 
     if (globalVariables.DEVmode) {
-        cmd.info(`${cmd.colorize('Furdex', 'cyan')} is running in ${cmd.colorize('DEVELOPMENT', 'red')} mode, some features will not be available in production mode.`, [cmd.preps.Debug, cmd.preps.System])
+        cmd.info(`${cmd.colorize("Furdex", "cyan")} is running in ${cmd.colorize("DEVELOPMENT", "red")} mode, some features will not be available in production mode.`, [cmd.preps.Debug, cmd.preps.System])
     }
 
     // i wanna leave here my little reminder for someone who will look into this code
@@ -85,23 +85,23 @@ async function init() {
     // :D
 
     async function setAdminKey() {
-        const KC = require('./systemServices/keyControl.js')
-        const adminKey = await KC.createKey('superadminassign', {}, true)
-        cmd.info(`Admin role key ${cmd.colorize(adminKey, 'red')}`, [cmd.preps.System])
-        cmd.warn(cmd.colorize('DO NOT SHARE ADMIN KEY WITH ANYONE\nIT GIVES ALMOST UNRESTRICTED ACCES TO THE APP', 'red'), [cmd.preps.System])
+        const KC = require("./systemServices/keyControl.js")
+        const adminKey = await KC.createKey("superadminassign", {}, true)
+        cmd.info(`Admin role key ${cmd.colorize(adminKey, "red")}`, [cmd.preps.System])
+        cmd.warn(cmd.colorize("DO NOT SHARE ADMIN KEY WITH ANYONE\nIT GIVES ALMOST UNRESTRICTED ACCES TO THE APP", "red"), [cmd.preps.System])
     }
 
     await setAdminKey()
 
-    await require('./systemServices/DBmetaTags.js')()
+    await require("./systemServices/DBmetaTags.js")()
 
-    await require('./systemServices/checkFileIntegrity.js')()
+    await require("./systemServices/checkFileIntegrity.js")()
 
-    require('./systemServices/sync-langs.js')
+    require("./systemServices/sync-langs.js")
 
-    require('./systemServices/webServer.js')
+    require("./systemServices/webServer.js")
 
-    require('./systemServices/cron/cronJobs.js')
+    require("./systemServices/cron/cronJobs.js")
 }
 
 init()

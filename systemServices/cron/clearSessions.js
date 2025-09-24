@@ -20,7 +20,7 @@ async function checkExpiredSessions() {
         }
     })
 
-    cmd.info(`Cleared ${killedExpiredSessions.count} expired sessions`, [cmd.preps.System, { text: 'Sessions', color: 'yellow' }])
+    cmd.info(`Cleared ${killedExpiredSessions.count} expired sessions`, [cmd.preps.System, { text: "Sessions", color: "yellow" }])
 }
 
 checkExpiredSessions()

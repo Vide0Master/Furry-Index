@@ -1,5 +1,5 @@
-const prisma = require('./prisma')
-const processFileStats = require('./processFileStats')
+const prisma = require("./prisma")
+const processFileStats = require("./processFileStats")
 
 module.exports = async () => {
     const errorFiles = await prisma.file.findMany({

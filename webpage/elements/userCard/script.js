@@ -5,34 +5,34 @@ import RoleLabel from "../roleLabel/script.js"
 
 export default class UserCard extends Elem {
     // eslint-disable-next-line no-unused-vars
-    constructor(parent, userData, cardType = 'default', features = []) {
-        super('internal-user-card', parent)
+    constructor(parent, userData, cardType = "default", features = []) {
+        super("internal-user-card", parent)
 
-        if (!['default', 'messageHeader'].includes(cardType)) return
+        if (!["default", "messageHeader"].includes(cardType)) return
 
         if (userData.avatarID) {
-            const avatarCont = new Elem('avatar-cont', this.element)
-            const avatarBorder = new Elem('avatar-border', avatarCont.element)
-            new Image(`/api/profile/${userData.username}/avatar?thumbnail=300`, 'user-avatar', avatarBorder.element)
+            const avatarCont = new Elem("avatar-cont", this.element)
+            const avatarBorder = new Elem("avatar-border", avatarCont.element)
+            new Image(`/api/profile/${userData.username}/avatar?thumbnail=300`, "user-avatar", avatarBorder.element)
         }
 
-        const sideBlock = new Elem('side-block', this.element)
+        const sideBlock = new Elem("side-block", this.element)
 
         switch (cardType) {
-            case 'messageHeader': {
-                this.addClass('message-header')
-                new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, 'user-link')
-            }; break;
-            default: {
-                if (userData.visiblename) {
-                    new Elem(null, sideBlock.element).text = userData.visiblename
-                }
-                new Link(`@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, 'user-link')
-            }; break;
+        case "messageHeader": {
+            this.addClass("message-header")
+            new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, "user-link")
+        }; break;
+        default: {
+            if (userData.visiblename) {
+                new Elem(null, sideBlock.element).text = userData.visiblename
+            }
+            new Link(`@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, "user-link")
+        }; break;
         }
 
         for (const role of userData.roles) {
-            new RoleLabel(role, sideBlock.element, ['messageHeader'].includes(cardType))
+            new RoleLabel(role, sideBlock.element, ["messageHeader"].includes(cardType))
         }
     }
 }

@@ -13,60 +13,60 @@ import BigTextField from "../../components/bigtextfield/script.js";
 export default async function makePostMaker(postData, editedCB) {
     const overlay = new Overlay()
 
-    const container = new Elem('postmaker-post-container', overlay.element)
+    const container = new Elem("postmaker-post-container", overlay.element)
 
     const PostData = {
-        name: postData?.name || '',
-        description: postData?.description || '',
-        type: postData?.type || '',
-        rating: postData?.rating || '',
+        name: postData?.name || "",
+        description: postData?.description || "",
+        type: postData?.type || "",
+        rating: postData?.rating || "",
         files: postData?.files.map(file => file.id) || [],
         tags: postData?.tags
-            .filter(tag => !tag?.group || tag.group.basename !== 'meta')
+            .filter(tag => !tag?.group || tag.group.basename !== "meta")
             .map(tag => tag.name) || []
     }
 
     const postname = new TextInputLine(Language.lang.elements.postMaker.postName, container.element, null, null, (value) => {
         PostData.name = value
     })
-    postname.input.value = PostData.name != '' ? PostData.name : ''
+    postname.input.value = PostData.name != "" ? PostData.name : ""
 
     const postdesc = new BigTextField(Language.lang.elements.postMaker.postDesc, container.element, 2000, (value) => {
         PostData.description = value
     })
-    postdesc.input = PostData.description != '' ? PostData.description : ''
+    postdesc.input = PostData.description != "" ? PostData.description : ""
 
     new DropdownList(
-        (await API('GET', '/api/posts/data?q=rating', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.rating[val], value: val })),
+        (await API("GET", "/api/posts/data?q=rating", null, true)).types.map(val => ({ name: Language.lang.elements.postCard.rating[val], value: val })),
         container.element, Language.lang.elements.postMaker.postRating, (val) => { PostData.rating = val }
-    ).value = PostData.rating != '' ? PostData.rating : 'placeholder'
+    ).value = PostData.rating != "" ? PostData.rating : "placeholder"
 
     const postType = new DropdownList(
-        (await API('GET', '/api/posts/data?q=types', null, true)).types.map(val => ({ name: Language.lang.elements.postCard.type[val], value: val })),
+        (await API("GET", "/api/posts/data?q=types", null, true)).types.map(val => ({ name: Language.lang.elements.postCard.type[val], value: val })),
         container.element, Language.lang.elements.postMaker.postType, getFiles
     )
-    postType.value = PostData.type != '' ? PostData.type : 'placeholder'
+    postType.value = PostData.type != "" ? PostData.type : "placeholder"
 
-    const filesField = new Elem(['files-list', 'hidden'], container.element)
+    const filesField = new Elem(["files-list", "hidden"], container.element)
 
     async function getFiles(type, presentFiles) {
         PostData.files = presentFiles ? presentFiles : []
         PostData.type = type
-        filesField.element.innerHTML = ''
+        filesField.element.innerHTML = ""
 
         const tags = []
-        if (['image', 'imageGroup', 'comic'].includes(type)) {
-            tags.push('image')
-        } else if (['video'].includes(type)) {
-            tags.push('animated')
+        if (["image", "imageGroup", "comic"].includes(type)) {
+            tags.push("image")
+        } else if (["video"].includes(type)) {
+            tags.push("animated")
         }
 
-        const files = await API('GET', `/api/files?inuse=${postData ? `postID:${postData.id}` : 'false'}&t=10${tags.length > 0 ? '&tags=' + tags.join('+') : ''}`)
+        const files = await API("GET", `/api/files?inuse=${postData ? `postID:${postData.id}` : "false"}&t=10${tags.length > 0 ? "&tags=" + tags.join("+") : ""}`)
         if (files.files.length == 0) {
-            filesField.element.classList.toggle('hidden', true)
+            filesField.element.classList.toggle("hidden", true)
             return
         } else {
-            filesField.element.classList.toggle('hidden', false)
+            filesField.element.classList.toggle("hidden", false)
         }
 
         const switches = {}
@@ -75,7 +75,7 @@ export default async function makePostMaker(postData, editedCB) {
             const fcard = new FileCard(file, false, filesField.element, { remove: false })
 
             switches[file.id] = new SwitchInput(Language.lang.elements.postMaker.include, fcard.element, (state) => {
-                if (['image', 'video'].includes(type)) {
+                if (["image", "video"].includes(type)) {
                     for (const id in switches) {
                         if (id == file.id) continue
                         switches[id].change(false)
@@ -104,51 +104,51 @@ export default async function makePostMaker(postData, editedCB) {
 
     if (PostData.files.length != 0) getFiles(postType.value, PostData.files)
 
-    const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, 'custom', (val) => {
+    const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, "custom", (val) => {
         tagsField.input = tagsField.input.toLowerCase()
-        const tags = val.split(' ').filter(tag => tag != '' && !tag.startsWith('#'))
+        const tags = val.split(" ").filter(tag => tag != "" && !tag.startsWith("#"))
         tagsField.setLimit(tags.length)
         PostData.tags = tags.map(tag => `${tag}`)
     })
 
     if (PostData.tags.length > 0) {
         tagsField.setLimit(PostData.tags.length)
-        tagsField.input = PostData.tags.join(' ')
+        tagsField.input = PostData.tags.join(" ")
     } else {
         tagsField.setLimit(0)
     }
 
     new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
         switch (true) {
-            case PostData.name.length == 0: {
-                new Alert.Simple('No name provided', 'Error', 3000, null, 'noname')
-                return
-            }; 
-            case PostData.rating.length == 0: {
-                new Alert.Simple('No rating selected', 'Error', 3000, null, 'norating')
-                return
-            }; 
-            case PostData.type.length == 0: {
-                new Alert.Simple('No type selected', 'Error', 3000, null, 'notype')
-                return
-            }; 
-            case PostData.files.length == 0: {
-                new Alert.Simple('No files selected', 'Error', 3000, null, 'nofiles')
-                return
-            }; 
+        case PostData.name.length == 0: {
+            new Alert.Simple("No name provided", "Error", 3000, null, "noname")
+            return
+        }; 
+        case PostData.rating.length == 0: {
+            new Alert.Simple("No rating selected", "Error", 3000, null, "norating")
+            return
+        }; 
+        case PostData.type.length == 0: {
+            new Alert.Simple("No type selected", "Error", 3000, null, "notype")
+            return
+        }; 
+        case PostData.files.length == 0: {
+            new Alert.Simple("No files selected", "Error", 3000, null, "nofiles")
+            return
+        }; 
         }
 
         if (postData) {
-            const postResult = await API('PUT', `/api/posts/${postData.id}`, PostData, true)
+            const postResult = await API("PUT", `/api/posts/${postData.id}`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.Simple(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, 'Success', 5000, null, postResult.postID)
+                new Alert.Simple(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, "Success", 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }
         } else {
-            const postResult = await API('POST', `/api/posts`, PostData, true)
+            const postResult = await API("POST", `/api/posts`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.Simple(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, 'Success', 5000, null, postResult.postID)
+                new Alert.Simple(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, "Success", 5000, null, postResult.postID)
                 overlay.element.click()
                 await editedCB()
             }

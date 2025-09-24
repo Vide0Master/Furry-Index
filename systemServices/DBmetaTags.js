@@ -1,29 +1,29 @@
-const cmd = require('./cmdPretty')
-const prisma = require('./prisma')
+const cmd = require("./cmdPretty")
+const prisma = require("./prisma")
 
 const permanentTagsList = [
-    { name: 'absurd_res' },
-    { name: 'high_res' },
-    { name: 'image', icon: 'image' },
-    { name: 'animated' },
-    { name: 'sound' },
-    { name: 'short_playtime' },
-    { name: 'long_playtime' },
-    { name: 'absurd_playtime' },
+    { name: "absurd_res" },
+    { name: "high_res" },
+    { name: "image", icon: "image" },
+    { name: "animated" },
+    { name: "sound" },
+    { name: "short_playtime" },
+    { name: "long_playtime" },
+    { name: "absurd_playtime" },
 ]
 
 module.exports = async () => {
-    cmd.info('Upserting tags group "Meta" and adding system meta-tags', [cmd.preps.System, cmd.preps.DB])
+    cmd.info("Upserting tags group \"Meta\" and adding system meta-tags", [cmd.preps.System, cmd.preps.DB])
     const tagGroup = await prisma.tagGroup.upsert({
-        where: { basename: 'meta' },
+        where: { basename: "meta" },
         update: {
-            name: { ENG: 'Meta', UA: 'Мета', RU: 'Мета' },
+            name: { ENG: "Meta", UA: "Мета", RU: "Мета" },
             locked: true,
             priority: -1
         },
         create: {
-            basename: 'meta',
-            name: { ENG: 'Meta', UA: 'Мета', RU: 'Мета' },
+            basename: "meta",
+            name: { ENG: "Meta", UA: "Мета", RU: "Мета" },
             locked: true,
             priority: -1
         }

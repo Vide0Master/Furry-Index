@@ -1,10 +1,10 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
 const getUserByID = require("../../systemServices/getUserByID")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
 
-exports.ROUTE = '/api/posts/:postID'
+exports.ROUTE = "/api/posts/:postID"
 
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
@@ -56,7 +56,7 @@ exports.GET = async (req, res) => {
         include,
     })
 
-    if (!post.visible && user?.id != post.ownerid) return res.status(403).send('Post is not available')
+    if (!post.visible && user?.id != post.ownerid) return res.status(403).send("Post is not available")
 
     for (const tag of post.tags) {
         tag.count = tag._count.posts;
@@ -64,7 +64,7 @@ exports.GET = async (req, res) => {
     }
 
     if (post.scores) {
-        post.ownscore = post.scores[0]?.type || 'none'
+        post.ownscore = post.scores[0]?.type || "none"
         delete post.scores
     }
 
@@ -82,19 +82,19 @@ exports.PUT = async (req, res) => {
     if (!user) return res.status(401).send();
 
     const postID = req.params.postID;
-    if (!postID) return res.status(400).send('No postID in route');
-    if (!req.body) return res.status(400).send('No body request');
+    if (!postID) return res.status(400).send("No postID in route");
+    if (!req.body) return res.status(400).send("No body request");
 
     const post = await prisma.post.findUnique({
         where: { id: postID },
         include: { files: { select: { id: true } } }
     })
 
-    if (!post) return res.status(404).send('Post not found')
+    if (!post) return res.status(404).send("Post not found")
 
-    const restricted = ['id', 'ownerid', 'owner', 'createdOn'];
+    const restricted = ["id", "ownerid", "owner", "createdOn"];
     if (Object.keys(req.body).some(key => restricted.includes(key))) {
-        return res.status(403).send('Cant edit restricted fields');
+        return res.status(403).send("Cant edit restricted fields");
     }
 
     const updateData = {};
@@ -142,7 +142,7 @@ exports.PUT = async (req, res) => {
     }
 
     for (const key of Object.keys(req.body)) {
-        if (key !== 'files' && key !== 'tags') {
+        if (key !== "files" && key !== "tags") {
             updateData[key] = req.body[key];
         }
     }
@@ -168,7 +168,7 @@ exports.DELETE = async (req, res) => {
 
     const postID = req.params.postID
 
-    if (!postID) return res.status(400).send('No postID in route')
+    if (!postID) return res.status(400).send("No postID in route")
 
     const postData = await prisma.post.findUnique({
         where: {
@@ -177,9 +177,9 @@ exports.DELETE = async (req, res) => {
         include: { files: { select: { id: true } } }
     })
 
-    if (!postData) return res.status(404).send('Post not found')
+    if (!postData) return res.status(404).send("Post not found")
 
-    if (postData.ownerid != user.id) return res.status(403).send('You are not allowed to edit this post')
+    if (postData.ownerid != user.id) return res.status(403).send("You are not allowed to edit this post")
 
     const rm = await prisma.post.deleteMany({
         where: {
@@ -188,11 +188,11 @@ exports.DELETE = async (req, res) => {
         }
     })
 
-    if (rm.count == 0) return res.status(500).send('Rm error')
+    if (rm.count == 0) return res.status(500).send("Rm error")
 
     postData.files.forEach(file => {
         updateFileLastActivity(file.id)
     })
 
-    return res.status(200).send('Post removed successfully')
+    return res.status(200).send("Post removed successfully")
 }

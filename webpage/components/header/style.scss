@@ -4,6 +4,7 @@ header {
     align-items: center;
     gap: 10px;
     justify-content: start;
+    overflow: visible;
 
     img {
         height: 30px;
@@ -16,6 +17,7 @@ header {
         align-items: center;
         flex-wrap: wrap;
         position: relative;
+        overflow: visible;
 
         &>* {
             background-color: var(--background-s);
@@ -63,6 +65,20 @@ header {
 
         @media (max-width: 700px) {
             display: flex;
+        }
+    }
+
+    .internal-dropdown {
+        border: none;
+        border-radius: 10px;
+        padding: 0;
+
+        .label {
+            padding: 10px;
+        }
+
+        .options-block {
+            top: 100%;
         }
     }
 }

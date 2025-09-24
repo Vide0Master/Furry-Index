@@ -1,8 +1,8 @@
-const prisma = require('../../systemServices/prisma')
+const prisma = require("../../systemServices/prisma")
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
 
-exports.ROUTE = '/api/posts/:postID/navigation'
+exports.ROUTE = "/api/posts/:postID/navigation"
 
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
@@ -16,21 +16,21 @@ exports.GET = async (req, res) => {
     if (!current) return res.status(404).json({ error: "Post not found" })
 
     const tagFilter = req.query.tags
-        ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
         : [];
 
     const filterHandlers = {
-        'author': (value, negative) => {
+        "author": (value, negative) => {
             const clause = { owner: { username: value } };
             return negative ? { NOT: clause } : clause;
         },
-        'id': (value, negative) => {
-            const clause = { OR: value.split(',').map(v => ({ id: v })) };
+        "id": (value, negative) => {
+            const clause = { OR: value.split(",").map(v => ({ id: v })) };
             return negative ? { NOT: clause } : clause;
         },
-        'fav': (value, negative) => {
+        "fav": (value, negative) => {
             let clause = {}
-            if (value != 'server' || !user) {
+            if (value != "server" || !user) {
                 clause = { favourites: { some: { user: { username: value } } } };
             } else {
                 clause = { favourites: { some: { userid: user.id } } };
@@ -47,7 +47,7 @@ exports.GET = async (req, res) => {
         let negative = false;
         let tag = rawTag;
 
-        if (tag.startsWith('-')) {
+        if (tag.startsWith("-")) {
             negative = true;
             tag = tag.slice(1);
         }
@@ -78,12 +78,12 @@ exports.GET = async (req, res) => {
     const [next, prev] = await Promise.all([
         prisma.post.findFirst({
             where: { ...where, createdOn: { lt: current.createdOn } },
-            orderBy: [{ createdOn: 'desc' }, { id: 'desc' }],
+            orderBy: [{ createdOn: "desc" }, { id: "desc" }],
             select: { id: true }
         }),
         prisma.post.findFirst({
             where: { ...where, createdOn: { gt: current.createdOn } },
-            orderBy: [{ createdOn: 'asc' }, { id: 'asc' }],
+            orderBy: [{ createdOn: "asc" }, { id: "asc" }],
             select: { id: true }
         })
     ]);

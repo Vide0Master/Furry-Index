@@ -1,9 +1,9 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions");
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
 
-exports.ROUTE = '/api/posts'
+exports.ROUTE = "/api/posts"
 
 exports.GET = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
@@ -11,21 +11,21 @@ exports.GET = async (req, res) => {
     const page = req.query.p ? parseInt(req.query.p) : 0;
     const take = req.query.t ? parseInt(req.query.t) : 50;
     const tagFilter = req.query.tags
-        ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
         : [];
 
     const filterHandlers = {
-        'author': (value, negative) => {
+        "author": (value, negative) => {
             const clause = { owner: { username: value } };
             return negative ? { NOT: clause } : clause;
         },
-        'id': (value, negative) => {
-            const clause = { OR: value.split(',').map(v => ({ id: v })) };
+        "id": (value, negative) => {
+            const clause = { OR: value.split(",").map(v => ({ id: v })) };
             return negative ? { NOT: clause } : clause;
         },
-        'fav': (value, negative) => {
+        "fav": (value, negative) => {
             let clause = {}
-            if (value != 'server' || !user) {
+            if (value != "server" || !user) {
                 clause = { favourites: { some: { user: { username: value } } } };
             } else {
                 clause = { favourites: { some: { userid: user.id } } };
@@ -42,7 +42,7 @@ exports.GET = async (req, res) => {
         let negative = false;
         let tag = rawTag;
 
-        if (tag.startsWith('-')) {
+        if (tag.startsWith("-")) {
             negative = true;
             tag = tag.slice(1);
         }
@@ -89,7 +89,7 @@ exports.GET = async (req, res) => {
         ]
     };
 
-    if (req.query.count === 'true') {
+    if (req.query.count === "true") {
         const count = await prisma.post.count({ where });
         return res.status(200).json({ count });
     }
@@ -97,7 +97,7 @@ exports.GET = async (req, res) => {
     const include = {
         tags: {
             include: { group: true, _count: true },
-            orderBy: { name: 'desc' },
+            orderBy: { name: "desc" },
         },
         favourites: { select: { userid: true } },
         files: true,
@@ -113,7 +113,7 @@ exports.GET = async (req, res) => {
         where,
         include,
         orderBy: {
-            createdOn: 'desc'
+            createdOn: "desc"
         }
     });
 
@@ -124,7 +124,7 @@ exports.GET = async (req, res) => {
         }
 
         if (post.scores) {
-            post.ownscore = post.scores[0]?.type || 'none'
+            post.ownscore = post.scores[0]?.type || "none"
             delete post.scores
         }
 
@@ -143,7 +143,7 @@ exports.POST = async (req, res) => {
     if (!user) return res.status(401).send()
 
     const postData = req.body
-    if (!postData) return res.status(400).send('No body provided!')
+    if (!postData) return res.status(400).send("No body provided!")
 
     const filesTags = await prisma.file.findMany({
         where: {
@@ -158,7 +158,7 @@ exports.POST = async (req, res) => {
     })
 
     const inputTags = Array.isArray(postData.tags)
-        ? postData.tags.map(tag => typeof tag === 'string' ? tag : tag?.name)
+        ? postData.tags.map(tag => typeof tag === "string" ? tag : tag?.name)
         : []
 
     let postTags = inputTags.map(tagname => ({
@@ -193,7 +193,7 @@ exports.POST = async (req, res) => {
         }
     })
 
-    if (!newPost) return res.status(500).send('Error creating post!')
+    if (!newPost) return res.status(500).send("Error creating post!")
 
     res.status(200).json({ postID: newPost.id })
 }

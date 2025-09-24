@@ -1,9 +1,9 @@
 export default class Elem {
-    constructor(cname, parent, tag = 'div') {
+    constructor(cname, parent, tag = "div") {
         this.element = document.createElement(tag)
 
         if (cname) {
-            if (typeof cname === 'object') {
+            if (typeof cname === "object") {
                 for (const cn of cname)
                     this.element.classList.add(cn)
             } else {
@@ -18,11 +18,11 @@ export default class Elem {
         if (parent) this.append(parent)
 
         this.moveAfter = (elem) => {
-            elem.insertAdjacentElement('afterend', this.element);
+            elem.insertAdjacentElement("afterend", this.element);
         }
 
         this.switchVisible = (state) => {
-            this.element.classList.toggle('hidden', !state)
+            this.element.classList.toggle("hidden", !state)
         }
 
         // YOU GOTTA KILL EM ALL
@@ -31,7 +31,7 @@ export default class Elem {
         }
 
         this.wipe = () => {
-            this.element.innerHTML = ''
+            this.element.innerHTML = ""
         }
 
         this.addEvent = (event, func, once = false) => {
@@ -39,7 +39,7 @@ export default class Elem {
         }
 
         this.onAnimationEnd = (cb) => {
-            this.addEvent('animationend', cb, true)
+            this.addEvent("animationend", cb, true)
         }
 
         this.addClass = (c) => {

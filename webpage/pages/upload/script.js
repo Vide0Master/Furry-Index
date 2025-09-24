@@ -9,15 +9,15 @@ export const tag = "upload";
 export const tagLimit = 1;
 
 export async function render() {
-    const container = new Elem('upload-container')
+    const container = new Elem("upload-container")
 
     const upload = new UploadField(container.element)
 
-    const fileManagerField = new Elem('file-manager', container.element)
+    const fileManagerField = new Elem("file-manager", container.element)
 
     let fileList = []
 
-    const groupUploadBtn = new Button(Language.lang.upload.groupUpload, container.element, 'hidden', async () => {
+    const groupUploadBtn = new Button(Language.lang.upload.groupUpload, container.element, "hidden", async () => {
         for (const fCard of fileList) {
             fCard.uploadFile()
         }
@@ -28,7 +28,7 @@ export async function render() {
 
     upload.onFileChange((files) => {
         fileList = []
-        fileManagerField.element.innerHTML = ''
+        fileManagerField.element.innerHTML = ""
 
         groupUploadBtn.switchVisible(files.length > 1)
 

@@ -10,7 +10,7 @@ export default async function API(method, route, body, credentials = false) {
             if (body instanceof FormData) {
                 fetchBody = body
             } else {
-                headers['Content-Type'] = 'application/json'
+                headers["Content-Type"] = "application/json"
                 fetchBody = JSON.stringify(body)
             }
         }
@@ -19,7 +19,7 @@ export default async function API(method, route, body, credentials = false) {
             method: method.toUpperCase(),
             headers,
             body: fetchBody,
-            credentials: credentials ? 'include' : 'same-origin',
+            credentials: credentials ? "include" : "same-origin",
         });
 
         const data = {}
@@ -31,16 +31,7 @@ export default async function API(method, route, body, credentials = false) {
             }
         } catch {
             if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
-                console.log('No json in response')
-            }
-        }
-
-        try {
-            const responseData = await response.text()
-            data.TEXT = responseData
-        } catch {
-            if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
-                console.log('No text in response')
+                console.log("No json in response")
             }
         }
 
@@ -48,52 +39,52 @@ export default async function API(method, route, body, credentials = false) {
 
         if (AppInfo.appData.isDev || AppInfo.appData.isEval) {
             const styleLabel = [
-                'background: #333',
-                'color: #fff',
-                'padding: 2px 6px',
-                'border-radius: 50px 0 0 50px',
-                'font-weight: bold'
-            ].join(';');
+                "background: #333",
+                "color: #fff",
+                "padding: 2px 6px",
+                "border-radius: 50px 0 0 50px",
+                "font-weight: bold"
+            ].join(";");
 
-            let statusColor = ''
+            let statusColor = ""
 
             switch (true) {
-                case data.HTTPCODE >= 200 && data.HTTPCODE < 300:
-                    statusColor = '#4caf50'
-                    break
-                case data.HTTPCODE >= 400 && data.HTTPCODE < 500:
-                    statusColor = '#ff5722'
-                    break
-                case data.HTTPCODE >= 500 && data.HTTPCODE < 600:
-                    statusColor = '#000000'
-                    break
+            case data.HTTPCODE >= 200 && data.HTTPCODE < 300:
+                statusColor = "#4caf50"
+                break
+            case data.HTTPCODE >= 400 && data.HTTPCODE < 500:
+                statusColor = "#ff5722"
+                break
+            case data.HTTPCODE >= 500 && data.HTTPCODE < 600:
+                statusColor = "#000000"
+                break
             }
 
             const styleMethod = [
                 `background: ${statusColor}`,
-                'color: #fff',
-                'padding: 2px 6px',
-                'font-weight: bold'
-            ].join(';');
+                "color: #fff",
+                "padding: 2px 6px",
+                "font-weight: bold"
+            ].join(";");
 
             const styleRoute = [
-                'background: #2196f3',
-                'color: #fff',
-                'padding: 2px 6px',
-                'border-radius: 0 50px 50px 0',
-                'font-weight: bold'
-            ].join(';');
+                "background: #2196f3",
+                "color: #fff",
+                "padding: 2px 6px",
+                "border-radius: 0 50px 50px 0",
+                "font-weight: bold"
+            ].join(";");
 
             console.groupCollapsed(
-                '%c API %c ' + method.toUpperCase() + ' %c ' + route,
+                "%c API %c " + method.toUpperCase() + " %c " + route,
                 styleLabel,
                 styleMethod,
                 styleRoute
             );
 
             //! DO NOT DELETE
-            console.log('Request:\n', body)
-            console.log('Response:\n', data)
+            console.log("Request:\n", body)
+            console.log("Response:\n", data)
 
             console.groupEnd();
         }

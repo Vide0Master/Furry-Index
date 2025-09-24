@@ -1,9 +1,9 @@
 const getUserBySessionCookie = require("../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../systemServices/globalVariables')
-const keyControl = require('../systemServices/keyControl')
+const { mainAuthTokenKey } = require("../systemServices/globalVariables")
+const keyControl = require("../systemServices/keyControl")
 
-exports.ROUTE = '/api/key/:key'
-exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
+exports.ROUTE = "/api/key/:key"
+exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
 const keyResponses = {
     "404": "Key not found",

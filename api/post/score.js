@@ -1,9 +1,9 @@
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
-const { ScoreType } = require('@prisma/client')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
+const { ScoreType } = require("@prisma/client")
 
-exports.ROUTE = '/api/post/:postid/score'
+exports.ROUTE = "/api/post/:postid/score"
 
 async function recalcPostScore(postid) {
     const scores = await prisma.score.findMany({
@@ -12,8 +12,8 @@ async function recalcPostScore(postid) {
     });
     let score = 0;
     for (const s of scores) {
-        if (s.type === 'up') score++;
-        else if (s.type === 'down') score--;
+        if (s.type === "up") score++;
+        else if (s.type === "down") score--;
     }
     await prisma.post.update({
         where: { id: postid },
@@ -28,7 +28,7 @@ exports.GET = async (req, res) => {
         where: { id: postid },
         select: { score: true }
     });
-    if (!post) return res.status(404).send('No such post');
+    if (!post) return res.status(404).send("No such post");
 
     const scoreData = { score: post.score };
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
@@ -46,17 +46,17 @@ exports.GET = async (req, res) => {
 
 exports.POST = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
-    if (!user) return res.status(401).send('You are not authorized');
+    if (!user) return res.status(401).send("You are not authorized");
 
     const postid = req.params.postid;
     const post = await prisma.post.findUnique({
         where: { id: postid },
         select: { score: true }
     });
-    if (!post) return res.status(404).send('No such post');
+    if (!post) return res.status(404).send("No such post");
 
-    if (!req?.body?.type) return res.status(400).send('No type provided in body');
-    if (!Object.values(ScoreType).includes(req.body.type)) return res.status(400).send('Incorrect type provided');
+    if (!req?.body?.type) return res.status(400).send("No type provided in body");
+    if (!Object.values(ScoreType).includes(req.body.type)) return res.status(400).send("Incorrect type provided");
 
     const userScore = await prisma.score.upsert({
         where: {
@@ -83,7 +83,7 @@ exports.POST = async (req, res) => {
 exports.DELETE = async (req, res) => {
     const postid = req.params.postid;
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
-    if (!user) return res.status(401).send('You are not authorized');
+    if (!user) return res.status(401).send("You are not authorized");
 
     const deleted = await prisma.score.deleteMany({
         where: {
@@ -92,9 +92,9 @@ exports.DELETE = async (req, res) => {
         }
     });
 
-    if (deleted.count == 0) res.status(500).send('Score removal failed');
+    if (deleted.count == 0) res.status(500).send("Score removal failed");
 
     const newScore = await recalcPostScore(postid);
 
-    return res.status(200).json({ state: 'none', score: newScore });
+    return res.status(200).json({ state: "none", score: newScore });
 }

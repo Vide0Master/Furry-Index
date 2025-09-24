@@ -8,19 +8,19 @@ export const tag = "main";
 export const tagLimit = 1;
 
 export async function render() {
-    const container = new Elem('main-container')
+    const container = new Elem("main-container")
 
-    const websiteLabel = new Elem('FI-label', container.element)
-    new Elem('welcome', websiteLabel.element).text = Language.lang.main.welcome
+    const websiteLabel = new Elem("FI-label", container.element)
+    new Elem("welcome", websiteLabel.element).text = Language.lang.main.welcome
     // const fiCont = new Elem('FI-container', websiteLabel.element).element
     // new Elem('FI-text', fiCont).text = 'Furry Index'
 
     new FurrIndexLogo(websiteLabel.element)
 
-    new Elem('bigLabel', container.element).text = Language.lang.main.latest
+    new Elem("bigLabel", container.element).text = Language.lang.main.latest
 
-    const latestPosts = new Elem('latest-posts', container.element)
-    const postsData = await API('GET', '/api/posts?t=10', null, true)
+    const latestPosts = new Elem("latest-posts", container.element)
+    const postsData = await API("GET", "/api/posts?t=10", null, true)
     for (const postData of postsData.posts) {
         new PostCard(postData, latestPosts.element)
     }

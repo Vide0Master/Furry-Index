@@ -1,12 +1,13 @@
-import WSController from '../scripts/ws.js'
-import Overlay from '../features/overlay/script.js';
-import staticRoutes from '../staticVariables/routerRoutes.js';
+import WSController from "./ws.js"
+import Overlay from "../features/overlay/script.js";
+import staticRoutes from "../staticVariables/routerRoutes.js";
 
 class Router {
     static routes = [...staticRoutes];
-    static containerSelector = 'main';
+    static containerSelector = "main";
     static container = null;
     static _initialized = false;
+    static navListeners = []
 
     static init() {
         if (this._initialized) return;
@@ -20,24 +21,24 @@ class Router {
     }
 
     static _bindEvents() {
-        document.addEventListener('click', async (e) => {
-            const link = e.target.closest('a');
+        document.addEventListener("click", async (e) => {
+            const link = e.target.closest("a");
             if (!link) return;
 
-            const isExternal = link.hasAttribute('external');
-            const isInternal = link.hasAttribute('internal') || !isExternal;
+            const isExternal = link.hasAttribute("external");
+            const isInternal = link.hasAttribute("internal") || !isExternal;
 
             if (isInternal) {
-                const href = link.getAttribute('href');
-                if (href.startsWith('http') || href.startsWith('//')) return;
+                const href = link.getAttribute("href");
+                if (href.startsWith("http") || href.startsWith("//")) return;
 
                 e.preventDefault();
 
-                await this.navigate(href, e.target.tagName == 'A' ? e.target : e.target.parentNode);
+                await this.navigate(href, e.target.tagName == "A" ? e.target : e.target.parentNode);
             }
         });
 
-        window.addEventListener('popstate', () => {
+        window.addEventListener("popstate", () => {
             this._loadRoute(window.location.pathname + window.location.search);
         });
     }
@@ -56,11 +57,14 @@ class Router {
     static async navigate(path, killOverlays = true, force = false) {
         if (killOverlays) Overlay.clearOverlays()
 
+        this.execNavListeners(path)
+
         this.init();
         if (window.location.pathname + window.location.search !== path || force) {
-            window.history.pushState({}, '', path);
+            window.history.pushState({}, "", path);
             await this._loadRoute(path);
             WSController.updateRoute()
+            this.clrNavListeners()
         }
     }
 
@@ -83,7 +87,7 @@ class Router {
         const keys = [];
         const regexString = routePath.replace(/:([^/]+)/g, (_, key) => {
             keys.push(key);
-            return '([^/]+)';
+            return "([^/]+)";
         });
         return { regex: new RegExp(`^${regexString}$`), keys };
     }
@@ -103,7 +107,7 @@ class Router {
         const match = this._matchRoute(pathname);
 
         if (!match) {
-            this.container.innerHTML = '<h2>Page not found</h2>';
+            this.container.innerHTML = "<h2>Page not found</h2>";
             return;
         }
 
@@ -113,8 +117,8 @@ class Router {
 
         try {
             const pageModule = await import(route.module);
-            if (typeof pageModule.render !== 'function') {
-                throw new Error('Module does not export a render() function');
+            if (typeof pageModule.render !== "function") {
+                throw new Error("Module does not export a render() function");
             }
 
             const content = await pageModule.render(params);
@@ -131,6 +135,20 @@ class Router {
             console.error(`Error loading ${route.module}:`, err);
             this.container.innerHTML = `<p>Error loading page</p>`;
         }
+    }
+
+    static regNavListener(func, permanent = false) {
+        this.navListeners.push({ func, permanent })
+    }
+
+    static clrNavListeners() {
+        for (const i in this.navListeners) {
+            if (!this.navListeners[i].permanent) delete this.navListeners[i]
+        }
+    }
+
+    static execNavListeners(route) {
+        this.navListeners.forEach(v => v.func(route))
     }
 }
 

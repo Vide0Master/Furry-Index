@@ -7,11 +7,6 @@ const LANG = {
             NOLINK: "Does not have link assigned"
         }
     },
-    BUILD: {
-        dev: "DEVELOPMENT BUILD",
-        eval: "EVALUATION BUILD",
-        rel: "RELEASE BUILD"
-    },
     TOS: [
         {
             label: "Furry Index Terms of Service",
@@ -214,14 +209,14 @@ const LANG = {
                 lowecase: "Only lowecase",
                 restrictedSymbol: "Special symbols",
                 taken: {
-                    default: 'Username should be unique',
-                    ok: 'Username unique',
-                    nok: 'Username is taken'
+                    default: "Username should be unique",
+                    ok: "Username unique",
+                    nok: "Username is taken"
                 },
                 specialSymbolCheck: {
-                    default: 'No special symbols',
-                    ok: 'No special symbols found',
-                    nok: 'Remove special symbols'
+                    default: "No special symbols",
+                    ok: "No special symbols found",
+                    nok: "Remove special symbols"
                 }
             }
         },
@@ -244,9 +239,9 @@ const LANG = {
         TOS: "Terms Of Service",
         PP: "Privacy Policy",
         termsacc: {
-            label: 'Do you agree with this terms?',
-            no: 'No',
-            yes: 'Yes'
+            label: "Do you agree with this terms?",
+            no: "No",
+            yes: "Yes"
         },
         rememberMe: {
             label: "Remember me"
@@ -340,6 +335,19 @@ const LANG = {
             filesPerPage: "Files per page"
         }
     },
+    keyRedeem: {
+        label: "Redeem key",
+        malformedKey: "Correct key",
+        redeem: "Redeem",
+        err: {
+            notFound: "Key was not found",
+            redeemed: "Key was already redeemed",
+            fix: "Fix errors in key"
+        },
+        succ: {
+            superadminassign: "Superadmin role assigned"
+        }
+    },
     components: {
         upload: {
             field: "Click or drag your files here",
@@ -372,12 +380,12 @@ const LANG = {
                 confirm: "Confirm",
                 confirmText: [
                     "You want to delete file",
-                    '?'
+                    "?"
                 ],
                 alert: "Removed file"
             },
-            useAsAvatar: 'Avatar',
-            uploadBtn: 'Upload'
+            useAsAvatar: "Avatar",
+            uploadBtn: "Upload"
         },
         postCard: {
             rating: {
@@ -386,10 +394,10 @@ const LANG = {
                 mature: "Mature"
             },
             type: {
-                image: 'Image',
-                imageGroup: 'Image group',
-                comic: 'Comic',
-                video: 'Video'
+                image: "Image",
+                imageGroup: "Image group",
+                comic: "Comic",
+                video: "Video"
             },
             editButtons: {
                 visible: "Visible",
@@ -400,8 +408,8 @@ const LANG = {
                     "removed"
                 ]
             },
-            score: 'Score',
-            favs: 'In favourites'
+            score: "Score",
+            favs: "In favourites"
         },
         postMaker: {
             postName: "Name",
@@ -413,7 +421,7 @@ const LANG = {
             tags: "Tags",
             createPost: "Create",
             editPost: "Edit",
-            include: 'Include',
+            include: "Include",
             successCreate: [
                 "Post",
                 "created successfully"
@@ -424,20 +432,20 @@ const LANG = {
             ]
         },
         messages: {
-            noMsg: 'No messages... for now',
-            message: 'Message...',
-            send: 'Send',
+            noMsg: "No messages... for now",
+            message: "Message...",
+            send: "Send",
             messageElem: {
-                editedAt: 'Message edited at',
-                editMessage: 'Edit message',
-                removeMessage: 'Remove message'
+                editedAt: "Message edited at",
+                editMessage: "Edit message",
+                removeMessage: "Remove message"
             }
         },
         search: {
             label: "Search"
         },
         dropdown: {
-            label: 'Select'
+            label: "Select"
         },
         image: {
             ageRestriction: {

@@ -1,10 +1,10 @@
 const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require('../../systemServices/globalVariables')
-const prisma = require('../../systemServices/prisma')
+const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
+const prisma = require("../../systemServices/prisma")
 
-exports.ROUTE = '/api/files'
+exports.ROUTE = "/api/files"
 
-exports.PERMISSIONS = ['REQUIRECOOKIE', 'REQUIREUSER']
+exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
 
 // little fun notation
@@ -24,14 +24,14 @@ exports.GET = async (req, res) => {
     const page = req.query.p ? parseInt(req.query.p) : 0
     const take = req.query.t ? parseInt(req.query.t) : 50
     const tagFilter = req.query.tags
-        ? req.query.tags.split(' ').map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
         : []
 
     const positiveTagNames = []
     const negativeTagNames = []
 
     for (let rawTag of tagFilter) {
-        if (rawTag.startsWith('-')) {
+        if (rawTag.startsWith("-")) {
             negativeTagNames.push(rawTag.slice(1))
         } else {
             positiveTagNames.push(rawTag)
@@ -58,15 +58,15 @@ exports.GET = async (req, res) => {
 
     const inUse = req.query.inuse
     let postFilter
-    if (inUse === 'false') {
+    if (inUse === "false") {
         postFilter = { post: null, avatarfor: null }
-    } else if (inUse?.startsWith('postID:')) {
-        const postID = inUse.split(':', 2)[1]
+    } else if (inUse?.startsWith("postID:")) {
+        const postID = inUse.split(":", 2)[1]
         postFilter = {
             OR: [{ post: { id: postID } }, { post: null }],
             avatarfor: null
         }
-    } else if (inUse?.startsWith('avatarID')) {
+    } else if (inUse?.startsWith("avatarID")) {
         postFilter = {
             OR: [{ avatarfor: { id: user.id } }, { avatarfor: null }],
             post: null
@@ -95,7 +95,7 @@ exports.GET = async (req, res) => {
         skip: page * take,
         take,
         where,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         select: {
             id: true,
             filetype: true,
@@ -103,7 +103,7 @@ exports.GET = async (req, res) => {
             createdAt: true,
             updatedAt: true,
             tags: {
-                orderBy: { name: 'asc' },
+                orderBy: { name: "asc" },
                 select: {
                     name: true,
                     icon: true,
@@ -115,7 +115,7 @@ exports.GET = async (req, res) => {
         }
     })
 
-    if (req.query.count === 'true') {
+    if (req.query.count === "true") {
         const count = await prisma.file.count({ where })
         return res.status(200).json({ files: userFiles, count })
     }

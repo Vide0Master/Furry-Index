@@ -1,5 +1,5 @@
-const getUserByID = require('./getUserByID')
-const prisma = require('./prisma')
+const getUserByID = require("./getUserByID")
+const prisma = require("./prisma")
 
 
 module.exports = async function getUserBySessionCookie(cookie, exclude = []) {
