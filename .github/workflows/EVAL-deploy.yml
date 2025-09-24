@@ -76,7 +76,7 @@ jobs:
     steps:
       - name: Wait for response
         run: |
-          URL="https://https://furry-index-eval.vmtech.services/api/whatisthisbuild"
+          URL="https://furry-index-eval.vmtech.services/api/whatisthisbuild"
           max_attempts=30
           attempt=1
           interval=1
