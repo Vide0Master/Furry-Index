@@ -1,3 +1,33 @@
-.template-container {
-    
+.admin-news-manager {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+
+    .news-editor-container {
+        grid-column: 2;
+
+        background-color: var(--background);
+        padding: 10px;
+        border-radius: 20px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .big-text-field {
+            width: 100%;
+
+            textarea {
+                width: 100%;
+            }
+        }
+    }
+
+    .news-container {
+        grid-column: 1;
+
+        background-color: var(--background);
+        padding: 10px;
+        border-radius: 20px;
+    }
 }

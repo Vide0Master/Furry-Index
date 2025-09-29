@@ -32,7 +32,7 @@ export default class BigTextField extends Elem {
             this.inputElement.style.height = "auto"
             this.inputElement.style.height = this.inputElement.scrollHeight + "px"
 
-            if (typeof limit == "number") {
+            if (typeof limit == "number" && limit != 0) {
                 if (this.inputElement.value.length > limit) {
                     this.inputElement.value = this.inputElement.value.slice(0, limit)
                 }

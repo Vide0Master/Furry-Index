@@ -26,6 +26,7 @@ model User {
     directChats          Chat[]
     userMessages         ChatMessage[]
     roles                Role[]
+    NewsLetter           NewsLetter[]
 
     @@index([username, id])
 }
@@ -199,4 +200,14 @@ model Role {
     user        User    @relation(fields: [userid], references: [id])
     hidden      Boolean @default(false)
     specialData Json?
+}
+
+model NewsLetter {
+    id          String   @id @unique @default(uuid())
+    title       Json
+    description Json
+    authorid    String
+    author      User     @relation(fields: [authorid], references: [id])
+    postedAt    DateTime @default(now())
+    tags        Json
 }

@@ -13,7 +13,7 @@
     "author": "VideoMaster",
     "license": "SEE LICENSE IN LICENSE.md",
     "dependencies": {
-        "@prisma/client": "^6.16.1",
+        "@prisma/client": "^6.16.2",
         "bcrypt": "^6.0.0",
         "cookie-parser": "^1.4.7",
         "dotenv": "^16.5.0",
@@ -32,6 +32,6 @@
         "eslint": "^9.35.0",
         "eslint-plugin-no-unsanitized": "^4.1.4",
         "globals": "^16.4.0",
-        "prisma": "^6.16.1"
+        "prisma": "^6.16.2"
     }
 }

@@ -1,0 +1,36 @@
+.news-message-container {
+    background-color: var(--background-s);
+
+    padding: 10px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: fit-content;
+
+    .msg-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+
+        .header-side-block {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .label {
+                font-size: 1.5em;
+            }
+
+            .tags-row {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    }
+}
