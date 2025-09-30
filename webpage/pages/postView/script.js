@@ -63,9 +63,9 @@ export async function render(params) {
         rating.clr = "gold"
         rating.txt = Language.lang.elements.postCard.rating.questionable;
     }; break;
-    case "mature": {
+        case "explicit": {
         rating.clr = "red"
-        rating.txt = Language.lang.elements.postCard.rating.mature;
+            rating.txt = Language.lang.elements.postCard.rating.explicit;
     }; break;
     }
 
@@ -101,7 +101,7 @@ export async function render(params) {
     }
 
     if (["image", "imageGroup", "comic", "video"].includes(PData.type)) {
-        const isBlurred = !User.data && ["mature", "questionable"].includes(PData.rating)
+        const isBlurred = !User.data && ["explicit", "questionable"].includes(PData.rating)
 
         let avg = { width: 0, height: 0, size: 0 };
         let count = PData.files.length;

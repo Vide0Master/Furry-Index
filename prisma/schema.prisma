@@ -93,7 +93,7 @@ enum PostType {
 enum PostRating {
     safe
     questionable
-    mature
+    explicit
 }
 
 model Post {

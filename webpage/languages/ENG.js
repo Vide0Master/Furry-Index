@@ -391,7 +391,7 @@ const LANG = {
             rating: {
                 safe: "Safe",
                 questionable: "Questionable",
-                mature: "Mature"
+                explicit: "Explicit"
             },
             type: {
                 image: "Image",

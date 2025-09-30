@@ -387,7 +387,7 @@ const LANG = {
             rating: {
                 safe: "Безпечно",
                 questionable: "Під питанням",
-                mature: "Для дорослих"
+                explicit: "Для дорослих"
             },
             type: {
                 image: "Зображення",
