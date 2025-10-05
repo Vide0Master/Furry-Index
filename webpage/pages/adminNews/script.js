@@ -46,34 +46,34 @@ export async function render() {
             letterDesc.value = newsData.description[v] ? newsData.description[v] : ""
         }, Language.lang.settings.webpage.language.label + ": ")
 
-    const letterLabel = new TextInputLine("Label", newsEditor.element, null, null, (v) => {
+    const letterLabel = new TextInputLine(Language.lang.adminNews.editor.label, newsEditor.element, null, null, (v) => {
         newsData.title[langSelect.value] = v
         testResultsForButton()
     })
     letterLabel.enabled = false
 
-    const letterDesc = new BigTextField("description", newsEditor.element, 10000, (v) => {
+    const letterDesc = new BigTextField(Language.lang.adminNews.editor.description, newsEditor.element, 10000, (v) => {
         newsData.description[langSelect.value] = v
         testResultsForButton()
     })
     letterDesc.enabled = false
 
     for (const lang of Language.availableLanguages) {
-        letterLabel.addCheck(lang, () => { return !!newsData.title[lang] })
-        letterDesc.addCheck(lang, () => { return !!newsData.description[lang] })
+        letterLabel.addCheck(Language.lang.settings.webpage.language[lang], () => { return !!newsData.title[lang] })
+        letterDesc.addCheck(Language.lang.settings.webpage.language[lang], () => { return !!newsData.description[lang] })
     }
 
     letterLabel.checkBlock.element.style.flexDirection = "row"
     letterDesc.checkBlock.element.style.flexDirection = "row"
 
-    const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, newsEditor.element, "custom", (val) => {
+    const tagsField = new BigTextField(Language.lang.adminNews.editor.tags, newsEditor.element, "custom", (val) => {
         tagsField.value = tagsField.value.toLowerCase()
         const tags = val.split(" ").filter(tag => tag != "" && !tag.startsWith("#"))
         tagsField.setLimit(tags.length)
         newsData.tags = tags
         testResultsForButton()
     })
-    tagsField.addCheck("Min 2 tags", (val) => {
+    tagsField.addCheck(`${Language.lang.adminNews.editor.tagsCheck.min} 2 ${Language.lang.adminNews.editor.tagsCheck.tags}`, (val) => {
         const tags = val.split(" ").filter(tag => tag != "" && !tag.startsWith("#"))
         return tags.length > 1
     })
@@ -85,7 +85,7 @@ export async function render() {
         console.log(newsData)
     }
 
-    const submitButton = new Button("Post", newsEditor.element, null, async () => {
+    const submitButton = new Button(Language.lang.adminNews.editor.button.post, newsEditor.element, null, async () => {
         let resp
         if (editing != "") {
             resp = await API("PUT", "/api/news?id=" + editing, newsData)
@@ -121,6 +121,8 @@ export async function render() {
         letterLabel.testChecksWithCB(true)
         letterDesc.testChecksWithCB(true)
         tagsField.testChecksWithCB(true)
+
+        submitButton.text = Language.lang.adminNews.editor.button.post
     }
 
     async function getNewsCount() {
@@ -144,8 +146,6 @@ export async function render() {
 
                 langSelect.selectOption("ENG")
 
-                // letterLabel.value = newsData.title["ENG"] ? newsData.title["ENG"] : ""
-                // letterDesc.value = newsData.description["ENG"] ? newsData.description["ENG"] : ""
                 tagsField.value = newsData.tags.join(" ")
 
                 letterLabel.enabled = true
@@ -157,7 +157,8 @@ export async function render() {
                 tagsField.testChecksWithCB(true)
 
                 editing = message.id
-                submitButton.text = "Edit"
+
+                submitButton.text = `${Language.lang.adminNews.editor.button.edit} "${message.title[Language.currentLang]}"`
             }, () => {
                 updateNewsList(1)
             })

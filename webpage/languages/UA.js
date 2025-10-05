@@ -354,6 +354,21 @@ const LANG = {
             superadminassign: "Роль суперадміна присвоєна"
         }
     },
+    adminNews: {
+        editor: {
+            label: "Заголовок",
+            description: "Опис",
+            tags: "Теги новини",
+            tagsCheck: {
+                min: "Мінімум",
+                tags: "тегів"
+            },
+            button: {
+                post: "Відправити",
+                edit: "Редагувати"
+            }
+        }
+    },
     components: {
         upload: {
             field: "Натисніть або перетягніть файли",
@@ -473,6 +488,16 @@ const LANG = {
             verifiedPaymentEntity: {
                 lshort: "ППО",
                 long: "Перевірена платіжна особа"
+            }
+        },
+        newsMessage: {
+            buttons: {
+                edit: "Редагувати",
+                remove: "Видалення"
+            },
+            rmConf: {
+                label: "Видалення",
+                conf: "Ви впевнені що хочете видалити повідомлення"
             }
         }
     },

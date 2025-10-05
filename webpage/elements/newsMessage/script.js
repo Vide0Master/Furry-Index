@@ -40,12 +40,12 @@ export default class NewsMessage extends Elem {
         const msgContent = new Elem("msg-content", this.element)
         msgContent.text = newsMessageData.description[Language.currentLang] ? newsMessageData.description[Language.currentLang] : newsMessageData.description["ENG"]
 
-        if (editcb) new Button("Edit", msgHeader.element, null, () => {
+        if (editcb) new Button(Language.lang.elements.newsMessage.buttons.edit, msgHeader.element, null, () => {
             editcb(newsMessageData)
         })
 
-        if (rmcb) new Button("Remove", msgHeader.element, null, async () => {
-            new Alert.Confirm(`Do you want to delete message "${newsMessageData.title[Language.currentLang]}"`, "Confirm", async () => {
+        if (rmcb) new Button(Language.lang.elements.newsMessage.rmConf.label, msgHeader.element, null, async () => {
+            new Alert.Confirm(`${Language.lang.elements.newsMessage.rmConf.conf} "${newsMessageData.title[Language.currentLang]}"`, Language.lang.elements.newsMessage.rmConf.label, async () => {
                 const result = await API("DELETE", "/api/news?id=" + newsMessageData.id)
                 rmcb(result.HTTPCODE == 200)
             })

@@ -354,6 +354,21 @@ const LANG = {
             superadminassign: "Роль суперадминистратора назначена"
         }
     },
+    adminNews: {
+        editor: {
+            label: "Заглавие",
+            description: "Описание",
+            tags: "Теги новости",
+            tagsCheck: {
+                min: "Минимум",
+                tags: "тега"
+            },
+            button: {
+                post: "Отправить",
+                edit: "Редактировать"
+            }
+        }
+    },
     components: {
         upload: {
             field: "Нажмите или перетяните файлы",
@@ -473,6 +488,16 @@ const LANG = {
             verifiedPaymentEntity: {
                 lshort: "ППЛ",
                 long: "Проверенное платёжное лицо"
+            }
+        },
+        newsMessage: {
+            buttons: {
+                edit: "Редактировать",
+                remove: "Удалить"
+            },
+            rmConf: {
+                label: "Удаление",
+                conf: "Вы уверены что хотите удалить сообщение"
             }
         }
     },

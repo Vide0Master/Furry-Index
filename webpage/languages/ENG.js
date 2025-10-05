@@ -358,6 +358,21 @@ const LANG = {
             superadminassign: "Superadmin role assigned"
         }
     },
+    adminNews: {
+        editor: {
+            label: "Label",
+            description: "Description",
+            tags: "News tags",
+            tagsCheck: {
+                min: "Min",
+                tags: "tags"
+            },
+            button: {
+                post: "Post",
+                edit: "Edit"
+            }
+        }
+    },
     components: {
         upload: {
             field: "Click or drag your files here",
@@ -478,6 +493,16 @@ const LANG = {
                 lshort: "VPE",
                 long: "Verified payment entity"
             },
+        },
+        newsMessage: {
+            buttons: {
+                edit: "Edit",
+                remove: "Remove"
+            },
+            rmConf: {
+                label: "Confirm",
+                conf: "Do you want to delete message"
+            }
         }
     },
     features: {
