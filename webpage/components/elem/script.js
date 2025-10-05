@@ -21,6 +21,10 @@ export default class Elem {
             elem.insertAdjacentElement("afterend", this.element);
         }
 
+        this.moveBefore = (elem) => {
+            elem.insertAdjacentElement("beforebegin", this.element);
+        }
+
         this.switchVisible = (state) => {
             this.element.classList.toggle("hidden", !state)
         }

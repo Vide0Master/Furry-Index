@@ -7,6 +7,14 @@ const LANG = {
             NOLINK: "Does not have link assigned"
         }
     },
+    SYSTEM: {
+        WS: {
+            reconnect: {
+                label: "WebSocket error",
+                text: "Server connection issues detected, trying to reconnect..."
+            }
+        }
+    },
     TOS: [
         {
             label: "Furry Index Terms of Service",
@@ -171,6 +179,7 @@ const LANG = {
     ],
     header: {
         main: "Main",
+        news: "News",
         search: "Search",
         settings: "Settings",
         upload: "Upload",
@@ -265,6 +274,7 @@ const LANG = {
     main: {
         welcome: "Welcome to",
         latest: "Latest posts",
+        news: "Latest news"
     },
     postView: {
         hiddenLabel: "This post is not visible",

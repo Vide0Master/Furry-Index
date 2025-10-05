@@ -33,6 +33,7 @@ export default class Header {
         }, true)
 
         this.main = new Link(Language.lang.header.main, "/", navRow.element)
+        this.news = new Link(Language.lang.header.news, "/news", navRow.element, true, null, "list")
         this.search = new Link(Language.lang.header.search, "/search", navRow.element, true, null, "search")
         this.settings = new Link(Language.lang.header.settings, "/settings", navRow.element, true, null, "settings")
         this.upload = new Link(Language.lang.header.upload, "/upload", navRow.element, true, "hidden", "upload")

@@ -23,11 +23,27 @@
         }
     }
 
-    .news-container {
+    .news-navigator-cont {
         grid-column: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
 
-        background-color: var(--background);
-        padding: 10px;
-        border-radius: 20px;
+        .news-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 700px) {
+        grid-template-columns: auto;
+        grid-template-rows: 1fr 1fr;
+
+        .news-editor-container {
+            grid-column: 1;
+            grid-row: 2;
+        }
     }
 }

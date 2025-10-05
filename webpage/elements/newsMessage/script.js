@@ -1,10 +1,14 @@
+import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
+import API from "../../scripts/api.js";
+import formatDate from "../../scripts/formatDate.js";
 import Language from "../../scripts/language.js";
 import TextLabel from "../textLabel/script.js";
 import UserCard from "../userCard/script.js";
+import Alert from "../../features/alert/script.js";
 
 export default class NewsMessage extends Elem {
-    constructor(newsMessageData, parent) {
+    constructor(newsMessageData, parent, editcb, rmcb) {
         super("news-message-container", parent)
 
         console.log(newsMessageData)
@@ -23,15 +27,28 @@ export default class NewsMessage extends Elem {
         for (const tag of newsMessageData.tags) {
             const labelData = { text: tag, color: "#ffffff" }
             switch (true) {
-                case tag.startsWith("v"):{
-                    labelData.color="#1ce4c9"
-                };break;
+                case tag.startsWith("v"): {
+                    labelData.color = "#1ce4c9"
+                }; break;
                 default: break;
             }
             new TextLabel(labelData.text, tagsRow.element, labelData.color)
         }
 
+        new TextLabel(formatDate(newsMessageData.postedAt), tagsRow.element)
+
         const msgContent = new Elem("msg-content", this.element)
         msgContent.text = newsMessageData.description[Language.currentLang] ? newsMessageData.description[Language.currentLang] : newsMessageData.description["ENG"]
+
+        if (editcb) new Button("Edit", msgHeader.element, null, () => {
+            editcb(newsMessageData)
+        })
+
+        if (rmcb) new Button("Remove", msgHeader.element, null, async () => {
+            new Alert.Confirm(`Do you want to delete message "${newsMessageData.title[Language.currentLang]}"`, "Confirm", async () => {
+                const result = await API("DELETE", "/api/news?id=" + newsMessageData.id)
+                rmcb(result.HTTPCODE == 200)
+            })
+        })
     }
 }

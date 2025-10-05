@@ -7,20 +7,28 @@ export default class TextInputLine extends Elem {
 
         if (cname) {
             switch (typeof cname) {
-            case "object": cname.forEach(element => {
-                this.element.classList.add(element);
-            }); break;
-            case "string": this.element.classList.add(cname); break;
+                case "object": cname.forEach(element => {
+                    this.element.classList.add(element);
+                }); break;
+                case "string": this.element.classList.add(cname); break;
             }
         }
 
-        this.input = new Elem(null, this.element, "input").element
-        this.input.placeholder = " "
+        switch (type) {
+            case "bigTextField": {
+                this.input = new Elem(null, this.element, "textarea").element
+                this.input.placeholder = " "
+            }; break;
+            default: {
+                this.input = new Elem(null, this.element, "input").element
+                this.input.placeholder = " "
 
-        if (type) {
-            this.input.type = type
-        } else {
-            this.input.type = "text"
+                if (type) {
+                    this.input.type = type
+                } else {
+                    this.input.type = "text"
+                }
+            }; break;
         }
 
         if (desc) {
@@ -34,18 +42,52 @@ export default class TextInputLine extends Elem {
             if (e.key == "Escape") this.input.blur()
         })
 
+        this.testChecksWithCB = async (silent = true) => {
+            if (!silent) await chcb(this.input.value)
+            return (await this.testChecks(this.input.value))
+        }
+
         if (chcb) this.input.addEventListener("input", async () => {
-            chcb((await this.testChecks(this.input.value)))
+            await this.testChecksWithCB(false)
         })
 
         this.checks = []
+        this.checksInf = {
+            okAny: false,
+            okAll: false,
+            errAny: false,
+            errAll: false,
+            status: [],
+            reset: () => {
+                this.checksInf.okAny = false
+                this.checksInf.okAll = false
+                this.checksInf.errAny = false
+                this.checksInf.errAll = false
+            }
+        }
 
         this.testChecks = async (val) => {
-            let failed = false
-            for (const check of this.checks) {
-                if (!(await check(val))) failed = true
+            this.checksInf.reset()
+            this.checksInf.status = []
+
+            for (const checkFunc of this.checks) {
+                const checkResult = await checkFunc(val)
+                this.checksInf.status.push(checkResult)
             }
-            return failed ? null : val
+
+            function isOk(v) {
+                return typeof v === "boolean" ? v : false
+            }
+
+            const statuses = this.checksInf.status
+
+            this.checksInf.okAll = statuses.every(v => isOk(v))
+            this.checksInf.okAny = statuses.some(v => isOk(v))
+            this.checksInf.errAll = statuses.every(v => !isOk(v))
+            this.checksInf.errAny = statuses.some(v => !isOk(v))
+
+            console.log(this.checksInf)
+            return this.checksInf.okAll ? val : null
         }
 
         // So... about this code...
@@ -58,9 +100,17 @@ export default class TextInputLine extends Elem {
 
         // So... memba this... i'm not pro, nor i'm noob... idk what i am...
         // If someone finds and reads this, dm me in any way, i will be happy to talk with you! :D
+
+        // 03.10.2025
+        // so, this is bad, as i tested before
+        // in developing, i underestimated checks 
+        // so, here will be some rework, also some changes that will be implemented in register page...
+        // T.T
+
         this.addCheck = (text, testFuncion) => {
-            if (!this.checkBlock)
+            if (!this.checkBlock) {
                 this.checkBlock = new Elem("checks-box", this.element)
+            }
 
             const textObjMode = typeof text === "object"
 
@@ -90,5 +140,13 @@ export default class TextInputLine extends Elem {
 
     set value(val) {
         this.input.value = val;
+    }
+
+    set enabled(state) {
+        if (state) {
+            this.input.removeAttribute("disabled")
+        } else {
+            this.input.setAttribute("disabled", "")
+        }
     }
 }

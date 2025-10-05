@@ -9,10 +9,11 @@ export default class Overlay extends Elem {
 
         overlays.push(this)
 
+        history.pushState({ overlayOpen: true }, "")
+
         this.element.addEventListener("click", (e) => {
             if (e.target != this.element) return
-            this.element.remove()
-            this.enablePageScroll()
+            this.close()
         })
     }
 
@@ -24,9 +25,24 @@ export default class Overlay extends Elem {
         document.body.classList.remove("disable-scroll")
     }
 
-    static clearOverlays(){
-        for(const overlay of overlays){
-            overlay.kill()
+    close() {
+        this.element.remove()
+        this.enablePageScroll()
+        if (history.state?.overlayOpen) history.back()
+
+        const index = overlays.indexOf(this)
+        if (index > -1) overlays.splice(index, 1)
+    }
+
+    static clearOverlays() {
+        while (overlays.length) {
+            overlays[overlays.length - 1].close()
         }
     }
 }
+
+window.addEventListener("popstate", () => {
+    if (overlays.length > 0) {
+        overlays[overlays.length - 1].close()
+    }
+});

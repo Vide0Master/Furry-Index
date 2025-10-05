@@ -7,6 +7,14 @@ const LANG = {
             NOLINK: "Не має присвоєнного посилання"
         }
     },
+    SYSTEM: {
+        WS: {
+            reconnect: {
+                label: "Помилка WebSocket",
+                text: "Виявлені поблеми з підключенням до серверу, намагаємось відновити зв'язок..."
+            }
+        }
+    },
     TOS: [
         {
             label: "Умови надання послуг Furry Index",
@@ -167,6 +175,7 @@ const LANG = {
     ],
     header: {
         main: "Головна",
+        news: "Новини",
         search: "Пошук",
         settings: "Налаштунки",
         upload: "Завантажити",
@@ -260,7 +269,8 @@ const LANG = {
     },
     main: {
         welcome: "Вітаємо у",
-        latest: "Останні пости"
+        latest: "Останні пости",
+        news: "Останні новини"
     },
     postView: {
         hiddenLabel: "Цей пост не відображається",

@@ -7,6 +7,14 @@ const LANG = {
             NOLINK: "Не имеет привязанной ссылки"
         }
     },
+    SYSTEM: {
+        WS: {
+            reconnect: {
+                label: "Ошибка WebSocket",
+                text: "Обнаружены проблемы с подключением к серверу, пытаемся восстановить подключение..."
+            }
+        }
+    },
     TOS: [
         {
             label: "Условия использования Furry Index",
@@ -167,6 +175,7 @@ const LANG = {
     ],
     header: {
         main: "Главная",
+        news: "Новости",
         search: "Поиск",
         settings: "Настройки",
         upload: "Загрузить",
@@ -260,7 +269,8 @@ const LANG = {
     },
     main: {
         welcome: "Добро пожаловать в",
-        latest: "Последние посты"
+        latest: "Последние посты",
+        news: "Последние новости"
     },
     postView: {
         hiddenLabel: "Этот пост не отображается",
