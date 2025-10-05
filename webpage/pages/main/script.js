@@ -1,5 +1,6 @@
 import Elem from "../../components/elem/script.js";
 import FurrIndexLogo from "../../elements/FIlogo/script.js";
+import NewsMessage from "../../elements/newsMessage/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
@@ -23,6 +24,12 @@ export async function render() {
     const postsData = await API("GET", "/api/posts?t=10", null, true)
     for (const postData of postsData.posts) {
         new PostCard(postData, latestPosts.element)
+    }
+
+    const messageResp = await API("GET", "/api/news?t=1")
+    if (messageResp.news[0]) {
+        new Elem("bigLabel", container.element).text = Language.lang.main.news
+        new NewsMessage(messageResp.news[0], container.element)
     }
 
     return container.element;

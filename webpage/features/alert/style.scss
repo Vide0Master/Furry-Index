@@ -15,7 +15,7 @@
         border: 3px solid var(--alert-border-color, var(--outline));
         border-radius: 15px;
         padding: 15px;
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: color-mix(in srgb, var(--background) 50%, transparent 50%);
         backdrop-filter: blur(4px);
 
         display: flex;
@@ -56,7 +56,7 @@
             font-size: inherit;
         }
 
-        .buttons-row{
+        .buttons-row {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -83,6 +83,63 @@
 
                 to {
                     width: 0;
+                }
+            }
+
+            &.waiting {
+                animation: internal-alert-progressbar-waiting 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+                transform: none;
+                left: unset;
+                right: unset;
+
+                @keyframes internal-alert-progressbar-waiting {
+                    0% {
+                        width: calc(30% - 15px);
+                        left: 7.5px;
+                        right: unset;
+                    }
+
+                    24% {
+                        width: calc(100% - 15px);
+                        left: 7.5px;
+                        right: unset;
+                    }
+
+                    25% {
+                        width: calc(100% - 15px);
+                        left: unset;
+                        right: 7.5px;
+                    }
+
+                    49% {
+                        width: calc(30% - 15px);
+                        left: unset;
+                        right: 7.5px;
+                    }
+
+                    50% {
+                        width: calc(30% - 15px);
+                        left: unset;
+                        right: 7.5px;
+                    }
+
+                    74% {
+                        width: calc(100% - 15px);
+                        left: unset;
+                        right: 7.5px;
+                    }
+
+                    75% {
+                        width: calc(100% - 15px);
+                        left: 7.5px;
+                        right: unset;
+                    }
+
+                    100% {
+                        width: calc(30% - 15px);
+                        left: 7.5px;
+                        right: unset;
+                    }
                 }
             }
         }

@@ -54,6 +54,7 @@ for (let i = 0; i < apiFiles.length; i++) {
     routesNest.childs.push({ label: route, childs: [] })
     const logIndex = routesNest.childs.findIndex(v => v.label == route)
 
+    //region method perm
     for (const method in module) {
         if (["ROUTE", "PERMISSIONS"].includes(method)) continue
         if (!["GET", "POST", "PUT", "PATCH", "DELETE", "WS"].includes(method)) {

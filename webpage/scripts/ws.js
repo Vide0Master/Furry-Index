@@ -1,15 +1,81 @@
-const link = (location.protocol === "https:" ? "wss" : "ws") + `://${window.location.host}`
+import Alert from "../features/alert/script.js";
+import Language from "./language.js";
 
-const ws = new WebSocket(link)
+const link = (location.protocol === "https:" ? "wss" : "ws") + `://${window.location.host}`;
 
-ws.addEventListener("close", (e) => {
-    console.warn("WebSocket connection closed:", e.code, e.reason);
-});
+let ws = createWebSocket();
 
-ws.addEventListener("error", (err) => {
-    console.error("WebSocket error:", err);
-});
+function createWebSocket() {
+    const socket = new WebSocket(link);
+    setupWsHandlers(socket);
+    return socket;
+}
 
+function setupWsHandlers(socket) {
+    socket.addEventListener("open", () => {
+        if (WSController.isReconnecting) {
+            WSController.isReconnecting = false;
+            if (WSController.waitingAlert) WSController.waitingAlert.removeAlert();
+        }
+
+        WSController.updateRoute();
+    });
+
+    socket.addEventListener("message", (e) => {
+        try {
+            const msg = JSON.parse(e.data);
+            const cbs = WSController.listeners.filter(v => v.event === msg.event);
+            cbs.forEach(v => v.cb(msg.data));
+        } catch (err) {
+            console.error("Error processing message:", err);
+        }
+    });
+
+    socket.addEventListener("close", () => {
+        attemptReconnect();
+    });
+
+    socket.addEventListener("error", () => {
+        socket.close();
+    });
+}
+
+function attemptReconnect() {
+    if (WSController.isReconnecting) return;
+    WSController.isReconnecting = true;
+
+    WSController.waitingAlert = new Alert.Waiting(Language.lang.SYSTEM.WS.reconnect.text, Language.lang.SYSTEM.WS.reconnect.label, null, "wswaitingrecon");
+
+    const tryReconnect = () => {
+        let newWs;
+
+        try {
+            newWs = new WebSocket(link);
+        } catch {
+            return setTimeout(tryReconnect, 1000);
+        }
+
+        newWs.addEventListener("open", () => {
+            ws = newWs;
+            WSController.isReconnecting = false;
+            if (WSController.waitingAlert) WSController.waitingAlert.removeAlert();
+            WSController.updateRoute();
+            setupWsHandlers(ws);
+        });
+
+        newWs.addEventListener("error", () => {
+            newWs.close();
+        });
+
+        newWs.addEventListener("close", () => {
+            if (WSController.isReconnecting) {
+                setTimeout(tryReconnect, 1000);
+            }
+        });
+    };
+
+    tryReconnect();
+}
 
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
@@ -21,40 +87,31 @@ function getCookie(name) {
 }
 
 class WSController {
+    static listeners = [];
+    static waitingAlert = null;
+    static isReconnecting = false;
+
     static send(action, data) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            return;
+        }
         ws.send(JSON.stringify({
             tData: {
                 action,
-                sessionID: getCookie("FURRYINDEXUSERTOKEN")
+                sessionID: getCookie("FURRYINDEXUSERTOKEN"),
             },
-            payload: data
-        }))
+            payload: data,
+        }));
     }
 
-    static listeners = []
-
     static listen(event, cb, permanent) {
-        this.listeners.push({ event, cb, permanent })
+        this.listeners.push({ event, cb, permanent });
     }
 
     static updateRoute() {
-        this.send("updateRoute", { route: location.pathname })
+        this.send("updateRoute", { route: location.pathname });
         this.listeners = this.listeners.filter(listener => listener.permanent);
     }
 }
 
-ws.addEventListener("open", () => {
-    WSController.updateRoute()
-});
-
-ws.addEventListener("message", (e) => {
-    try {
-        const msg = JSON.parse(e.data);
-        const cbs = WSController.listeners.filter(v => v.event == msg.event)
-        cbs.forEach(v => { v.cb(msg.data) })
-    } catch (err) {
-        console.error("Error processing message:" + err)
-    }
-});
-
-export default WSController
+export default WSController;

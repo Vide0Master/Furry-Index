@@ -13,6 +13,8 @@ const keyResponses = {
 exports.POST = async (req, res) => {
     const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
+    
+
     const key = req.params.key
 
     if (!keyControl.verifyKey(key)) {

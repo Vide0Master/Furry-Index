@@ -7,6 +7,14 @@ const LANG = {
             NOLINK: "Не имеет привязанной ссылки"
         }
     },
+    SYSTEM: {
+        WS: {
+            reconnect: {
+                label: "Ошибка WebSocket",
+                text: "Обнаружены проблемы с подключением к серверу, пытаемся восстановить подключение..."
+            }
+        }
+    },
     TOS: [
         {
             label: "Условия использования Furry Index",
@@ -167,6 +175,7 @@ const LANG = {
     ],
     header: {
         main: "Главная",
+        news: "Новости",
         search: "Поиск",
         settings: "Настройки",
         upload: "Загрузить",
@@ -260,7 +269,8 @@ const LANG = {
     },
     main: {
         welcome: "Добро пожаловать в",
-        latest: "Последние посты"
+        latest: "Последние посты",
+        news: "Последние новости"
     },
     postView: {
         hiddenLabel: "Этот пост не отображается",
@@ -344,6 +354,21 @@ const LANG = {
             superadminassign: "Роль суперадминистратора назначена"
         }
     },
+    adminNews: {
+        editor: {
+            label: "Заглавие",
+            description: "Описание",
+            tags: "Теги новости",
+            tagsCheck: {
+                min: "Минимум",
+                tags: "тега"
+            },
+            button: {
+                post: "Отправить",
+                edit: "Редактировать"
+            }
+        }
+    },
     components: {
         upload: {
             field: "Нажмите или перетяните файлы",
@@ -387,7 +412,7 @@ const LANG = {
             rating: {
                 safe: "Безопасно",
                 questionable: "Сомнительно",
-                mature: "Для взрослых"
+                explicit: "Для взрослых"
             },
             type: {
                 image: "Картинка",
@@ -463,6 +488,16 @@ const LANG = {
             verifiedPaymentEntity: {
                 lshort: "ППЛ",
                 long: "Проверенное платёжное лицо"
+            }
+        },
+        newsMessage: {
+            buttons: {
+                edit: "Редактировать",
+                remove: "Удалить"
+            },
+            rmConf: {
+                label: "Удаление",
+                conf: "Вы уверены что хотите удалить сообщение"
             }
         }
     },

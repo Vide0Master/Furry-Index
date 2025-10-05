@@ -17,7 +17,7 @@ export default class PostCard extends Elem {
 
         const previewContainer = new Elem("preview-container", this.element)
 
-        const isBlurred = !User.data && ["mature", "questionable"].includes(postData.rating)
+        const isBlurred = !User.data && ["explicit", "questionable"].includes(postData.rating)
 
         switch (postData.type) {
         case "imageGroup": {
@@ -59,9 +59,9 @@ export default class PostCard extends Elem {
             rating.clr = "gold"
             rating.txt = Language.lang.elements.postCard.rating.questionable;
         }; break;
-        case "mature": {
+            case "explicit": {
             rating.clr = "red"
-            rating.txt = Language.lang.elements.postCard.rating.mature;
+                rating.txt = Language.lang.elements.postCard.rating.explicit;
         }; break;
         }
 

@@ -7,6 +7,14 @@ const LANG = {
             NOLINK: "Does not have link assigned"
         }
     },
+    SYSTEM: {
+        WS: {
+            reconnect: {
+                label: "WebSocket error",
+                text: "Server connection issues detected, trying to reconnect..."
+            }
+        }
+    },
     TOS: [
         {
             label: "Furry Index Terms of Service",
@@ -171,6 +179,7 @@ const LANG = {
     ],
     header: {
         main: "Main",
+        news: "News",
         search: "Search",
         settings: "Settings",
         upload: "Upload",
@@ -265,6 +274,7 @@ const LANG = {
     main: {
         welcome: "Welcome to",
         latest: "Latest posts",
+        news: "Latest news"
     },
     postView: {
         hiddenLabel: "This post is not visible",
@@ -348,6 +358,21 @@ const LANG = {
             superadminassign: "Superadmin role assigned"
         }
     },
+    adminNews: {
+        editor: {
+            label: "Label",
+            description: "Description",
+            tags: "News tags",
+            tagsCheck: {
+                min: "Min",
+                tags: "tags"
+            },
+            button: {
+                post: "Post",
+                edit: "Edit"
+            }
+        }
+    },
     components: {
         upload: {
             field: "Click or drag your files here",
@@ -391,7 +416,7 @@ const LANG = {
             rating: {
                 safe: "Safe",
                 questionable: "Questionable",
-                mature: "Mature"
+                explicit: "Explicit"
             },
             type: {
                 image: "Image",
@@ -468,6 +493,16 @@ const LANG = {
                 lshort: "VPE",
                 long: "Verified payment entity"
             },
+        },
+        newsMessage: {
+            buttons: {
+                edit: "Edit",
+                remove: "Remove"
+            },
+            rmConf: {
+                label: "Confirm",
+                conf: "Do you want to delete message"
+            }
         }
     },
     features: {

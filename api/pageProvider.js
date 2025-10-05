@@ -17,7 +17,7 @@ exports.GET = (req, res) => {
 <link rel="canonical" href="https://${constants.serverLink}">
 <link rel="icon" href="https://${constants.serverLink}/icon.png">
 <link rel="apple-touch-icon" href="https://${constants.serverLink}/icon.png">
-${htmlImports()}
+${constants.DEVmode ? htmlImports.renderHTMLImports() : htmlImports.staticHtmlImports}
 </head>
 <body class="theme-default">
 </body>

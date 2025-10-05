@@ -113,10 +113,10 @@ class Input extends AlertComponent {
         let input
 
         switch (inputType) {
-        case "bigField": new BigTextField("", this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ""; break;
-        case "password": new PasswordInput("", this.alertCont.element, null, (v) => { input = v }).value = value ? value : ""; break;
-        case "simple":
-        default: new TextInputLine("", this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ""
+            case "bigField": new BigTextField("", this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ""; break;
+            case "password": new PasswordInput("", this.alertCont.element, null, (v) => { input = v }).value = value ? value : ""; break;
+            case "simple":
+            default: new TextInputLine("", this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ""
         }
 
         const buttonsRow = new Elem("buttons-row", this.alertCont.element)
@@ -134,10 +134,23 @@ class Input extends AlertComponent {
     }
 }
 
+class Waiting extends AlertComponent {
+    constructor(text, label, outlineColor, id) {
+        super(text, label, null, outlineColor, id)
+
+        if (!this.alertCont) return
+
+        this.timeoutBar = new Elem(["timeout-bar", "waiting"], this.alertCont.element)
+
+        this.okButton.kill()
+    }
+}
+
 class Alert {
     static Simple = Simple
     static Confirm = Confirm
     static Input = Input
+    static Waiting = Waiting
 }
 
 export default Alert

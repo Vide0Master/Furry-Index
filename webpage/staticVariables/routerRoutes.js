@@ -16,6 +16,7 @@ const routes = [
     { path: "/admin/posts", module: "/pages/adminPosts/script.js" },
     { path: "/admin/appeals", module: "/pages/adminAppeals/script.js" },
     { path: "/admin/users", module: "/pages/adminUsers/script.js" },
+    { path: "/news", module: "/pages/news/script.js" },
 ]
 
 export default routes

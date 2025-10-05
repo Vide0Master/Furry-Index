@@ -10,7 +10,6 @@ const ignoredFolders = [
     "!prisma/**/*"
 ];
 
-// Разрешить консоль в dev, запретить в продакшн
 const isDev = !["DEV", "EVAL"].includes(process.env.ENVIROMENT);
 
 const commonRules = {
