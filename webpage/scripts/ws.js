@@ -44,8 +44,6 @@ function attemptReconnect() {
     if (WSController.isReconnecting) return;
     WSController.isReconnecting = true;
 
-    WSController.waitingAlert = new Alert.Waiting(Language.lang.SYSTEM.WS.reconnect.text, Language.lang.SYSTEM.WS.reconnect.label, null, "wswaitingrecon");
-
     const tryReconnect = () => {
         let newWs;
 
@@ -58,7 +56,6 @@ function attemptReconnect() {
         newWs.addEventListener("open", () => {
             ws = newWs;
             WSController.isReconnecting = false;
-            if (WSController.waitingAlert) WSController.waitingAlert.removeAlert();
             WSController.updateRoute();
             setupWsHandlers(ws);
         });
@@ -88,7 +85,6 @@ function getCookie(name) {
 
 class WSController {
     static listeners = [];
-    static waitingAlert = null;
     static isReconnecting = false;
 
     static send(action, data) {
