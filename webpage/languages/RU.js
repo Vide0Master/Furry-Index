@@ -423,6 +423,10 @@ const LANG = {
             editButtons: {
                 visible: "Видимость",
                 remove: "Удалить",
+                rmAlert: {
+                    text: "Вы уверены что хотите удалить этот пост?",
+                    label: "Удаление поста"
+                },
                 edit: "Редактировать",
                 successRM: [
                     "Пост",

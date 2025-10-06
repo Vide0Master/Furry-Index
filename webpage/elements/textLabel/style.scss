@@ -1,9 +1,9 @@
 .label-elem {
     border: 1px solid var(--internal-label-color, var(--outline));
-    background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, black 40%);
+    background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 30%, var(--background) 70%);
     padding: 3px 6px;
     border-radius: 100vh;
-    color: #ffffff;
+    color: var(--font-main);
     width: fit-content;
     font-size: 14px;
     display: flex;
@@ -18,7 +18,7 @@
     }
 
     &.transparent-bg {
-        background-color: color-mix(in srgb, var(--internal-label-color, var(--outline)) 60%, transparent 40%);
+        background-color: color-mix(in srgb, color-mix(in srgb, var(--internal-label-color, var(--outline)) 30%, var(--background) 70%) 60%, transparent 40%);
         backdrop-filter: blur(2px);
     }
 }
