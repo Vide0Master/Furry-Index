@@ -9,5 +9,7 @@ module.exports = async function getUserBySessionCookie(cookie, exclude = []) {
         where: { token: cookie }
     })
 
+    if (!sessionData) return null
+
     return await getUserByID(sessionData.userid, exclude)
 }

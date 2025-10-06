@@ -104,7 +104,7 @@ export async function render() {
             registerData.password = pass
         })
 
-    passSecond.addCheck(Language.lang.register.passSecond.error.notMatch, (val) => {
+    passSecond.addCheck({ default: Language.lang.register.passSecond.notMatch, ok: Language.lang.register.passSecond.match, nok: Language.lang.register.passSecond.notMatch }, (val) => {
         return passFirst.input.value === val
     })
 
