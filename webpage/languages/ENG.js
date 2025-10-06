@@ -241,9 +241,8 @@ const LANG = {
         },
         passSecond: {
             label: "Repeat password",
-            error: {
-                notMatch: "Passwords should match"
-            }
+            match: "Passwords match",
+            notMatch: "Passwords should match"
         },
         TOS: "Terms Of Service",
         PP: "Privacy Policy",
