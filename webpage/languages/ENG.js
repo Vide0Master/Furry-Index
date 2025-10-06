@@ -427,6 +427,10 @@ const LANG = {
             editButtons: {
                 visible: "Visible",
                 remove: "Remove",
+                rmAlert: {
+                    text: "Are you sure you want to remove this post?",
+                    label: "Remove post"
+                },
                 edit: "Edit",
                 successRM: [
                     "Post",

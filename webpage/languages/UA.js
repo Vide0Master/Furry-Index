@@ -423,6 +423,10 @@ const LANG = {
             editButtons: {
                 visible: "Видимість",
                 remove: "Видалити",
+                rmAlert: {
+                    text: "Ви впевнені що хочете видалити цей пост?",
+                    label: "Видалення посту"
+                },
                 edit: "Редагувати",
                 successRM: [
                     "Пост",

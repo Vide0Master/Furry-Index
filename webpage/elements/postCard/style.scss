@@ -1,69 +1,116 @@
 .post-card {
     position: relative;
     background-color: #101010;
-    padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     width: fit-content;
     height: fit-content;
-    max-width: 180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    height: 250px;
+    width: 170px;
 
     .preview-container {
-        height: 160px;
-
-        border-radius: 10px;
         user-select: none;
-        overflow: hidden;
+        height: 100%;
 
         cursor: pointer;
 
-        .sliding-images-container {
-            height: 160px;
-            width: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+        .group-bars-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-auto-flow: row;
 
-            .internal-image-container {
-                position: absolute;
-                width: 160px;
-                height: 160px;
-                left: 0;
-                top: 0;
-                transition: 0.2s ease;
+            .control-bar {
+                height: 100%;
+                grid-row: 1;
             }
+        }
 
-            &:hover {
-                .internal-image-container {
-                    transform: translateX(var(--shift));
-                    width: var(--width-shift);
-                }
+        .internal-image-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            transition: 0.2s;
+
+            &.img-hide {
+                opacity: 0;
             }
         }
     }
 
     .post-name {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 3px 6px;
+
+        background-color: color-mix(in srgb, var(--background-s) 70%, transparent 30%);
+        border-bottom-right-radius: 10px;
+        border-top-left-radius: 10px;
+        border: var(--background-s) 1px solid;
+        border-top: none;
+        border-left: none;
+
+        backdrop-filter: blur(5px);
+
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 5px;
         flex-wrap: wrap;
         justify-content: center;
+
+        font-size: 12px;
     }
 
+    // .rating-label {
+    //     position: absolute;
+    //     bottom: 0;
+    //     left: 0;
+
+    //     border-left: none;
+    //     border-bottom: none;
+    //     border-radius: 10px;
+    //     border-top-left-radius: 0;
+    //     border-bottom-right-radius: 0;
+
+    //     font-size: 12px;
+    // }
+
     .small-data-field {
+        font-size: 12px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 10px;
-        background-color: var(--background-s);
-        border-radius: 100vh;
-        padding: 5px 7.5px;
+        gap: 5px;
+
+        background-color: color-mix(in srgb, var(--background-s) 70%, transparent 30%);
+        border: 1px solid var(--background-s);
+        border-top: none;
+        border-right: none;
+        border-radius: 10px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        padding: 3px 6px;
+
+        .favs-elem {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 3px;
+
+            .fav-heart.fav {
+                color: var(--ok-color);
+            }
+        }
 
         &>* {
             cursor: help;
@@ -88,11 +135,52 @@
     //     width: 200px;
     // }
 
-    .edit-buttons-row {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 5px;
+    .open-buttons-overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 4px;
+        background-color: color-mix(in srgb, var(--background-s) 70%, transparent 30%);
+        border: 1px solid var(--background-s);
+        backdrop-filter: blur(5px);
+        border-radius: 10px;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+        cursor: pointer;
+
+        &:hover {
+            .icon-elem {
+                background-color: var(--font-hover);
+            }
+        }
     }
 
+    .edit-buttons-col {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        padding: 5px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        gap: 5px;
+
+        background-color: color-mix(in srgb, var(--background-s) 70%, transparent 30%);
+        backdrop-filter: blur(5px);
+
+        border-radius: 10px;
+
+        display: none;
+        opacity: 0;
+        transition: 0.2;
+
+        &.active {
+            display: flex;
+            opacity: 1;
+        }
+    }
 }
