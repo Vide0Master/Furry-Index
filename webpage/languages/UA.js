@@ -383,6 +383,8 @@ const LANG = {
         fileCard: {
             fnameNotBeSaved: "Ім'я файлу не буде збережене на сервері",
             fsize: "Розмір",
+            bytes: "Байтів",
+            segments: "Сегментів",
             ftype: "Тип",
             segment: [
                 "Сегмент",
@@ -405,7 +407,8 @@ const LANG = {
                 alert: "Видалено файл"
             },
             useAsAvatar: "Аватар",
-            uploadBtn: "Завантажити"
+            uploadBtn: "Завантажити",
+            complete: "Готово"
         },
         postCard: {
             rating: {

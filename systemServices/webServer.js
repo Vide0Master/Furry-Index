@@ -30,7 +30,7 @@ expressServer.use((req, res, next) => {
     if (!fileToCompile) return next();
 
     try {
-        const result = sass.compile(fileToCompile, { style: "expanded" });
+        const result = sass.compile(fileToCompile, { style: "compressed" });
         res.setHeader("Content-Type", "text/css");
         res.send(result.css);
     } catch (err) {
@@ -39,7 +39,23 @@ expressServer.use((req, res, next) => {
     }
 });
 
-expressServer.use(express.static(path.join(__dirname, "../webpage")))
+expressServer.use(express.static(path.join(__dirname, "../webpage"), {
+    etag: true,
+    lastModified: true,
+    setHeaders: (res) => {
+        res.setHeader("Cache-Control", "public, no-cache");
+    }
+}))
+
+expressServer.use((req, res, next) => {
+    if (req.path.startsWith("/api")) {
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+        res.setHeader("Pragma", "no-cache")
+        res.setHeader("Expires", "0")
+        res.removeHeader("ETag")
+    }
+    next()
+})
 
 expressServer.use(express.json())
 

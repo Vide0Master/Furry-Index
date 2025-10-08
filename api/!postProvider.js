@@ -45,5 +45,9 @@ ${constants.DEVmode ? htmlImports.renderHTMLImports() : htmlImports.staticHtmlIm
 <body class="theme-default">
 </body>
 </html>`
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+    res.setHeader("Pragma", "no-cache")
+    res.setHeader("Expires", "0")
+    res.removeHeader("ETag")
     res.send(page)
 }
