@@ -387,6 +387,8 @@ const LANG = {
         fileCard: {
             fnameNotBeSaved: "Filename will not be saved on server",
             fsize: "File size",
+            bytes: "Bytes",
+            segments: "Segments",
             ftype: "File type",
             segment: [
                 "Segment",
@@ -409,7 +411,8 @@ const LANG = {
                 alert: "Removed file"
             },
             useAsAvatar: "Avatar",
-            uploadBtn: "Upload"
+            uploadBtn: "Upload",
+            complete: "Complete"
         },
         postCard: {
             rating: {

@@ -47,6 +47,16 @@ expressServer.use(express.static(path.join(__dirname, "../webpage"), {
     }
 }))
 
+expressServer.use((req, res, next) => {
+    if (req.path.startsWith("/api")) {
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+        res.setHeader("Pragma", "no-cache")
+        res.setHeader("Expires", "0")
+        res.removeHeader("ETag")
+    }
+    next()
+})
+
 expressServer.use(express.json())
 
 expressServer.use(cookieParser())
