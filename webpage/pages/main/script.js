@@ -32,7 +32,5 @@ export async function render() {
         new NewsMessage(messageResp.news[0], container.element)
     }
 
-    new Elem("", container.element).text="tetset"
-
     return container.element;
 }
