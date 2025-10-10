@@ -37,6 +37,7 @@
         background-color: var(--background-s);
         border-radius: 0;
         gap: 5px;
+        width: auto;
 
         .avatar-cont {
             .avatar-border {
@@ -55,6 +56,7 @@
         .side-block {
             flex-direction: row;
             align-items: center;
+
             .user-link {}
         }
     }
