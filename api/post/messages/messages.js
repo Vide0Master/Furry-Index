@@ -56,18 +56,10 @@ exports.POST = async (req, res) => {
             userID: user.id,
             text: req.body.text,
             specialData: req.body.specialData
-        },
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    avatarID: true,
-                    username: true,
-                    visiblename: true
-                }
-            }
         }
     })
+
+    msg.user = await getUserByID(msg.userID)
 
     if (msg) {
         res.status(200).send()
