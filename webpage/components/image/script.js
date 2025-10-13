@@ -4,7 +4,7 @@ import Elem from "../elem/script.js"
 import Icon from "../icon/script.js"
 
 export default class Image extends Elem {
-    constructor(src, alt, parent, ageRestriction) {
+    constructor(src, alt, parent, blurred) {
         super("internal-image-container", parent, "div")
 
         this.image = new Elem(null, this.element, "img").element
@@ -27,15 +27,11 @@ export default class Image extends Elem {
             loadingContainer.remove()
         });
 
-        if (ageRestriction) {
+        if (blurred) {
             const blur = new Elem("blur-overlay", this.element)
 
-            if (ageRestriction?.text) {
-                const textBlock = new Elem("text-block", blur.element)
-                new Elem(null, textBlock.element).text = Language.lang.elements.image.ageRestriction.label
-                const btnRow = new Elem("btn-row", textBlock.element)
-                new Button(Language.lang.elements.image.ageRestriction.no, btnRow.element, null, () => { history.back() })
-                new Button(Language.lang.elements.image.ageRestriction.yes, btnRow.element, null, () => { blur.kill()})
+            if (blurred?.text) {
+                new Button(Language.lang.elements.image.removeBlur, blur.element, "blur-rm", () => { blur.kill() })
             }
         }
 

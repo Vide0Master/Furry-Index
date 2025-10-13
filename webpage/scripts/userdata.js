@@ -2,8 +2,14 @@ import Alert from "../features/alert/script.js"
 import API from "./api.js"
 
 const defaultSettings = {
+    doNotChangeThis: 1,
     postsPerPage: 50,
-    filesPerPage: 50
+    filesPerPage: 50,
+    contentFiler: {
+        safe: { show: true, blur: false },
+        questionable: { show: true, blur: true },
+        explicit: { show: false, blur: true }
+    }
 }
 
 class Settings {
@@ -33,10 +39,6 @@ class Settings {
         data[name] = value
         this.setStorage(data)
     }
-}
-
-if (Settings.getStorage() == {}) {
-    Settings.setStorage(defaultSettings)
 }
 
 class User {
@@ -79,6 +81,10 @@ class User {
             return this.data.permissionsList.some(p => p.includes(permission));
         }
     }
+}
+
+if (Settings.getStorage()?.doNotChangeThis !== defaultSettings.doNotChangeThis) {
+    Settings.setStorage(defaultSettings)
 }
 
 export default User

@@ -3,7 +3,7 @@ import Language from "../../scripts/language.js"
 import Button from "../button/script.js"
 
 export default class Video extends Elem {
-    constructor(src, parent, options = {}, ageRestriction) {
+    constructor(src, parent, options = {}, blurred) {
         super("internal-video-container", parent, "div")
 
         this.video = new Elem(null, this.element, "video").element
@@ -21,15 +21,11 @@ export default class Video extends Elem {
         this.element.appendChild(this.video)
         if (parent) parent.appendChild(this.element)
 
-        if (ageRestriction) {
+        if (blurred) {
             const blur = new Elem("blur-overlay", this.element)
 
-            if (ageRestriction?.text) {
-                const textBlock = new Elem("text-block", blur.element)
-                new Elem(null, textBlock.element).text = Language.lang.elements.image.ageRestriction.label
-                const btnRow = new Elem("btn-row", textBlock.element)
-                new Button(Language.lang.elements.image.ageRestriction.no, btnRow.element, null, () => { history.back() })
-                new Button(Language.lang.elements.image.ageRestriction.yes, btnRow.element, null, () => { blur.kill() })
+            if (blurred?.text) {
+                new Button(Language.lang.elements.image.removeBlur, blur.element, "blur-rm", () => { blur.kill() })
             }
         }
     }

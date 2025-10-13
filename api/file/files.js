@@ -24,7 +24,7 @@ exports.GET = async (req, res) => {
     const page = req.query.p ? parseInt(req.query.p) : 0
     const take = req.query.t ? parseInt(req.query.t) : 50
     const tagFilter = req.query.tags
-        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split(/[ +]+/).map(tag => tag.trim()).filter(Boolean)
         : []
 
     const positiveTagNames = []

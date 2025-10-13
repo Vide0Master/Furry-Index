@@ -1,6 +1,3 @@
-import Alert from "../features/alert/script.js";
-import Language from "./language.js";
-
 const link = (location.protocol === "https:" ? "wss" : "ws") + `://${window.location.host}`;
 
 let ws = createWebSocket();

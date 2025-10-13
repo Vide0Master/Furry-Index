@@ -11,7 +11,7 @@ exports.GET = async (req, res) => {
     const page = req.query.p ? parseInt(req.query.p) : 0;
     const take = req.query.t ? parseInt(req.query.t) : 50;
     const tagFilter = req.query.tags
-        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split(/[ +]+/).map(tag => tag.trim()).filter(Boolean)
         : [];
 
     const filterHandlers = {
@@ -30,6 +30,11 @@ exports.GET = async (req, res) => {
             } else {
                 clause = { favourites: { some: { userid: user.id } } };
             }
+            return negative ? { NOT: clause } : clause;
+        },
+        "rating": (value, negative) => {
+            if (!["safe", "questionable", "explicit"].includes(value)) return null
+            let clause = { rating: value }
             return negative ? { NOT: clause } : clause;
         }
     };
@@ -51,7 +56,8 @@ exports.GET = async (req, res) => {
         if (fieldMatch) {
             const [, field, value] = fieldMatch;
             if (filterHandlers[field]) {
-                processedFilters.push(filterHandlers[field](value, negative));
+                const clause = filterHandlers[field](value, negative)
+                if (clause) processedFilters.push(clause);
             }
             continue;
         }

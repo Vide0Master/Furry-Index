@@ -88,3 +88,20 @@ body {
 .hidden {
     display: none;
 }
+
+.age-check-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+
+    background-color: color-mix(in srgb, var(--background) 90%, transparent 10%);
+    padding: 20px;
+    border-radius: 20px;
+
+    overflow: visible;
+
+    .age-check-label {
+        font-size: 40px;
+    }
+}

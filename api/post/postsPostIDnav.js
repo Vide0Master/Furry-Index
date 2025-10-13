@@ -16,7 +16,7 @@ exports.GET = async (req, res) => {
     if (!current) return res.status(404).json({ error: "Post not found" })
 
     const tagFilter = req.query.tags
-        ? req.query.tags.split(" ").map(tag => tag.trim()).filter(Boolean)
+        ? req.query.tags.split("+").map(tag => tag.trim()).filter(Boolean)
         : [];
 
     const filterHandlers = {
@@ -35,6 +35,11 @@ exports.GET = async (req, res) => {
             } else {
                 clause = { favourites: { some: { userid: user.id } } };
             }
+            return negative ? { NOT: clause } : clause;
+        },
+        "rating": (value, negative) => {
+            if (!["safe", "questionable", "explicit"].includes(value)) return null
+            let clause = { rating: value }
             return negative ? { NOT: clause } : clause;
         }
     };

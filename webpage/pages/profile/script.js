@@ -5,6 +5,7 @@ import API from "../../scripts/api.js";
 import PostCard from "../../elements/postCard/script.js";
 import Link from "../../components/link/script.js";
 import UserCard from "../../elements/userCard/script.js";
+import postSearch from "../../scripts/search.js";
 
 export const tag = "profile";
 export const tagLimit = 5;
@@ -32,24 +33,17 @@ export async function render(params) {
         editprofile.textElem.kill()
     }
 
+    // const posts = await API("GET", `/api/posts?tags=author:${Pdata.username}&t=5`)
+    const posts = await postSearch([`author:${Pdata.username}`], 0, 10, false, User.data.username == Pdata.username)
 
-    const latestPostsCont = new Elem("latest-posts-cont", container.element)
-    new Elem("latest-posts-title", latestPostsCont.element).text = Language.lang.profile.latestPosts
-    const latestPosts = new Elem("latest-posts", latestPostsCont.element)
-
-    async function getUserLatestPosts() {
-        const posts = await API("GET", `/api/posts?tags=author:${Pdata.username}&t=5`)
+    if (posts.posts?.length > 0) {
+        const latestPostsCont = new Elem("latest-posts-cont", container.element)
+        new Elem("latest-posts-title", latestPostsCont.element).text = Language.lang.profile.latestPosts
+        const latestPosts = new Elem("latest-posts", latestPostsCont.element)
         for (const post of posts.posts) {
             new PostCard(post, latestPosts.element, false)
         }
     }
-    getUserLatestPosts()
-
-    // if (User.data.usename == params.username) {
-
-    // } else {
-    //     new Elem('profile-username', container.element, 'div')
-    // }
 
     return container.element;
 }

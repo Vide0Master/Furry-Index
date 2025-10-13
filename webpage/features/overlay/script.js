@@ -3,7 +3,7 @@ import Elem from "../../components/elem/script.js";
 const overlays = []
 
 export default class Overlay extends Elem {
-    constructor() {
+    constructor(closeOnClick = true) {
         super("internal-overlay", document.body)
         this.disablePageScroll()
 
@@ -11,10 +11,11 @@ export default class Overlay extends Elem {
 
         history.pushState({ overlayOpen: true }, "")
 
-        this.element.addEventListener("click", (e) => {
-            if (e.target != this.element) return
-            this.close()
-        })
+        if (closeOnClick)
+            this.element.addEventListener("click", (e) => {
+                if (e.target != this.element) return
+                this.close()
+            })
     }
 
     disablePageScroll() {
