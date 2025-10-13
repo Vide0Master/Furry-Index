@@ -36,24 +36,21 @@ export default class Header {
         this.search = new Link(Language.lang.header.search, "/search", navRow.element, true, null, "search")
         this.news = new Link(Language.lang.header.news, "/news", navRow.element, true, null, "list")
         this.settings = new Link(Language.lang.header.settings, "/settings", navRow.element, true, null, "settings")
-        this.upload = new Link(Language.lang.header.upload, "/upload", navRow.element, true, "hidden", "upload")
-        this.fileManager = new Link(Language.lang.header.fileManager, "/file-manager", navRow.element, true, "hidden", "file")
-        this.postMaster = new Link("✦ " + Language.lang.header.postMaster, "/post-master", navRow.element, true)
+
+        this.content = new DropdownList([
+            { name: "✦ " + Language.lang.header.content.postMaster, value: "link:/post-master" },
+            { name: Language.lang.header.content.upload, value: "link:/upload", icon: "upload" },
+            { name: Language.lang.header.content.fileManager, value: "link:/file-manager", icon: "file" }
+        ], navRow.element, "✦ " + Language.lang.header.content.label, null, null)
+        this.content.icon.kill()
 
         const adminPages = []
-        if (User.testUserPermission("admin:news")) adminPages.push({ name: "News manager", value: "/admin/news" })
-        if (User.testUserPermission("admin:posts")) adminPages.push({ name: "Post manager", value: "/admin/posts" })
-        if (User.testUserPermission("admin:appeals")) adminPages.push({ name: "Appeals", value: "/admin/appeals" })
-        if (User.testUserPermission("admin:users")) adminPages.push({ name: "Users manager", value: "/admin/users" })
+        if (User.testUserPermission("admin:news")) adminPages.push({ name: Language.lang.header.admin.news, value: "link:/admin/news" })
+        if (User.testUserPermission("admin:posts")) adminPages.push({ name: Language.lang.header.admin.posts, value: "link:/admin/posts" })
+        if (User.testUserPermission("admin:appeals")) adminPages.push({ name: Language.lang.header.admin.appeals, value: "link:/admin/appeals" })
+        if (User.testUserPermission("admin:users")) adminPages.push({ name: Language.lang.header.admin.users, value: "link:/admin/users" })
 
-        this.adminPanel = new DropdownList(
-            adminPages,
-            navRow.element,
-            "Admin panel",
-            (sel) => {
-                Router.navigate(sel)
-            },
-            "Admin panel: ")
+        this.adminPanel = new DropdownList(adminPages, navRow.element, Language.lang.header.admin.label, null, null)
 
         this.adminPanel.icon.iconName = "shield"
 
@@ -72,7 +69,7 @@ export default class Header {
     }
 
     static showLoggenInOptions(state) {
-        const loggenInOptions = [this.upload, this.fileManager, this.postMaster]
+        const loggenInOptions = [this.content]
 
         for (const elem of loggenInOptions) {
             state ? elem.element.classList.remove("hidden") : elem.element.classList.add("hidden")

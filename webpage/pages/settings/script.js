@@ -12,6 +12,7 @@ import API from "../../scripts/api.js";
 import FileCard from "../../elements/fileCard/script.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import Link from "../../components/link/script.js";
+import SwitchInput from "../../components/switchinput/script.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -58,7 +59,7 @@ export async function render(params) {
         })),
         pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
-        }, Language.lang.settings.webpage.language.label+": ")
+        }, Language.lang.settings.webpage.language.label + ": ")
 
     //region item counts for posts
     const itemCounts = [25, 50, 75, 100, 150, 200]
@@ -67,15 +68,48 @@ export async function render(params) {
         value: v,
         selected: User.Settings.get("postsPerPage") == v
     })),
-    pages.webpage.element, null, (v) => {
-        User.Settings.set("postsPerPage", v)
-    },
-    `${Language.lang.settings.webpage.postsPerPage}: `
+        pages.webpage.element, null, (v) => {
+            User.Settings.set("postsPerPage", v)
+        },
+        `${Language.lang.settings.webpage.postsPerPage}: `
     )
+
+    //region content filters
+    const contentFilters = new Elem("content-filter-cont", pages.webpage.element);
+    new Elem("label", contentFilters.element).text = Language.lang.settings.webpage.contentFilters.label
+
+    const userContentSettings = User.Settings.get("contentFiler")
+
+    function updateContentFilter(type, mode, value) {
+        const settings = User.Settings.get("contentFiler")
+        settings[type][mode] = value
+        User.Settings.set("contentFiler", settings)
+    }
+
+    const filterTypes = ["safe", "questionable", "explicit"]
+
+    filterTypes.forEach(type => {
+        const row = new Elem("rating-row", contentFilters.element)
+        new Elem("label", row.element).text = Language.lang.settings.webpage.contentFilters.labels[type]
+
+        new SwitchInput(Language.lang.settings.webpage.contentFilters.show, row.element, (v) => {
+            updateContentFilter(type, "show", v)
+            blurInput.switchVisible(v)
+        }, userContentSettings[type].show)
+
+        const blurInput = new SwitchInput(Language.lang.settings.webpage.contentFilters.blur, row.element, (v) => {
+            updateContentFilter(type, "blur", v)
+        }, userContentSettings[type].blur)
+
+        if (!userContentSettings[type].show) {
+            blurInput.switchVisible(false)
+        }
+    });
+
 
     //region User Settings
     if (User.data) {
-        pages.user = new Elem(["user-settings", "hidden"], container.element);
+        pages.user = new Elem(["user-settings", "hidden"], container.element)
 
         //region logout
         new Button(`${Language.lang.settings.user.logout} ${User.data.username}`, pages.user.element, null, async () => {
@@ -167,10 +201,10 @@ export async function render(params) {
             value: v,
             selected: User.Settings.get("filesPerPage") == v
         })),
-        pages.user.element, null, (v) => {
-            User.Settings.set("filesPerPage", v)
-        },
-        `${Language.lang.settings.user.filesPerPage}: `
+            pages.user.element, null, (v) => {
+                User.Settings.set("filesPerPage", v)
+            },
+            `${Language.lang.settings.user.filesPerPage}: `
         )
     }
 

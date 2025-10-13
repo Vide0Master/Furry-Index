@@ -2,8 +2,7 @@ import Elem from "../../components/elem/script.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
-import API from "../../scripts/api.js";
-import Favourites from "../../scripts/favouriteControl.js";
+import postSearch from "../../scripts/search.js";
 import User from "../../scripts/userdata.js";
 
 export const tag = "search";
@@ -18,33 +17,17 @@ export async function render() {
 
     const posts = new Elem("posts-field", container.element)
 
-    async function renderPosts(tags, page = 0, take = itemsPerPage) {
+    async function renderPosts(tags = [], page = 0, take = itemsPerPage) {
+        const postsResp = await postSearch(tags, page, take)
         posts.wipe()
-        const req = []
-
-        if (tags.some(v => v.startsWith("fav:local"))) {
-            const localFavIndex = tags.indexOf("fav:local")
-            tags.splice(localFavIndex, 1)
-
-            if (Favourites.localFavs)
-                tags.push("id:" + Favourites.localFavs.join(","))
-        }
-
-        if (tags) req.push(`tags=${tags.join("+")}`)
-        if (page) req.push(`p=${page}`)
-        if (take) req.push(`t=${take}`)
-
-        const query = req.length > 0 ? `?${req.join("&")}` : ""
-
-        const postsResp = await API("GET", `/api/posts${query}`)
-
+        
         for (const post of postsResp.posts) {
             new PostCard(post, posts.element)
         }
     }
 
     async function getPostsCount(tags) {
-        const pagesCount = await API("GET", `/api/posts?count=true${tags.length > 0 ? `&tags=${tags.join("+")}` : ""}`)
+        const pagesCount = await postSearch(tags, null, null, true)
         return pagesCount.count
     }
 

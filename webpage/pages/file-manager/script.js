@@ -23,7 +23,6 @@ export async function render() {
     const fileField = new Elem("files-container", container.element)
 
     async function renderFiles(tags, page = 0, take = itemsPerPage) {
-        fileField.wipe()
         const req = []
 
         if (tags) req.push(`tags=${tags.join("+")}`)
@@ -33,6 +32,7 @@ export async function render() {
         const query = req.length > 0 ? `?${req.join("&")}` : ""
 
         const filesResp = await API("GET", `/api/files${query}`)
+        fileField.wipe()
         for (const file of filesResp.files) {
             const fcard = new FileCard(file, false, fileField.element,
                 { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true }

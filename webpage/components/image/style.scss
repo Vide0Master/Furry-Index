@@ -86,8 +86,9 @@
         align-items: center;
         justify-content: center;
 
-        .text-block {
-            background-color:color-mix(in srgb, var(--background-s) 70%, transparent 30%) ;
+        .blur-rm {
+            border: none;
+            background-color: color-mix(in srgb, var(--background-s) 70%, transparent 30%);
             padding: 10px;
             border-radius: 20px;
 
@@ -97,13 +98,6 @@
             gap: 5px;
 
             backdrop-filter: blur(10px);
-
-            .btn-row{
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 5px;
-            }
         }
     }
 }

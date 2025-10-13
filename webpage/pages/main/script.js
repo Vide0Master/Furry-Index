@@ -4,6 +4,7 @@ import NewsMessage from "../../elements/newsMessage/script.js";
 import PostCard from "../../elements/postCard/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
+import postSearch from "../../scripts/search.js";
 
 export const tag = "main";
 export const tagLimit = 1;
@@ -21,7 +22,7 @@ export async function render() {
     new Elem("bigLabel", container.element).text = Language.lang.main.latest
 
     const latestPosts = new Elem("latest-posts", container.element)
-    const postsData = await API("GET", "/api/posts?t=10", null, true)
+    const postsData = await postSearch([], 0, 10)
     for (const postData of postsData.posts) {
         new PostCard(postData, latestPosts.element)
     }

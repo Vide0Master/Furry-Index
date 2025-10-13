@@ -25,6 +25,21 @@
         }
     }
 
+    .webpage-settings {
+        .content-filter-cont {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .rating-row {
+                display: flex;
+                flex-direction: row;
+                gap: 5px;
+                align-items: center;
+            }
+        }
+    }
+
     .user-settings {
         display: flex;
         flex-direction: column;

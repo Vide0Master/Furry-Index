@@ -5,7 +5,6 @@ import SwitchInput from "../../components/switchinput/script.js";
 import Alert from "../../features/alert/script.js";
 import API from "../../scripts/api.js";
 import makePostMaker from "../postMaker/script.js";
-import TextLabel from "../textLabel/script.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
 import Icon from "../../components/icon/script.js";
@@ -17,7 +16,7 @@ export default class PostCard extends Elem {
 
         const previewContainer = new Elem("preview-container", this.element)
 
-        const isBlurred = !User.data && ["explicit", "questionable"].includes(postData.rating)
+        const isBlurred = User.Settings.get("contentFiler")[postData.rating].blur || !User.Settings.get("contentFiler")[postData.rating].show
 
         switch (postData.type) {
             case "imageGroup": {
@@ -48,8 +47,6 @@ export default class PostCard extends Elem {
                 new Image(`/api/posts/${postData.id}/file/${postData.files[0].id}?thumbnail=500`, "post-image", previewContainer.element, isBlurred)
             }; break;
         }
-
-
 
         this.name = new Elem("post-name", this.element)
         const isVisibleIcon = new Icon("non-visible", this.name.element)

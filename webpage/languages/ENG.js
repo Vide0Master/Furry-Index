@@ -182,12 +182,22 @@ const LANG = {
         news: "News",
         search: "Search",
         settings: "Settings",
-        upload: "Upload",
-        fileManager: "File manager",
-        postMaster: "PostMaster",
+        content: {
+            label: "Content",
+            upload: "Upload",
+            fileManager: "Files",
+            postMaster: "Post master"
+        },
         userCard: {
             login: "Login",
             register: "Register"
+        },
+        admin: {
+            label: "Admin panel",
+            news: "News",
+            posts: "Posts",
+            appeals: "Appeals",
+            users: "Users",
         }
     },
     login: {
@@ -318,7 +328,17 @@ const LANG = {
                 UA: "Ukrainian",
                 RU: "russian"
             },
-            postsPerPage: "Posts per page"
+            postsPerPage: "Posts per page",
+            contentFilters: {
+                label: "Content filters",
+                labels: {
+                    safe: "Safe",
+                    questionable: "Questionable",
+                    explicit: "Explicit"
+                },
+                show: "Show",
+                blur: "Blur"
+            }
         },
         user: {
             logout: "Log out from",
@@ -479,11 +499,7 @@ const LANG = {
             label: "Select"
         },
         image: {
-            ageRestriction: {
-                label: "Are you over 18?",
-                no: "No",
-                yes: "Yes"
-            }
+            removeBlur: "Spoiler"
         },
         roleLabel: {
             superAdmin: "Administrator",
@@ -523,6 +539,17 @@ const LANG = {
                 top: "Warning!",
                 content: "You saved 50 favourites in offline mode.\n\nRegister to use unlimited favourites."
             }
+        },
+        ageCheck: {
+            hello: "Hello!",
+            text: "This website contains adult content.\nSelect one of the following options to use our website and comply with current website policy.",
+            options: [
+                "I'm not over 18",
+                "I'm over 18 and want to hide NSFW",
+                "I'm over 18 and want to blur NSFW",
+                "I'm over 18 and want to see NSFW",
+            ],
+            ddLabel: "Over 18?"
         }
     }
 }

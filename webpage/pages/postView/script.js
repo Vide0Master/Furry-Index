@@ -29,6 +29,8 @@ export async function render(params) {
     const container = new Elem("post-view-container");
     const postData = await API("GET", `/api/posts/${params.postID}`);
 
+    if (!User.Settings.get("contentFiler")[postData.post.rating].show && postData.post.owner.username != User.data.username) postData.HTTPCODE = 403
+
     if (postData.HTTPCODE !== 200) {
         const errorElem = new Elem("error", container.element);
         errorElem.text = postData.HTTPCODE === 403
@@ -45,7 +47,6 @@ export async function render(params) {
     //render tags
     renderTags(PData.tags, postDataBlock.element);
 
-
     //region upload data
     const postUploadData = new Elem("post-upload-data", postDataBlock.element);
     const uploadedOn = new Elem("when", postUploadData.element);
@@ -55,18 +56,18 @@ export async function render(params) {
     //region age rating
     const rating = { txt: PData.rating, clr: "" }
     switch (PData.rating) {
-    case "safe": {
-        rating.clr = "greenyellow"
-        rating.txt = Language.lang.elements.postCard.rating.safe;
-    }; break;
-    case "questionable": {
-        rating.clr = "gold"
-        rating.txt = Language.lang.elements.postCard.rating.questionable;
-    }; break;
+        case "safe": {
+            rating.clr = "greenyellow"
+            rating.txt = Language.lang.elements.postCard.rating.safe;
+        }; break;
+        case "questionable": {
+            rating.clr = "gold"
+            rating.txt = Language.lang.elements.postCard.rating.questionable;
+        }; break;
         case "explicit": {
-        rating.clr = "red"
+            rating.clr = "red"
             rating.txt = Language.lang.elements.postCard.rating.explicit;
-    }; break;
+        }; break;
     }
 
     const ageRatingBlock = new Elem("rating-label-cont", postDataBlock.element)
@@ -101,7 +102,7 @@ export async function render(params) {
     }
 
     if (["image", "imageGroup", "comic", "video"].includes(PData.type)) {
-        const isBlurred = !User.data && ["explicit", "questionable"].includes(PData.rating)
+        const isBlurred = User.Settings.get("contentFiler")[PData.rating].blur || !User.Settings.get("contentFiler")[postData.post.rating].show ? { text: true } : false
 
         let avg = { width: 0, height: 0, size: 0 };
         let count = PData.files.length;
@@ -115,9 +116,9 @@ export async function render(params) {
         //region post files render
         PData.files.forEach(file => {
             if (PData.type === "video") {
-                filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred ? { text: true } : false))
+                filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred))
             } else {
-                filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, "post-image", fileContainer.element, isBlurred ? { text: true } : false))
+                filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, "post-image", fileContainer.element, isBlurred))
             }
 
             //region post stats
