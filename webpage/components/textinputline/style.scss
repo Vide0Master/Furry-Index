@@ -3,13 +3,17 @@
     width: fit-content;
     overflow: visible;
 
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
     input {
         position: relative;
         color: var(--font-main);
         font-size: 16px;
         border: solid 3px var(--border-clr-internal, var(--interactible-passive));
         padding: 6px 12px;
-        border-radius: 100vh;
+        border-radius: 10px;
         background-color: var(--background-s);
         caret-color: var(--font-main);
         transition: 0.2s;
@@ -42,7 +46,8 @@
         color: var(--font-main);
         background-color: var(--background-s);
         transition: 0.2s;
-        overflow: hidden;
+        overflow: auto;
+        min-width: 300px;
 
         flex-grow: 1;
 
@@ -87,6 +92,15 @@
         user-select: none;
         background-color: transparent;
         white-space: nowrap;
+    }
+
+    .limit-elem {
+        background-color: var(--background-s);
+        font-size: 14px;
+        padding: 3px 10px;
+        border-radius: 100vh;
+        border: 3px solid var(--outline);
+        width: fit-content;
     }
 
     .checks-box {

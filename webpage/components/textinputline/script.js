@@ -2,7 +2,7 @@ import TextLabel from "../../elements/textLabel/script.js"
 import Elem from "../elem/script.js"
 
 export default class TextInputLine extends Elem {
-    constructor(desc, parent, cname, type, chcb) {
+    constructor(desc, parent, cname, type, chcb, limit = 50) {
         super("input-container", parent, "div")
 
         if (cname) {
@@ -47,7 +47,37 @@ export default class TextInputLine extends Elem {
             return (await this.testChecks(this.input.value))
         }
 
+
+        this.limit = limit
+
+        const limitElem = new Elem("limit-elem", this.element)
+        if (!limit) limitElem.switchVisible(false)
+        limitElem.moveAfter(this.label.element)
+
+        this.setLimit = (val, max) => {
+            limitElem.switchVisible(true)
+            if (max) {
+                limitElem.text = `${val} / ${max}`
+            } else {
+                limitElem.text = val
+            }
+        }
+
+        if (typeof limit == "number" && limit != 0) {
+            this.setLimit(0, limit)
+        }
+
+        this.input.addEventListener("input", () => {
+            if (typeof limit == "number" && limit != 0) {
+                if (this.value.length > limit) {
+                    this.value = this.value.slice(0, limit)
+                }
+                this.setLimit(this.value.length, limit)
+            }
+        })
+
         if (chcb) this.input.addEventListener("input", async () => {
+            if (typeof limit == "number" && this.value.length > limit) return
             await this.testChecksWithCB(false)
         })
 
@@ -139,7 +169,8 @@ export default class TextInputLine extends Elem {
     }
 
     set value(val) {
-        this.input.value = val;
+        this.input.value = val
+        if (typeof this.limit == "number") this.setLimit(this.value.length, this.limit)
     }
 
     set enabled(state) {

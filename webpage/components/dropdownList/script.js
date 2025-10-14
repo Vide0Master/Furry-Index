@@ -35,6 +35,7 @@ export default class DropdownList extends Elem {
 
         if (chcb) this.chcb = () => {
             chcb(this.currentOption)
+            console.log(this.currentOption)
         }
 
         label.addEvent("click", () => {
@@ -54,7 +55,11 @@ export default class DropdownList extends Elem {
                 if (enabled) {
                     link.addEvent("click", () => {
                         this.currentOption = value
-                        if (this.labelPrefix) this.textLabel.text = this.labelPrefix + name
+                        if (this.labelPrefix) {
+                            this.textLabel.text = this.labelPrefix + name
+                        } else {
+                            this.textLabel.text = name
+                        }
                         this.element.classList.toggle("dd-visible", false)
                         if (this.chcb) this.chcb()
                     })
@@ -64,15 +69,18 @@ export default class DropdownList extends Elem {
             }; break;
             default: {
                 const option = new Elem("option", this.optionsBlock.element)
-                if (icon) {
-                    new Icon(icon, option.element)
-                }
+                if (icon) new Icon(icon, option.element)
+
                 new Elem("option-text", option.element).text = name
 
                 if (enabled) {
                     option.addEvent("click", () => {
                         this.currentOption = value
-                        if (this.labelPrefix) this.textLabel.text = this.labelPrefix + name
+                        if (this.labelPrefix) {
+                            this.textLabel.text = this.labelPrefix + name
+                        } else {
+                            this.textLabel.text = name
+                        }
                         this.element.classList.toggle("dd-visible", false)
                         if (this.chcb) this.chcb()
                     })
