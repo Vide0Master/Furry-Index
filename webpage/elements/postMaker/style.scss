@@ -6,7 +6,7 @@
     flex-direction: column;
     gap: 10px;
     overflow: visible;
-    backdrop-filter: blur(10px);
+    background-color: var(--background);
 
     .files-list {
         display: flex;

@@ -1,6 +1,11 @@
 .internal-video-container {
     position: relative;
 
+    video {
+        position: relative;
+        box-sizing: border-box;
+    }
+
     .blur-overlay {
         backdrop-filter: blur(20px);
         position: absolute;

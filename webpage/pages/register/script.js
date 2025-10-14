@@ -37,7 +37,7 @@ export async function render() {
 
             registerData.error[0] = false
             registerData.username = textInp.input.value
-        })
+        }, null)
 
     textInp.addCheck(Language.lang.register.username.error.min + " 3 " + Language.lang.register.username.error.chars, (val) => {
         return !BasicCheck.MinLen(val, 3)
@@ -74,7 +74,7 @@ export async function render() {
             }
 
             registerData.error[1] = false
-        })
+        }, null)
 
     passFirst.addCheck(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.chars, (val) => {
         return !BasicCheck.MinLen(val, 8)

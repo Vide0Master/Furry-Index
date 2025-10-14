@@ -105,14 +105,40 @@ export default async function makePostMaker(postData, editedCB) {
     if (PostData.files.length != 0) getFiles(postType.value, PostData.files)
 
     const tagsField = new BigTextField(Language.lang.elements.postMaker.tags, container.element, "custom", (val) => {
-        tagsField.value = tagsField.value.toLowerCase()
-        const tags = val.split(" ").filter(tag => tag != "" && !tag.startsWith("#"))
-        tagsField.setLimit(tags.length)
-        PostData.tags = tags.map(tag => `${tag}`)
+        const endsWithSpace = val.endsWith(" ")
+        val = val.toLowerCase()
+
+        let tags = val
+            .split(/[ ,]+/) // split string by spaces and commas
+            .map(tag => tag
+                .replace(/[^a-z0-9_\-:/]/gi, "") // prevent use of special symbols
+                .replace(/^-+/, "")              // kill "-" in front of tag
+                .slice(0, 30)                    // max tag size 30 symbols
+            )
+            .filter(tag => tag !== "")
+
+        const uniqueTags = []
+        for (const tag of tags) {
+            if (!uniqueTags.includes(tag)) {
+                uniqueTags.push(tag)
+            }
+        }
+
+        if (uniqueTags.length > 100) {
+            uniqueTags.length = 100
+        }
+
+        tagsField.setLimit(uniqueTags.length, 100)
+        PostData.tags = uniqueTags
+
+        const shouldKeepSpace = endsWithSpace || (val.length > 0 && uniqueTags.length < tags.length)
+
+        tagsField.value = uniqueTags.join(" ") + (shouldKeepSpace ? " " : "")
     })
 
+
     if (PostData.tags.length > 0) {
-        tagsField.setLimit(PostData.tags.length)
+        tagsField.setLimit(PostData.tags.length, 100)
         tagsField.value = PostData.tags.join(" ")
     } else {
         tagsField.setLimit(0)
@@ -120,22 +146,22 @@ export default async function makePostMaker(postData, editedCB) {
 
     new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
         switch (true) {
-        case PostData.name.length == 0: {
-            new Alert.Simple("No name provided", "Error", 3000, null, "noname")
-            return
-        }; 
-        case PostData.rating.length == 0: {
-            new Alert.Simple("No rating selected", "Error", 3000, null, "norating")
-            return
-        }; 
-        case PostData.type.length == 0: {
-            new Alert.Simple("No type selected", "Error", 3000, null, "notype")
-            return
-        }; 
-        case PostData.files.length == 0: {
-            new Alert.Simple("No files selected", "Error", 3000, null, "nofiles")
-            return
-        }; 
+            case PostData.name.length == 0: {
+                new Alert.Simple(Language.lang.elements.postMaker.noName, Language.lang.elements.postMaker.errorLabel, 3000, null, "noname")
+                return
+            };
+            case PostData.rating.length == 0: {
+                new Alert.Simple(Language.lang.elements.postMaker.noRating, Language.lang.elements.postMaker.errorLabel, 3000, null, "norating")
+                return
+            };
+            case PostData.type.length == 0: {
+                new Alert.Simple(Language.lang.elements.postMaker.noType, Language.lang.elements.postMaker.errorLabel, 3000, null, "notype")
+                return
+            };
+            case PostData.files.length == 0: {
+                new Alert.Simple(Language.lang.elements.postMaker.noFiles, Language.lang.elements.postMaker.errorLabel, 3000, null, "nofiles")
+                return
+            };
         }
 
         if (postData) {

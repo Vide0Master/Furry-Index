@@ -24,7 +24,14 @@
     .text {
         padding: 5px;
         background-color: var(--message-bg);
-        width: 100%;
+        max-width: 25vw;
+
+        text-wrap: wrap;
+        word-break: break-all;
+
+        @media (max-width: 700px) {
+            max-width: unset;
+        }
     }
 
     .time-row {
@@ -35,6 +42,8 @@
         flex-direction: row;
         align-items: center;
         gap: 5px;
+
+        border-top: 1px solid var(--background-s);
 
         .edited-icon {
             background-color: var(--message-font);
