@@ -43,16 +43,16 @@ class Router {
         });
     }
 
-    static addRoute(path, modulePath) {
-        this.init();
+    // static addRoute(path, modulePath) {
+    //     this.init();
 
-        const index = this.routes.findIndex(route => route.path === path);
-        if (index >= 0) {
-            this.routes[index].module = modulePath;
-        } else {
-            this.routes.push({ path, module: modulePath });
-        }
-    }
+    //     const index = this.routes.findIndex(route => route.path === path);
+    //     if (index >= 0) {
+    //         this.routes[index].module = modulePath;
+    //     } else {
+    //         this.routes.push({ path, module: modulePath });
+    //     }
+    // }
 
     static async navigate(path, killOverlays = true, force = false) {
         if (killOverlays) Overlay.clearOverlays()

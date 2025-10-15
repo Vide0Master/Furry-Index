@@ -40,21 +40,21 @@ if (!isAgeCheckComplete) {
                     safe: { show: true, blur: false },
                     questionable: { show: true, blur: true },
                     explicit: { show: false, blur: true }
-                })
+                }, "p")
             }; break;
             case "Y18H": {
                 User.Settings.set("contentFiler", {
                     safe: { show: true, blur: false },
                     questionable: { show: true, blur: false },
                     explicit: { show: false, blur: true }
-                })
+                }, "p")
             }; break;
             case "Y18B": {
                 User.Settings.set("contentFiler", {
                     safe: { show: true, blur: false },
                     questionable: { show: true, blur: false },
                     explicit: { show: true, blur: true }
-                })
+                }, "p")
 
                 location.reload()
             }; break;
@@ -63,7 +63,7 @@ if (!isAgeCheckComplete) {
                     safe: { show: true, blur: false },
                     questionable: { show: true, blur: false },
                     explicit: { show: true, blur: false }
-                })
+                }, "p")
 
                 location.reload()
             }; break;

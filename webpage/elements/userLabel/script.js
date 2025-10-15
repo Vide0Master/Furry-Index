@@ -45,13 +45,21 @@ class UserLabel {
 
     static updateUserData() {
         if (User.data.avatar) {
-            userAvatar.image.src = `/api/profile/${User.data.username}/avatar?thumbnail=100`
-            avatarContainer.element.classList.toggle("hidden", false)
+            userAvatar.image.src = `/api/profile/${User.data.username}/avatar?thumbnail=100?cacheBust=${Date.now()}`
+            avatarContainer.switchVisible(true)
+            this.setAvatarShape(User.Settings.get("avatarShape", "g"))
         } else {
-            avatarContainer.element.classList.toggle("hidden", true)
+            avatarContainer.switchVisible(false)
         }
 
         userName.text = User.data.visiblename != null ? User.data.visiblename : User.data.username
+    }
+
+    static setAvatarShape(shape) {
+        if (User.data.avatarID && shape) {
+            avatarContainer.rmClass(/^shape-/)
+            avatarContainer.addClass(`shape-${shape}`)
+        }
     }
 }
 

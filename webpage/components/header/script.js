@@ -46,7 +46,6 @@ export default class Header {
 
         const adminPages = []
         if (User.testUserPermission("admin:news")) adminPages.push({ name: Language.lang.header.admin.news, value: "link:/admin/news" })
-        if (User.testUserPermission("admin:posts")) adminPages.push({ name: Language.lang.header.admin.posts, value: "link:/admin/posts" })
         if (User.testUserPermission("admin:appeals")) adminPages.push({ name: Language.lang.header.admin.appeals, value: "link:/admin/appeals" })
         if (User.testUserPermission("admin:users")) adminPages.push({ name: Language.lang.header.admin.users, value: "link:/admin/users" })
 

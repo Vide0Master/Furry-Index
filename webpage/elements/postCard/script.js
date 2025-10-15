@@ -16,7 +16,7 @@ export default class PostCard extends Elem {
 
         const previewContainer = new Elem("preview-container", this.element)
 
-        const isBlurred = User.Settings.get("contentFiler")[postData.rating].blur || !User.Settings.get("contentFiler")[postData.rating].show
+        const isBlurred = User.Settings.get("contentFiler", "p")[postData.rating].blur || !User.Settings.get("contentFiler", "p")[postData.rating].show
 
         switch (postData.type) {
             case "imageGroup": {

@@ -33,7 +33,6 @@ export async function render(params) {
         editprofile.textElem.kill()
     }
 
-    // const posts = await API("GET", `/api/posts?tags=author:${Pdata.username}&t=5`)
     const posts = await postSearch([`author:${Pdata.username}`], 0, 10, false, User.data.username == Pdata.username)
 
     if (posts.posts?.length > 0) {

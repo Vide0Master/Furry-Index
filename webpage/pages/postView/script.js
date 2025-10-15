@@ -29,7 +29,7 @@ export async function render(params) {
     const container = new Elem("post-view-container");
     const postData = await API("GET", `/api/posts/${params.postID}`);
 
-    if (!User.Settings.get("contentFiler")[postData.post.rating].show && postData.post.owner.username != User.data.username) postData.HTTPCODE = 403
+    if (!User.Settings.get("contentFiler", "p")[postData.post.rating].show && postData.post.owner.username != User.data.username) postData.HTTPCODE = 403
 
     if (postData.HTTPCODE !== 200) {
         const errorElem = new Elem("error", container.element);
@@ -42,7 +42,7 @@ export async function render(params) {
     const PData = postData.post;
     const postDataBlock = new Elem("post-data-block", container.element);
 
-    new UserCard(postDataBlock.element, PData.owner)
+    new UserCard(postDataBlock.element, PData.owner, "default", ["shrinkName"])
 
     //render tags
     renderTags(PData.tags, postDataBlock.element);
@@ -102,7 +102,7 @@ export async function render(params) {
     }
 
     if (["image", "imageGroup", "comic", "video"].includes(PData.type)) {
-        const isBlurred = User.Settings.get("contentFiler")[PData.rating].blur || !User.Settings.get("contentFiler")[postData.post.rating].show ? { text: true } : false
+        const isBlurred = User.Settings.get("contentFiler", "p")[PData.rating].blur || !User.Settings.get("contentFiler", "p")[postData.post.rating].show ? { text: true } : false
 
         let avg = { width: 0, height: 0, size: 0 };
         let count = PData.files.length;
@@ -203,8 +203,9 @@ export async function render(params) {
     }
 
     if (User.data == null) {
-        upBtn.element.disabled = true
-        downBtn.element.disabled = true
+        upBtn.enabled = false
+        downBtn.enabled = false
+        scoreTextCont.addClass("disabled")
     }
 
     //region fav
