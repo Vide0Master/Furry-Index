@@ -195,7 +195,6 @@ const LANG = {
         admin: {
             label: "Admin panel",
             news: "News",
-            posts: "Posts",
             appeals: "Appeals",
             users: "Users",
         }
@@ -361,7 +360,16 @@ const LANG = {
                     rmsucc: "Successfully removed visible name",
                 }
             },
-            filesPerPage: "Files per page"
+            filesPerPage: "Files per page",
+            avatarType: {
+                label: "Avatar shape",
+                shapes: {
+                    square: "Square",
+                    round: "Round",
+                    portrait: "Portrait",
+                    landscape: "Landscape"
+                }
+            }
         }
     },
     keyRedeem: {

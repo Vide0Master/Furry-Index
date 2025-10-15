@@ -191,7 +191,6 @@ const LANG = {
         admin: {
             label: "Админ панель",
             news: "Новости",
-            posts: "Посты",
             appeals: "Апеляции",
             users: "Пользователи"
         }
@@ -357,7 +356,16 @@ const LANG = {
                     rmsucc: "Отображаемое имя убрано"
                 }
             },
-            filesPerPage: "Файлы на страницу"
+            filesPerPage: "Файлы на страницу",
+            avatarType: {
+                label: "Форма аватара",
+                shapes: {
+                    square: "Квадрат",
+                    round: "Круг",
+                    portrait: "Портрет",
+                    landscape: "Ландшафт"
+                }
+            }
         }
     },
     keyRedeem: {

@@ -29,7 +29,7 @@ exports.GET = async (req, res) => {
     if (!chatData) return res.status(404).send("Chat not found")
 
     for (const message of chatData.chatMessages) {
-        message.user = await getUserByID(message.userID)
+        message.user = await getUserByID(message.userID, ["privateprofileparams"])
     }
 
     res.status(200).json({ chat: chatData })

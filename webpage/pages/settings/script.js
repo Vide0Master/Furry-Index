@@ -66,10 +66,10 @@ export async function render(params) {
     new DropdownList(itemCounts.map((v) => ({
         name: v,
         value: v,
-        selected: User.Settings.get("postsPerPage") == v
+        selected: User.Settings.get("postsPerPage", "p") == v
     })),
         pages.webpage.element, null, (v) => {
-            User.Settings.set("postsPerPage", v)
+            User.Settings.set("postsPerPage", v, "p")
         },
         `${Language.lang.settings.webpage.postsPerPage}: `
     )
@@ -78,12 +78,12 @@ export async function render(params) {
     const contentFilters = new Elem("content-filter-cont", pages.webpage.element);
     new Elem("label", contentFilters.element).text = Language.lang.settings.webpage.contentFilters.label
 
-    const userContentSettings = User.Settings.get("contentFiler")
+    const userContentSettings = User.Settings.get("contentFiler", "p")
 
     function updateContentFilter(type, mode, value) {
-        const settings = User.Settings.get("contentFiler")
+        const settings = User.Settings.get("contentFiler", "p")
         settings[type][mode] = value
-        User.Settings.set("contentFiler", settings)
+        User.Settings.set("contentFiler", settings, "p")
     }
 
     const filterTypes = ["safe", "questionable", "explicit"]
@@ -132,6 +132,7 @@ export async function render(params) {
                     await User.updateUserData()
                     UserLabel.checkUserData()
                     rmAvatar.switchVisible(false)
+                    avatarShapeDD.switchVisible(false)
                 }
             })
         })
@@ -148,10 +149,11 @@ export async function render(params) {
                 new Button(Language.lang.settings.user.selectBtn, fileElem.element, null, async () => {
                     const avatarSetResult = await API("PUT", `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
-                        overlay.element.click()
+                        overlay.close()
                         await User.updateUserData()
                         UserLabel.checkUserData()
                         rmAvatar.switchVisible(true)
+                        avatarShapeDD.switchVisible(true)
                     }
                 })
             }
@@ -163,6 +165,24 @@ export async function render(params) {
             }
         })
         rmAvatar.moveAfter(selAvatar.element)
+
+        //region select avatar type
+
+        const currentShape = User.Settings.get("avatarShape", "g")
+        const avatarTypes = ["square", "round", "portrait", "landscape"]
+
+        const avatarShapeDD = new DropdownList(avatarTypes.map(v => {
+            return {
+                name: Language.lang.settings.user.avatarType.shapes[v],
+                value: v,
+                selected: v == currentShape
+            }
+        }), avatarLine.element, Language.lang.settings.user.avatarType.label, (v) => {
+            User.Settings.set("avatarShape", v, "g")
+            UserLabel.setAvatarShape(v)
+        }, Language.lang.settings.user.avatarType.label + ": ")
+
+        if (!User.data.avatarID) avatarShapeDD.switchVisible(false)
 
         //region visible name
         const visibleNameLine = new Elem("visible-name-cont", pages.user.element)
@@ -199,10 +219,10 @@ export async function render(params) {
         new DropdownList(itemCounts.map((v) => ({
             name: v,
             value: v,
-            selected: User.Settings.get("filesPerPage") == v
+            selected: User.Settings.get("filesPerPage", "p") == v
         })),
             pages.user.element, null, (v) => {
-                User.Settings.set("filesPerPage", v)
+                User.Settings.set("filesPerPage", v, "p")
             },
             `${Language.lang.settings.user.filesPerPage}: `
         )

@@ -11,7 +11,7 @@ import User from "../../scripts/userdata.js";
 export const tag = "file-manager";
 export const tagLimit = 1;
 
-const itemsPerPage = User.Settings.get("filesPerPage")
+const itemsPerPage = User.Settings.get("filesPerPage", "p")
 
 export async function render() {
     const container = new Elem("file-manager-container")

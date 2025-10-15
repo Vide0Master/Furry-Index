@@ -50,8 +50,16 @@ export default class Elem {
             this.element.classList.add(c)
         }
 
-        this.rmClass = (c) => {
-            this.element.classList.remove(c)
+        this.rmClass = (pattern) => {
+            if (pattern instanceof RegExp) {
+                this.element.classList.forEach(cls => {
+                    if (pattern.test(cls)) {
+                        this.element.classList.remove(cls)
+                    }
+                })
+            } else {
+                this.element.classList.remove(pattern)
+            }
         }
 
         this.setStyleProperty = (prop, value) => {

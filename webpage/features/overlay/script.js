@@ -29,7 +29,10 @@ export default class Overlay extends Elem {
     close() {
         this.element.remove()
         this.enablePageScroll()
-        if (history.state?.overlayOpen) history.back()
+
+        if (history.state?.overlayOpen) {
+            history.replaceState({}, "")
+        }
 
         const index = overlays.indexOf(this)
         if (index > -1) overlays.splice(index, 1)

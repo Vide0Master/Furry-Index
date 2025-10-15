@@ -18,11 +18,25 @@
         transition: 0.2s;
 
         .user-avatar-container {
-            width: 18px;
-            height: 18px;
+            max-width: 18px;
+            max-height: 18px;
             border-radius: 3px;
             border: 1px solid var(--outline);
             transition: 0.2s;
+
+            &.shape-round {
+                border-radius: 100vh;
+            }
+
+            &.shape-portrait {
+                max-height: 18px;
+                max-width: 9px;
+            }
+
+            &.shape-landscape {
+                max-height: 18px;
+                max-width: 36px;
+            }
         }
 
         &:hover {

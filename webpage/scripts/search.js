@@ -15,7 +15,7 @@ export default async function postSearch(tags = [], page = 0, take = 10, count =
     }
     
     if (!ignoreFilters) {
-        const contentFilter = User.Settings.get("contentFiler");
+        const contentFilter = User.Settings.get("contentFiler", "p");
         for (const rating in contentFilter) {
             if (!contentFilter[rating].show) {
                 tags.push(`-rating:${rating}`);

@@ -7,7 +7,7 @@ const prisma = require("../../systemServices/prisma")
 exports.ROUTE = "/api/profile/:username"
 
 exports.GET = async (req, res) => {
-    const user = await getUserByUsername(req.params.username)
+    const user = await getUserByUsername(req.params.username, ["privateprofileparams"])
 
     if (!user) return res.status(404).send("User not found")
 

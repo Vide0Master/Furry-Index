@@ -52,7 +52,7 @@ export async function render() {
                 new Alert.Simple(`${Language.lang.login.success[0]} ${User.data.visiblename ? User.data.visiblename : User.data.username}`, Language.lang.login.success[1], 5000, "#109f10")
                 UserLabel.checkUserData()
                 Header.checkUserLoginState()
-                Router.navigate("/profile")
+                Router.navigate(`/profile/${User.data.username}`)
             }; break
         }
     })

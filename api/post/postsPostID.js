@@ -72,7 +72,7 @@ exports.GET = async (req, res) => {
 
     if (post.favourites) post.favourites = post.favourites.length
 
-    post.owner = await getUserByID(post.ownerid)
+    post.owner = await getUserByID(post.ownerid, ["privateprofileparams"])
 
     res.status(200).json({ post })
 }

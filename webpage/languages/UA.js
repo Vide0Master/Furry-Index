@@ -191,7 +191,6 @@ const LANG = {
         admin: {
             label: "Адмін панель",
             news: "Новини",
-            posts: "Пости",
             appeals: "Апеляції",
             users: "Користувачі"
         }
@@ -357,7 +356,16 @@ const LANG = {
                     rmsucc: "Відображуване ім'я прибрано"
                 }
             },
-            filesPerPage: "Файли на сторінку"
+            filesPerPage: "Файли на сторінку",
+            avatarType: {
+                label: "Форма аватару",
+                shapes: {
+                    square: "Квадрат",
+                    round: "Кругляк",
+                    portrait: "Портрет",
+                    landscape: "Ландашафт"
+                }
+            }
         }
     },
     keyRedeem: {

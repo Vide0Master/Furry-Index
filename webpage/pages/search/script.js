@@ -8,7 +8,7 @@ import User from "../../scripts/userdata.js";
 export const tag = "search";
 export const tagLimit = 1;
 
-const itemsPerPage = User.Settings.get("postsPerPage")
+const itemsPerPage = User.Settings.get("postsPerPage", "p")
 
 export async function render() {
     const container = new Elem("search-container")
