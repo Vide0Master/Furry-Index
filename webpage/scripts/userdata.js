@@ -4,11 +4,12 @@ import API from "./api.js"
 // "doNotChangeThis" used to describe version of settings structure
 // if it was heavily changed, change the "doNotChangeThis" to +1
 const defaultSettings = {
-    doNotChangeThis: 2,
+    doNotChangeThis: 3,
     globalprofileparams: {
         avatarShape: "square"
     },
     privateprofileparams: {
+        theme: "default-dark",
         postsPerPage: 50,
         filesPerPage: 50,
         contentFiler: {
@@ -50,6 +51,8 @@ class Settings {
         data[{ p: "privateprofileparams", g: "globalprofileparams" }[type]][name] = value
         this.setStorage(data)
     }
+
+    static default = defaultSettings
 }
 
 class User {
