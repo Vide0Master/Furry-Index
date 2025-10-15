@@ -19,7 +19,7 @@ exports.GET = (req, res) => {
 <link rel="apple-touch-icon" href="https://${constants.serverLink}/icon.png">
 ${constants.DEVmode ? htmlImports.renderHTMLImports() : htmlImports.staticHtmlImports}
 </head>
-<body class="theme-default">
+<body>
 </body>
 </html>`
     res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")

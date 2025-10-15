@@ -13,6 +13,7 @@ import FileCard from "../../elements/fileCard/script.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import Link from "../../components/link/script.js";
 import SwitchInput from "../../components/switchinput/script.js";
+import Theme from "../../scripts/themeController.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -60,6 +61,20 @@ export async function render(params) {
         pages.webpage.element, Language.lang.settings.webpage.language.label, (val) => {
             Language.setLanguage(val)
         }, Language.lang.settings.webpage.language.label + ": ")
+
+    //region themes
+    const themesList = ["default-dark", "nature"]
+    const themes = new DropdownList(themesList.map(v => {
+        return {
+            name: Language.lang.settings.webpage.theme.themes[v],
+            value: v
+        }
+    }), pages.webpage.element, Language.lang.settings.webpage.theme.label, (v) => {
+        Theme.set(v)
+    }, Language.lang.settings.webpage.theme.label + ": ")
+
+    const currentTheme = User.Settings.get("theme", "p")
+    if (currentTheme) themes.selectOption(currentTheme)
 
     //region item counts for posts
     const itemCounts = [25, 50, 75, 100, 150, 200]

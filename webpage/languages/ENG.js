@@ -337,6 +337,13 @@ const LANG = {
                 },
                 show: "Show",
                 blur: "Blur"
+            },
+            theme: {
+                label: "Theme",
+                themes: {
+                    "default-dark": "Default",
+                    "nature": "Nature",
+                }
             }
         },
         user: {

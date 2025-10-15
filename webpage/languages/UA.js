@@ -333,6 +333,13 @@ const LANG = {
                 },
                 show: "Показувати",
                 blur: "Спойлер"
+            },
+            theme: {
+                label: "Тема",
+                themes: {
+                    "default-dark": "Стандарт",
+                    nature: "Природа"
+                }
             }
         },
         user: {
