@@ -186,7 +186,7 @@ const LANG = {
             label: "Content",
             upload: "Upload",
             fileManager: "Files",
-            postMaster: "Post master"
+            postMaster: "Post"
         },
         userCard: {
             login: "Login",

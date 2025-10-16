@@ -10,7 +10,6 @@ ws.addEventListener("error", (err) => {
     console.error("WebSocket error:", err);
 });
 
-
 function getCookie(name) {
     const cookies = document.cookie.split("; ");
     for (let cookie of cookies) {

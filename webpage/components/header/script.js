@@ -38,24 +38,19 @@ export default class Header {
         this.settings = new Link(Language.lang.header.settings, "/settings", navRow.element, true, null, "settings")
 
         this.content = new DropdownList([
-            { name: "✦ " + Language.lang.header.content.postMaster, value: "link:/post-master" },
+            { name: Language.lang.header.content.postMaster, value: "link:/post-master", icon: "card-hearts" },
             { name: Language.lang.header.content.upload, value: "link:/upload", icon: "upload" },
             { name: Language.lang.header.content.fileManager, value: "link:/file-manager", icon: "file" }
-        ], navRow.element, "✦ " + Language.lang.header.content.label, null, null)
-        this.content.icon.kill()
+        ], navRow.element, Language.lang.header.content.label, () => { this.content.selectOption("placeholder") }, null)
 
         const adminPages = []
         if (User.testUserPermission("admin:news")) adminPages.push({ name: Language.lang.header.admin.news, value: "link:/admin/news" })
         if (User.testUserPermission("admin:appeals")) adminPages.push({ name: Language.lang.header.admin.appeals, value: "link:/admin/appeals" })
         if (User.testUserPermission("admin:users")) adminPages.push({ name: Language.lang.header.admin.users, value: "link:/admin/users" })
 
-        this.adminPanel = new DropdownList(adminPages, navRow.element, Language.lang.header.admin.label, null, null)
+        this.adminPanel = new DropdownList(adminPages, navRow.element, Language.lang.header.admin.label, () => { this.adminPanel.selectOption("placeholder") }, null)
 
         this.adminPanel.icon.iconName = "shield"
-
-        Router.regNavListener((route) => {
-            if (!this.adminPanel.options.some(v => v.value == route)) this.adminPanel.selectOption("placeholder")
-        }, true)
 
         UserLabel.append(this.element)
 
