@@ -42,6 +42,7 @@ export default class Header {
             { name: Language.lang.header.content.upload, value: "link:/upload", icon: "upload" },
             { name: Language.lang.header.content.fileManager, value: "link:/file-manager", icon: "file" }
         ], navRow.element, Language.lang.header.content.label, () => { this.content.selectOption("placeholder") }, null)
+        this.content.icon.iconName = "plus"
 
         const adminPages = []
         if (User.testUserPermission("admin:news")) adminPages.push({ name: Language.lang.header.admin.news, value: "link:/admin/news" })
