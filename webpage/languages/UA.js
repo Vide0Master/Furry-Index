@@ -182,7 +182,7 @@ const LANG = {
             label: "Контент",
             upload: "Завантажити",
             fileManager: "Файли",
-            postMaster: "Пост майстер"
+            postMaster: "Пост"
         },
         userCard: {
             login: "Увійти",

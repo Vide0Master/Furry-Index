@@ -93,15 +93,13 @@ export default class PostCard extends Elem {
             new Elem("text", favsElem.element).text = postData.favourites
         }
 
-        if (!isInEditor) {
-            previewContainer.addEvent("click", () => {
-                Router.navigate(`/post/${postData.id}${window.location.search}`, this.element)
-            })
-        }
+        previewContainer.addEvent("click", () => {
+            Router.navigate(`/post/${postData.id}${window.location.search}`, this.element)
+        })
 
         if (isInEditor) {
             const openButtons = new Elem("open-buttons-overlay", this.element)
-            new Icon("list", openButtons.element)
+            new Icon("list", openButtons.element,null,"25x25")
 
             const buttonCont = new Elem("edit-buttons-col", this.element)
             document.addEventListener("click", (e) => {
