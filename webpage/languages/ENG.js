@@ -13,6 +13,9 @@ const LANG = {
                 label: "WebSocket error",
                 text: "Server connection issues detected, trying to reconnect..."
             }
+        },
+        navitaion: {
+            noAccess: "You can't access this page"
         }
     },
     TOS: [

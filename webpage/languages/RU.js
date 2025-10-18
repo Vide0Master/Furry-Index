@@ -13,6 +13,9 @@ const LANG = {
                 label: "Ошибка WebSocket",
                 text: "Обнаружены проблемы с подключением к серверу, пытаемся восстановить подключение..."
             }
+        },
+        navitaion: {
+            noAccess: "You can't access this page"
         }
     },
     TOS: [

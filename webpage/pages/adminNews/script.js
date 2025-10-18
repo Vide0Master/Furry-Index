@@ -7,6 +7,7 @@ import Button from "../../components/button/script.js";
 import API from "../../scripts/api.js";
 import NewsMessage from "../../elements/newsMessage/script.js";
 import PageNavigator from "../../elements/pagenavigator/script.js";
+import User from "../../scripts/userdata.js";
 
 export const tag = "adminnews";
 export const tagLimit = 1;
@@ -15,6 +16,11 @@ const newsOnPage = 10
 
 export async function render() {
     const container = new Elem("admin-news-manager")
+
+    if (!User.testUserPermission("admin:news")) {
+        container.text = Language.lang.SYSTEM.navitaion.noAccess
+        return container.element
+    }
 
     const leftCont = new Elem("news-navigator-cont", container.element)
 
@@ -29,8 +35,6 @@ export async function render() {
     }
 
     let editing = ""
-
-    // let letterLabel, letterDesc
 
     const langSelect = new DropdownList(
         Language.availableLanguages.map((k) => ({
