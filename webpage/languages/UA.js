@@ -13,6 +13,9 @@ const LANG = {
                 label: "Помилка WebSocket",
                 text: "Виявлені поблеми з підключенням до серверу, намагаємось відновити зв'язок..."
             }
+        },
+        navitaion: {
+            noAccess: "You can't access this page"
         }
     },
     TOS: [
@@ -176,7 +179,11 @@ const LANG = {
     header: {
         main: "Головна",
         news: "Новини",
-        search: "Пошук",
+        search: {
+            label: "Пошук",
+            posts: "Пости",
+            users: "Користувачі"
+        },
         settings: "Налаштунки",
         content: {
             label: "Контент",

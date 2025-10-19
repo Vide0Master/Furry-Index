@@ -33,8 +33,15 @@ export default class Header {
         }, true)
 
         this.main = new Link(Language.lang.header.main, "/", navRow.element)
-        this.search = new Link(Language.lang.header.search, "/search", navRow.element, true, null, "search")
+
+        this.search = new DropdownList([
+            { name: Language.lang.header.search.posts, value: "link:/search", icon: "card-hearts" },
+            { name: Language.lang.header.search.users, value: "link:/users", icon: "user" }
+        ], navRow.element, Language.lang.header.search.label, () => { this.search.selectOption("placeholder") }, null)
+        this.search.icon.iconName = "search"
+
         this.news = new Link(Language.lang.header.news, "/news", navRow.element, true, null, "list")
+
         this.settings = new Link(Language.lang.header.settings, "/settings", navRow.element, true, null, "settings")
 
         this.content = new DropdownList([
@@ -47,10 +54,7 @@ export default class Header {
         const adminPages = []
         if (User.testUserPermission("admin:news")) adminPages.push({ name: Language.lang.header.admin.news, value: "link:/admin/news" })
         if (User.testUserPermission("admin:appeals")) adminPages.push({ name: Language.lang.header.admin.appeals, value: "link:/admin/appeals" })
-        if (User.testUserPermission("admin:users")) adminPages.push({ name: Language.lang.header.admin.users, value: "link:/admin/users" })
-
         this.adminPanel = new DropdownList(adminPages, navRow.element, Language.lang.header.admin.label, () => { this.adminPanel.selectOption("placeholder") }, null)
-
         this.adminPanel.icon.iconName = "shield"
 
         UserLabel.append(this.element)
