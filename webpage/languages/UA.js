@@ -179,7 +179,11 @@ const LANG = {
     header: {
         main: "Головна",
         news: "Новини",
-        search: "Пошук",
+        search: {
+            label: "Пошук",
+            posts: "Пости",
+            users: "Користувачі"
+        },
         settings: "Налаштунки",
         content: {
             label: "Контент",

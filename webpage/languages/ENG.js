@@ -183,7 +183,11 @@ const LANG = {
     header: {
         main: "Main",
         news: "News",
-        search: "Search",
+        search: {
+            label: "Search",
+            posts: "Posts",
+            users: "Users"
+        },
         settings: "Settings",
         content: {
             label: "Content",

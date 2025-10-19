@@ -38,10 +38,6 @@ export default class SearchField extends Elem {
             this.callbacks.push(func)
         }
 
-        // this.searchInput.addEvent('input', () => {
-        //     this.searchInput.element.value = this.searchInput.element.value.toLowerCase();
-        // })
-
         this.searchInput.addEvent("keydown", (e) => {
             switch (e.key) {
             case "Enter": {
