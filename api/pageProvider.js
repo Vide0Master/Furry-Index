@@ -3,9 +3,11 @@ const htmlImports = require("../systemServices/importBuilder")
 
 exports.ROUTE = /^(?!\/api(?:\/|$)).*/
 
-exports.GET = (req, res) => {
-    const page =
-        `<!DOCTYPE html>
+exports.PageProvider = {
+    m: "get",
+    e: (req, res) => {
+        const page =
+            `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,9 +24,10 @@ ${constants.DEVmode ? htmlImports.renderHTMLImports() : htmlImports.staticHtmlIm
 <body>
 </body>
 </html>`
-    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
-    res.setHeader("Pragma", "no-cache")
-    res.setHeader("Expires", "0")
-    res.removeHeader("ETag")
-    res.send(page)
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate")
+        res.setHeader("Pragma", "no-cache")
+        res.setHeader("Expires", "0")
+        res.removeHeader("ETag")
+        res.send(page)
+    }
 }

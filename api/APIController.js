@@ -31,98 +31,101 @@ const { webServer } = require("../systemServices/webServer");
 const getUserBySessionCookie = require("../systemServices/getUserBySessionCookie");
 const WSController = require("../systemServices/WebSocket");
 
-const localRoutes = []
-
-const routesNest = {}
-
-routesNest.label = `List of loaded routes`
-routesNest.childs = []
-
 for (let i = 0; i < apiFiles.length; i++) {
     const module = require(apiFiles[i])
-    let route
 
-    if (module.ROUTE) {
-        route = module.ROUTE
-    } else {
-        route = "/api/" + path.basename(apiFiles[i]).split(".")[0]
-        cmd.warn(`Route file ${path.basename(apiFiles[i])} noes not have ${cmd.colorize("ROUTE", "cyan")} export specified, fallback to default "${route}" route`, [cmd.preps.API])
-    }
-
-    let routeCounter = 0
-
-    routesNest.childs.push({ label: route, childs: [] })
-    const logIndex = routesNest.childs.findIndex(v => v.label == route)
+    const moduleRoute = module.ROUTE
+    const modulePermissions = module.PERMISSIONS
+    const moduleInclude = module.INCLUDE
 
     //region method perm
-    for (const method in module) {
-        if (["ROUTE", "PERMISSIONS"].includes(method)) continue
-        if (!["GET", "POST", "PUT", "PATCH", "DELETE", "WS"].includes(method)) {
-            cmd.bad(`Method ${method} is not allowed, skipping`, [cmd.preps.API])
-            continue
+    for (const func in module) {
+        if (["ROUTE", "PERMISSIONS", "INCLUDE"].includes(func)) continue
+
+        const moduleFunc = module[func]
+        if (moduleFunc?.kill || moduleFunc?.k) continue
+
+        const funcMethod = (moduleFunc?.method || moduleFunc?.m)?.toLowerCase()
+        const funcRoute = moduleFunc?.route || moduleFunc?.r || moduleRoute
+        const funcName = moduleFunc?.name || moduleFunc?.n
+        const funcPerm = moduleFunc?.permissions || moduleFunc?.p || modulePermissions
+        const funcExec = moduleFunc?.exec || moduleFunc?.e
+        // eslint-disable-next-line no-unused-vars
+        const funcInc = moduleFunc?.include || moduleFunc?.i || moduleInclude
+
+        if (globalVariables.DEVmode) {
+            if (typeof funcMethod !== "string") {
+                cmd.err(`No method`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http, { text: `FILE:${apiFiles[i]}`, color: "green" }, { text: `ID:${func}`, color: "green" }])
+                continue
+            }
+
+            if (funcMethod === "ws") {
+                if (typeof funcName !== "string") {
+                    if (typeof funcRoute !== "string") {
+                        cmd.err(`No WS name`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.ws, { text: `FILE:${apiFiles[i]}`, color: "green" }, { text: `ID:${func}`, color: "green" }])
+                        continue
+                    }
+                }
+            } else {
+                if (typeof funcRoute !== "string" && !(funcRoute instanceof RegExp)) {
+                    cmd.err(`No route`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http, { text: `FILE:${apiFiles[i]}`, color: "green" }, { text: `ID:${func}`, color: "green" }])
+                    continue
+                }
+
+                if (typeof funcExec !== "function") {
+                    cmd.err(`No function`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http, { text: `FILE:${apiFiles[i]}`, color: "green" }, { text: `ID:${func}`, color: "green" }])
+                    continue
+                }
+            }
         }
-        localRoutes.push({
-            ROUTE: route,
-            METHOD: method.toLowerCase(),
-            FUNCTION: module[method],
-            PERMISSIONS: module.PERMISSIONS ? module.PERMISSIONS : undefined
-        })
-        routeCounter++
 
-        const prep = cmd.preps.APIs[method]
-        routesNest.childs[logIndex].childs.push({ label: cmd.colorize(prep.text, prep.color) })
-    }
+        if (funcMethod === "ws") {
+            WSController.registerListener(funcName, funcExec)
+            
+            if (globalVariables.DEVmode)
+                cmd.info(`Registered ${cmd.colorize("WS", "green")} listener ${funcName}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.ws])
+        } else {
+            const middlewares = []
 
-    if (routeCounter == 0) {
-        cmd.bad(`${path.basename(apiFiles[i])} does not contain any usable routes`, [cmd.preps.API])
-    }
-}
-
-for (const routeID in localRoutes) {
-    const route = localRoutes[routeID]
-    const middlewares = []
-
-    if (route.METHOD == "ws") {
-        WSController.registerListener(route.FUNCTION.name, route.FUNCTION.func)
-        continue
-    }
-
-    if (route?.PERMISSIONS?.includes("REQUIRECOOKIE")) {
-        middlewares.push(async (req, res, next) => {
-            const userToken = req.cookies[globalVariables.mainAuthTokenKey]
-            if (!userToken) {
-                cmd.warn(`${cmd.colorize("401", "red")} on route ${route.ROUTE} | No token "${globalVariables.mainAuthTokenKey}"`,
-                    [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
-                return res.status(401).send()
-            } else {
-                next()
+            if (funcPerm?.includes("REQUIRECOOKIE")) {
+                middlewares.push(async (req, res, next) => {
+                    const userToken = req.cookies[globalVariables.mainAuthTokenKey]
+                    if (!userToken) {
+                        cmd.warn(`${cmd.colorize("401", "red")} on route ${funcRoute} | No token "${globalVariables.mainAuthTokenKey}"`,
+                            [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
+                        return res.status(401).send()
+                    } else {
+                        next()
+                    }
+                })
             }
-        })
-    }
 
-    if (route?.PERMISSIONS?.includes("REQUIREUSER")) {
-        middlewares.push(async (req, res, next) => {
-            const user = await getUserBySessionCookie(req.cookies[globalVariables.mainAuthTokenKey])
-            if (!user) {
-                cmd.warn(`${cmd.colorize("401", "red")} on route ${route.ROUTE} | No user`,
-                    [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
-                return res.status(401).send()
-            } else {
-                next()
+            if (funcPerm?.includes("REQUIREUSER")) {
+                middlewares.push(async (req, res, next) => {
+                    const user = await getUserBySessionCookie(req.cookies[globalVariables.mainAuthTokenKey])
+                    if (!user) {
+                        cmd.warn(`${cmd.colorize("401", "red")} on route ${funcRoute} | No user`,
+                            [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
+                        return res.status(401).send()
+                    } else {
+                        next()
+                    }
+                })
             }
-        })
+
+            middlewares.push(funcExec);
+
+            webServer[funcMethod](funcRoute, ...middlewares)
+
+            if (globalVariables.DEVmode)
+                cmd.info(`Registered ${cmd.colorize(cmd.preps.APIs[funcMethod.toUpperCase()].text, cmd.preps.APIs[funcMethod.toUpperCase()].color)} listener for ${funcRoute}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http])
+        }
     }
-
-    middlewares.push(route.FUNCTION);
-
-    webServer[route.METHOD](route.ROUTE, ...middlewares)
 }
 
 if (globalVariables.DEVmode)
-    cmd.nested(routesNest, [cmd.preps.API])
-
-webServer.use((req, res) => {
-    res.status(404).send("Route not found.");
-    if (globalVariables.DEVmode)
-        cmd.bad(req.path + " " + cmd.colorize(404, "red"), [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
-});
+    webServer.use((req, res) => {
+        res.status(404).send("Route not found.");
+        if (globalVariables.DEVmode)
+            cmd.bad(req.path + " " + cmd.colorize(404, "red"), [cmd.preps.Debug, cmd.preps.http, cmd.preps.API, { text: req.method, color: "yellow" }])
+    });

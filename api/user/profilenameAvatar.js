@@ -3,23 +3,26 @@ const sendFileByName = require("../../systemServices/sendFileByName")
 
 exports.ROUTE = "/api/profile/:userName/avatar"
 
-exports.GET = async (req, res) => {
-    const user = await prisma.user.findUnique({
-        where: {
-            username: req.params.userName
-        },
-        select: {
-            avatar: {
-                select: {
-                    file: true
+exports.GetUserAvatar = {
+    m: "get",
+    e: async (req, res) => {
+        const user = await prisma.user.findUnique({
+            where: {
+                username: req.params.userName
+            },
+            select: {
+                avatar: {
+                    select: {
+                        file: true
+                    }
                 }
             }
-        }
-    })
+        })
 
-    if (!user) return res.status(404).send("User not found")
+        if (!user) return res.status(404).send("User not found")
 
-    if (!user.avatar) return res.status(404).send("Avatar not found")
+        if (!user.avatar) return res.status(404).send("Avatar not found")
 
-    sendFileByName(res, user.avatar.file)
+        sendFileByName(res, user.avatar.file)
+    }
 }
