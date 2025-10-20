@@ -5,39 +5,42 @@ const sendFileByName = require("../../systemServices/sendFileByName")
 
 exports.ROUTE = "/api/posts/:postID/file/:fileID"
 
-exports.GET = async (req, res) => {
-    // const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
+exports.GetPostFile = {
+    m: "get",
+    e: async (req, res) => {
+        // const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null)
 
-    const postID = req.params.postID
-    const fileID = req.params.fileID
+        const postID = req.params.postID
+        const fileID = req.params.fileID
 
-    const post = await prisma.post.findUnique({
-        where: {
-            id: postID
-        },
-        select: {
-            rating: true
+        const post = await prisma.post.findUnique({
+            where: {
+                id: postID
+            },
+            select: {
+                rating: true
+            }
+        })
+
+        if (!post) {
+            res.status(404).send("Post not found")
+            return
         }
-    })
 
-    if(!post) {
-        res.status(404).send("Post not found")
-        return
-    }
+        const file = await prisma.file.findUnique({
+            where: {
+                id: fileID
+            },
+            select: {
+                file: true
+            }
+        })
 
-    const file = await prisma.file.findUnique({
-        where: {
-            id: fileID
-        },
-        select: {
-            file: true
+        if (!file) {
+            res.status(404).send("File not found")
+            return
         }
-    })
 
-    if(!file) {
-        res.status(404).send("File not found")
-        return
+        sendFileByName(res, file.file)
     }
-
-    sendFileByName(res, file.file)
 }

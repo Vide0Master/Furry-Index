@@ -10,21 +10,22 @@ const keyResponses = {
     "405": "Key was already redeemed",
 }
 
-exports.POST = async (req, res) => {
-    const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
+exports.RedeemKey = {
+    m: "get",
+    e: async (req, res) => {
+        const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 
-    
+        const key = req.params.key
 
-    const key = req.params.key
-
-    if (!keyControl.verifyKey(key)) {
-        return res.status(406).send("Key is malformed, key should be in format XXXXXX-XXXXXX-XXXXXX-XXXXXX")
-    } else {
-        const status = await keyControl.redeemKey(key, user.id)
-        if (status.code == 200) {
-            return res.status(200).json({ key: status.key })
+        if (!keyControl.verifyKey(key)) {
+            return res.status(406).send("Key is malformed, key should be in format XXXXXX-XXXXXX-XXXXXX-XXXXXX")
         } else {
-            return res.status(status.code).send(keyResponses[status.code])
+            const status = await keyControl.redeemKey(key, user.id)
+            if (status.code == 200) {
+                return res.status(200).json({ key: status.key })
+            } else {
+                return res.status(status.code).send(keyResponses[status.code])
+            }
         }
     }
 }
