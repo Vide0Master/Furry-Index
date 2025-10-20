@@ -81,7 +81,9 @@ for (let i = 0; i < apiFiles.length; i++) {
 
         if (funcMethod === "ws") {
             WSController.registerListener(funcName, funcExec)
-            continue
+            
+            if (globalVariables.DEVmode)
+                cmd.info(`Registered ${cmd.colorize("WS", "green")} listener ${funcName}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.ws])
         } else {
             const middlewares = []
 
@@ -114,6 +116,9 @@ for (let i = 0; i < apiFiles.length; i++) {
             middlewares.push(funcExec);
 
             webServer[funcMethod](funcRoute, ...middlewares)
+
+            if (globalVariables.DEVmode)
+                cmd.info(`Registered ${cmd.colorize(cmd.preps.APIs[funcMethod.toUpperCase()].text, cmd.preps.APIs[funcMethod.toUpperCase()].color)} listener for ${funcRoute}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http])
         }
     }
 }

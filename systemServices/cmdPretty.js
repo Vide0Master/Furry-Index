@@ -36,7 +36,7 @@ const results = {
 
 function buildPrefix(preps = []) {
     if (!preps.length) return "";
-    return preps
+    return " " + preps
         .map(p => colorize(p.text, p.color))
         .join(" › ") + ": ";
 }
@@ -49,11 +49,11 @@ function buildResult(resultKey) {
     if (!resultKey || !results[resultKey]) return "";
 
     const { text, color } = results[resultKey];
-    return " " + colorize(text, color);
+    return colorize(text, color);
 }
 
 function cmdLineBuilder(preps, text, resultKey) {
-    return buildPrefix(preps) + buildMain(text) + buildResult(resultKey);
+    return buildResult(resultKey) + buildPrefix(preps) + buildMain(text);
 }
 
 class cmd {
