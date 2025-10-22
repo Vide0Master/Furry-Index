@@ -379,6 +379,17 @@ const LANG = {
                     portrait: "Портрет",
                     landscape: "Ландшафт"
                 }
+            },
+            changePass: {
+                label: "Изменение пароля",
+                newPass: "Новый пароль",
+                repNewPass: "Повторите новый пароль",
+                succ: {
+                    title: "Успех",
+                    text: "Пароль успешно изменён"
+                },
+                change: "Изменить",
+                cancel: "Отменить"
             }
         }
     },

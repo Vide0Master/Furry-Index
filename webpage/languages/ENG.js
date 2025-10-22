@@ -383,6 +383,17 @@ const LANG = {
                     portrait: "Portrait",
                     landscape: "Landscape"
                 }
+            },
+            changePass: {
+                label: "Password change",
+                newPass: "New password",
+                repNewPass: "Repeat new password",
+                succ: {
+                    title: "Success",
+                    text: "Password succesfully changed"
+                },
+                change: "Change",
+                cancel: "Cancel"
             }
         }
     },
