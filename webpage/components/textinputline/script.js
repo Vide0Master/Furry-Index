@@ -43,10 +43,10 @@ export default class TextInputLine extends Elem {
         })
 
         this.testChecksWithCB = async (silent = true) => {
+            const testRslt = await this.testChecks(this.input.value)
             if (!silent) await chcb(this.input.value)
-            return (await this.testChecks(this.input.value))
+            return testRslt
         }
-
 
         this.limit = limit
 

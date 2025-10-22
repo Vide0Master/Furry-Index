@@ -96,3 +96,10 @@
         gap: 10px;
     }
 }
+
+.alert .pass-change-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}

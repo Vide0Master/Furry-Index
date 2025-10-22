@@ -3,6 +3,7 @@ const getUserBySessionCookie = require("../../systemServices/getUserBySessionCoo
 const getUserByUsername = require("../../systemServices/getUserByUsername")
 const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
 const prisma = require("../../systemServices/prisma")
+const bcrypt = require("bcrypt");
 
 exports.ROUTE = "/api/profile/:username"
 
@@ -43,12 +44,14 @@ exports.UpdateUserData = {
 
         if (data.avatarID) updateFileLastActivity(data.avatarID)
 
-        await prisma.user.update({
-            where: {
-                id: sessionUser.id
-            },
-            data
-        })
+        if (data.password) data.password = await bcrypt.hash(data.password, 10)
+
+            await prisma.user.update({
+                where: {
+                    id: sessionUser.id
+                },
+                data
+            })
 
         return res.status(200).send("Profile updated successfully")
     }

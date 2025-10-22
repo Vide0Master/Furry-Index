@@ -14,6 +14,8 @@ import TextInputLine from "../../components/textinputline/script.js";
 import Link from "../../components/link/script.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import Theme from "../../scripts/themeController.js";
+import PasswordInput from "../../components/passwordinput/script.js";
+import BasicCheck from "../../scripts/basicChecks.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -135,6 +137,59 @@ export async function render(params) {
                 Header.checkUserLoginState()
             })
             new Alert.Simple(`${Language.lang.settings.user.loggedOut[0]} ${username} ${Language.lang.settings.user.loggedOut[1]}`, null, 5000)
+        })
+
+        //region updatePassword
+        new Button(Language.lang.settings.user.changePass.label, pages.user.element, null, async () => {
+            const pwChangeAlert = new Alert.Simple(null, Language.lang.settings.user.changePass.label, null, null, "changePass")
+            pwChangeAlert.okButton.kill()
+
+            let checkErrors
+
+            const newPass = new PasswordInput(Language.lang.settings.user.changePass.newPass, pwChangeAlert.alertCont.element, null, () => { checkErrors() })
+
+            newPass.addCheck(Language.lang.register.passFirst.error.min + " 8 " + Language.lang.register.passFirst.error.chars, (val) => {
+                return !BasicCheck.MinLen(val, 8)
+            })
+
+            newPass.addCheck(Language.lang.register.passFirst.error.max + " 1000 " + Language.lang.register.passFirst.error.chars, (val) => {
+                return !BasicCheck.MaxLen(val, 1000)
+            })
+
+            newPass.addCheck(Language.lang.register.passFirst.error.uppercase, (val) => {
+                return BasicCheck.includesUppercase(val)
+            })
+
+            newPass.addCheck(Language.lang.register.passFirst.error.numbers, (val) => {
+                return BasicCheck.includesDigit(val)
+            })
+
+            const repNewPass = new PasswordInput(Language.lang.settings.user.changePass.repNewPass, pwChangeAlert.alertCont.element, null, () => { checkErrors() })
+
+            repNewPass.addCheck({ default: Language.lang.register.passSecond.notMatch, ok: Language.lang.register.passSecond.match, nok: Language.lang.register.passSecond.notMatch }, (val) => {
+                return newPass.value === val
+            })
+
+            const btnRow = new Elem("pass-change-row", pwChangeAlert.alertCont.element)
+
+            const changeBtn = new Button(Language.lang.settings.user.changePass.change, btnRow.element, null, async () => {
+                if (newPass.checksInf.errAny || repNewPass.checksInf.errAny) return
+                const resp = await API("put", `/api/profile/${User.data.username}`, { password: repNewPass.value })
+                if (resp.HTTPCODE === 200) {
+                    pwChangeAlert.removeAlert()
+                    new Alert.Simple(Language.lang.settings.user.changePass.succ.text, Language.lang.settings.user.changePass.succ.title, 5000, null, "passChangeSucc")
+                } else { /* empty */ }
+                console.log(resp)
+            })
+            changeBtn.enabled = false
+
+            checkErrors = () => {
+                changeBtn.enabled = newPass.checksInf.okAll && repNewPass.checksInf.okAll
+            }
+
+            new Button(Language.lang.settings.user.changePass.cancel, btnRow.element, null, () => {
+                pwChangeAlert.removeAlert()
+            })
         })
 
         //region avatar control
