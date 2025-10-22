@@ -113,11 +113,13 @@ class Input extends AlertComponent {
         let input
 
         switch (inputType) {
-            case "bigField": new BigTextField("", this.alertCont.element, undefined, (v) => { input = v },).input = value ? value : ""; break;
-            case "password": new PasswordInput("", this.alertCont.element, null, (v) => { input = v }).value = value ? value : ""; break;
+            case "bigField": this.inputElem = new BigTextField("", this.alertCont.element, undefined, (v) => { input = v },); break;
+            case "password": this.inputElem = new PasswordInput("", this.alertCont.element, null, (v) => { input = v }); break;
             case "simple":
-            default: new TextInputLine("", this.alertCont.element, null, null, (v) => { input = v }).value = value ? value : ""
+            default: this.inputElem = new TextInputLine("", this.alertCont.element, null, null, (v) => { input = v })
         }
+
+        this.inputElem.value = value ? value : ""
 
         const buttonsRow = new Elem("buttons-row", this.alertCont.element)
 
