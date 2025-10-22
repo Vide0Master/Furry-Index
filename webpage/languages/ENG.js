@@ -193,7 +193,8 @@ const LANG = {
             label: "Content",
             upload: "Upload",
             fileManager: "Files",
-            postMaster: "Post"
+            postMaster: "My posts",
+            createPost: "Make a post"
         },
         userCard: {
             login: "Login",
@@ -506,6 +507,7 @@ const LANG = {
             noRating: "Select post rating",
             noType: "Select post type",
             noFiles: "Select files for post",
+            noFilesText: "You have no files",
             tags: "Tags",
             createPost: "Create",
             editPost: "Edit",
@@ -567,8 +569,9 @@ const LANG = {
     features: {
         alert: {
             confirm: {
-                confirmButton: "Yes",
-                cancelButton: "No"
+                ok: "Yes",
+                no: "No",
+                cancel: "Cancel"
             }
         },
         favs: {

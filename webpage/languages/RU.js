@@ -189,7 +189,8 @@ const LANG = {
             label: "Контент",
             upload: "Загрузить",
             fileManager: "Файлы",
-            postMaster: "Пост"
+            postMaster: "Мои посты",
+            createPost: "Создать пост"
         },
         userCard: {
             login: "Войти",
@@ -502,6 +503,7 @@ const LANG = {
             noRating: "Выберите рейтинг поста",
             noType: "Выберите тип поста",
             noFiles: "Выберите файлы для поста",
+            noFilesText: "У вас нету файлов",
             tags: "Теги",
             createPost: "Создать",
             editPost: "Редактировать",
@@ -563,8 +565,9 @@ const LANG = {
     features: {
         alert: {
             confirm: {
-                confirmButton: "Да",
-                cancelButton: "Нет"
+                ok: "Да",
+                no: "Нет",
+                cancel: "Отмена"
             }
         },
         favs: {

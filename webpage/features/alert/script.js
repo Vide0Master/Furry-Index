@@ -90,11 +90,11 @@ class Confirm extends AlertComponent {
 
         this.okButton.element.remove()
 
-        new Button(Language.lang.features.alert.confirm.confirmButton, buttonsRow.element, null, () => {
+        new Button(Language.lang.features.alert.confirm.ok, buttonsRow.element, null, () => {
             if (typeof this.confirmCallback === "function") this.confirmCallback()
             this.removeAlert()
         }).element.focus()
-        new Button(Language.lang.features.alert.confirm.cancelButton, buttonsRow.element, null, () => {
+        new Button(Language.lang.features.alert.confirm.no, buttonsRow.element, null, () => {
             if (typeof this.cancelCallback === "function") this.cancelCallback()
             this.removeAlert()
         })
@@ -123,11 +123,11 @@ class Input extends AlertComponent {
 
         this.okButton.element.remove()
 
-        new Button(Language.lang.features.alert.confirm.confirmButton, buttonsRow.element, null, () => {
+        new Button(Language.lang.features.alert.confirm.ok, buttonsRow.element, null, () => {
             if (typeof this.confirmCallback === "function") this.confirmCallback(input)
             this.removeAlert()
         }).element.focus()
-        new Button(Language.lang.features.alert.confirm.cancelButton, buttonsRow.element, null, () => {
+        new Button(Language.lang.features.alert.confirm.no, buttonsRow.element, null, () => {
             if (typeof this.cancelCallback === "function") this.cancelCallback()
             this.removeAlert()
         })
