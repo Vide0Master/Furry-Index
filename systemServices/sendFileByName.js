@@ -20,10 +20,8 @@ module.exports = async function sendFileByName(res, filename) {
     if (thumbnailRequested) {
         try {
             await fs.promises.access(thumbPath);
-            // если превью уже есть, отправляем
             return sendFileWithCache(res, thumbPath);
         } catch {
-            // превью ещё нет, создаём
             const contentType = mime.lookup(filePath) || "";
 
             if (contentType.startsWith("image/")) {
@@ -61,12 +59,10 @@ module.exports = async function sendFileByName(res, filename) {
             return res.status(400).send("Thumbnail preview not supported for this file type");
         }
     } else {
-        // обычная отправка файла
         return sendFileWithCache(res, filePath);
     }
 };
 
-// функция отправки файла через res.sendFile с поддержкой range и etag
 function sendFileWithCache(res, filePath) {
     const stat = fs.statSync(filePath);
     const options = {

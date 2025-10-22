@@ -56,6 +56,7 @@ model File {
     post       Post?    @relation(fields: [postid], references: [id], onDelete: SetNull)
     locked     Boolean  @default(false)
     avatarfor  User?    @relation("User-Avatar")
+    postOrder Int @default(0)
 
     @@index([id])
 }
@@ -86,8 +87,9 @@ model TagGroup {
 enum PostType {
     image
     imageGroup
-    comic
     video
+    videoGroup
+    comic
 }
 
 enum PostRating {

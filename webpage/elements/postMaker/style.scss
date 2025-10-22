@@ -18,6 +18,19 @@
         &.hidden {
             display: none;
         }
+
+        .file-card {
+            .order-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+
+                &.hidden {
+                    display: none;
+                }
+            }
+        }
     }
 
     .no-files {

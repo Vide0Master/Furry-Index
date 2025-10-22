@@ -18,8 +18,22 @@ export default class Video extends Elem {
         if (options?.poster) this.video.poster = options?.poster
         if (options?.width) this.video.width = options?.width
 
+        const savedVol = localStorage.getItem("video-volume")
+        if (savedVol !== null) {
+            const v = parseFloat(savedVol)
+            if (!Number.isNaN(v)) this.video.volume = Math.max(0, Math.min(1, v))
+        }
+
+        const savedMuted = localStorage.getItem("video-muted")
+        if (savedMuted !== null) this.video.muted = savedMuted === "1"
+
         this.element.appendChild(this.video)
         if (parent) parent.appendChild(this.element)
+
+        this.video.addEventListener("volumechange", () => {
+            localStorage.setItem("video-volume", String(this.video.volume))
+            localStorage.setItem("video-muted", this.video.muted ? "1" : "0")
+        })
 
         if (blurred) {
             const blur = new Elem("blur-overlay", this.element)

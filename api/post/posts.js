@@ -108,7 +108,11 @@ exports.GetPosts = {
                 orderBy: { name: "desc" },
             },
             favourites: { select: { userid: true } },
-            files: true,
+            files: {
+                orderBy: {
+                    postOrder: "asc"
+                }
+            }
         }
 
         if (user) {
@@ -205,6 +209,17 @@ exports.CreatePost = {
         })
 
         if (!newPost) return res.status(500).send("Error creating post!")
+
+        for (const fileId in postData.files) {
+            await prisma.file.update({
+                where: {
+                    id: postData.files[fileId]
+                },
+                data: {
+                    postOrder: parseInt(fileId)
+                }
+            })
+        }
 
         res.status(200).json({ postID: newPost.id })
     }

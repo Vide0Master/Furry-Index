@@ -473,8 +473,9 @@ const LANG = {
             type: {
                 image: "Зображення",
                 imageGroup: "Группа зображень",
-                comic: "Комікс",
-                video: "Відео"
+                video: "Відео",
+                videoGroup: "Группа відео",
+                comic: "Комікс"
             },
             editButtons: {
                 visible: "Видимість",
