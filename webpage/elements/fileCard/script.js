@@ -17,7 +17,7 @@ import User from "../../scripts/userdata.js";
 import UserLabel from "../userLabel/script.js";
 
 export default class FileCard extends Elem {
-    constructor(file, isUploadable, parent, options = { remove: true, avatar: true }) {
+    constructor(file, isUploadable, parent, options = { remove: true, avatar: true, onUpload: () => { } }) {
         super("file-card", parent)
 
         if (isUploadable) {
@@ -44,6 +44,7 @@ export default class FileCard extends Elem {
             this.filetype.element.innerText = `${Language.lang.elements.fileCard.ftype}: ` + file.type
 
             this.uploadFile = async () => {
+                options.onUpload()
                 this.uploadButton.element.remove()
 
                 const fileHash = await getFileHash(file)

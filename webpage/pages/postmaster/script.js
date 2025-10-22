@@ -58,7 +58,7 @@ export async function render(params) {
 
     renderPosts(currentTags, 0, itemsPerPage)
 
-    new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
+    const newPostBtn = new Button(Language.lang.postMaster.newPost, headBar.element, null, async () => {
         makePostMaker(null, () => { renderPosts(currentTags, 0, itemsPerPage) })
     })
 
@@ -82,6 +82,8 @@ export async function render(params) {
     })
 
     if (params.postID) loadPost(params.postID)
+
+    if (params?.query?.create == "true") newPostBtn.click()
 
     return container.element;
 }

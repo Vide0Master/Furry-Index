@@ -5,6 +5,10 @@ export default class Button extends Elem {
         super(cname, parent, "button")
         if (text) this.text = text
         if (cb) this.element.addEventListener("click", cb)
+
+        this.click = () => {
+            this.element.click()
+        }
     }
 
     set enabled(state) {

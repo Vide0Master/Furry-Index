@@ -9,9 +9,10 @@ import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
 import BigTextField from "../../components/bigtextfield/script.js";
+import Link from "../../components/link/script.js";
 
 export default async function makePostMaker(postData, editedCB) {
-    const overlay = new Overlay()
+    const overlay = new Overlay(false)
 
     const container = new Elem("postmaker-post-container", overlay.element)
 
@@ -49,6 +50,11 @@ export default async function makePostMaker(postData, editedCB) {
 
     const filesField = new Elem(["files-list", "hidden"], container.element)
 
+    const noFiles = new Elem("no-files", container.element)
+    new Elem(null, noFiles.element).text = Language.lang.elements.postMaker.noFilesText
+    new Link(Language.lang.settings.user.uploadFile, "/upload", noFiles.element, true, null, "upload")
+    noFiles.switchVisible(false)
+
     async function getFiles(type, presentFiles) {
         PostData.files = presentFiles ? presentFiles : []
         PostData.type = type
@@ -63,10 +69,12 @@ export default async function makePostMaker(postData, editedCB) {
 
         const files = await API("GET", `/api/files?inuse=${postData ? `postID:${postData.id}` : "false"}&t=10${tags.length > 0 ? "&tags=" + tags.join("+") : ""}`)
         if (files.files.length == 0) {
-            filesField.element.classList.toggle("hidden", true)
+            filesField.switchVisible(false)
+            noFiles.switchVisible(true)
             return
         } else {
-            filesField.element.classList.toggle("hidden", false)
+            filesField.switchVisible(true)
+            noFiles.switchVisible(false)
         }
 
         const switches = {}
@@ -144,7 +152,9 @@ export default async function makePostMaker(postData, editedCB) {
         tagsField.setLimit(0)
     }
 
-    new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, container.element, null, async () => {
+    const btnRow = new Elem("btn-row", container.element)
+
+    new Button(postData ? Language.lang.elements.postMaker.editPost : Language.lang.elements.postMaker.createPost, btnRow.element, null, async () => {
         switch (true) {
             case PostData.name.length == 0: {
                 new Alert.Simple(Language.lang.elements.postMaker.noName, Language.lang.elements.postMaker.errorLabel, 3000, null, "noname")
@@ -167,17 +177,43 @@ export default async function makePostMaker(postData, editedCB) {
         if (postData) {
             const postResult = await API("PUT", `/api/posts/${postData.id}`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.Simple(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.id}" ${Language.lang.elements.postMaker.successEdit[1]}!`, "Success", 5000, null, postResult.postID)
-                overlay.element.click()
+                new Alert.Simple(`${Language.lang.elements.postMaker.successEdit[0]} "${postData.name}" ${Language.lang.elements.postMaker.successEdit[1]}!`, "Success", 5000, null, postResult.postID)
+                overlay.close()
                 await editedCB()
             }
         } else {
             const postResult = await API("POST", `/api/posts`, PostData, true)
             if (postResult.HTTPCODE == 200) {
-                new Alert.Simple(`${Language.lang.elements.postMaker.successCreate[0]} "${postResult.postID}" ${Language.lang.elements.postMaker.successCreate[1]}!`, "Success", 5000, null, postResult.postID)
-                overlay.element.click()
+                new Alert.Simple(`${Language.lang.elements.postMaker.successCreate[0]} "${PostData.name}" ${Language.lang.elements.postMaker.successCreate[1]}!`, "Success", 5000, null, postResult.postID)
+                overlay.close()
+
+                const params = new URLSearchParams(window.location.search);
+                if (params.get("create") === "true") {
+                    params.delete("create");
+                    const newQuery = params.toString();
+                    const newUrl = newQuery
+                        ? `${window.location.pathname}?${newQuery}`
+                        : window.location.pathname;
+
+                    history.replaceState({}, "", newUrl);
+                }
+
                 await editedCB()
             }
+        }
+    })
+
+    new Button(Language.lang.features.alert.confirm.cancel, btnRow.element, null, () => {
+        overlay.close()
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("create") === "true") {
+            params.delete("create");
+            const newQuery = params.toString();
+            const newUrl = newQuery
+                ? `${window.location.pathname}?${newQuery}`
+                : window.location.pathname;
+
+            history.replaceState({}, "", newUrl);
         }
     })
 }

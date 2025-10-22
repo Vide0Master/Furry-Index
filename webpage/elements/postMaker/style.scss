@@ -1,7 +1,7 @@
 .postmaker-post-container {
     border: 3px solid var(--outline);
     padding: 10px;
-    border-radius: 30px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -18,5 +18,22 @@
         &.hidden {
             display: none;
         }
+    }
+
+    .no-files {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    .btn-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
     }
 }

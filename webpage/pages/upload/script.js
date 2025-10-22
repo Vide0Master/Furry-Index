@@ -33,7 +33,7 @@ export async function render() {
         groupUploadBtn.switchVisible(files.length > 1)
 
         for (const file of files) {
-            fileList.push(new FileCard(file, true, fileManagerField.element))
+            fileList.push(new FileCard(file, true, fileManagerField.element, { onUpload: () => { groupUploadBtn.switchVisible(false) } }))
         }
     })
 
