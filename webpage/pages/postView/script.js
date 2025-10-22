@@ -101,7 +101,7 @@ export async function render(params) {
         new Elem("post-description", postLabel.element).text = PData.description;
     }
 
-    if (["image", "imageGroup", "comic", "video"].includes(PData.type)) {
+    if (["image", "imageGroup", "comic", "video", "videoGroup"].includes(PData.type)) {
         const isBlurred = User.Settings.get("contentFiler", "p")[PData.rating].blur || !User.Settings.get("contentFiler", "p")[postData.post.rating].show ? { text: true } : false
 
         let avg = { width: 0, height: 0, size: 0 };
@@ -115,7 +115,7 @@ export async function render(params) {
 
         //region post files render
         PData.files.forEach(file => {
-            if (PData.type === "video") {
+            if (["video", "videoGroup"].includes(PData.type)) {
                 filesElems.push(new Video(`/api/posts/${params.postID}/file/${file.id}`, fileContainer.element, null, isBlurred))
             } else {
                 filesElems.push(new Image(`/api/posts/${params.postID}/file/${file.id}`, "post-image", fileContainer.element, isBlurred))

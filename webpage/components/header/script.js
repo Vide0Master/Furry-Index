@@ -45,9 +45,9 @@ export default class Header {
         this.settings = new Link(Language.lang.header.settings, "/settings", navRow.element, true, null, "settings")
 
         this.content = new DropdownList([
-            { name: Language.lang.header.content.postMaster, value: "link:/post-master", icon: "card-hearts" },
-            { name: Language.lang.header.content.createPost, value: "link:/post-master?create=true", icon: "plus" },
             { name: Language.lang.header.content.upload, value: "link:/upload", icon: "upload" },
+            { name: Language.lang.header.content.createPost, value: "link:/post-master?create=true", icon: "plus" },
+            { name: Language.lang.header.content.postMaster, value: "link:/post-master", icon: "card-hearts" },
             { name: Language.lang.header.content.fileManager, value: "link:/file-manager", icon: "file" }
         ], navRow.element, Language.lang.header.content.label, () => { this.content.selectOption("placeholder") }, null)
         this.content.icon.iconName = "plus"

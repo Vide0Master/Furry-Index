@@ -93,11 +93,18 @@ exports.GetFiles = {
             ]
         }
 
+        const orderBy = {}
+        if (inUse) {
+            orderBy.postOrder = "asc"
+        } else {
+            orderBy.createdAt = "desc"
+        }
+
         const userFiles = await prisma.file.findMany({
             skip: page * take,
             take,
             where,
-            orderBy: { createdAt: "desc" },
+            orderBy,
             select: {
                 id: true,
                 filetype: true,

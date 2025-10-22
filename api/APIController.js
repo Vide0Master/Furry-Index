@@ -81,7 +81,7 @@ for (let i = 0; i < apiFiles.length; i++) {
 
         if (funcMethod === "ws") {
             WSController.registerListener(funcName, funcExec)
-            
+
             if (globalVariables.DEVmode)
                 cmd.info(`Registered ${cmd.colorize("WS", "green")} listener ${funcName}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.ws])
         } else {
@@ -110,6 +110,14 @@ for (let i = 0; i < apiFiles.length; i++) {
                     } else {
                         next()
                     }
+                })
+            }
+
+            if (funcInc?.includes("USER")) {
+                middlewares.push(async (req, res, next) => {
+                    const user = await getUserBySessionCookie(req.cookies[globalVariables.mainAuthTokenKey])
+                    req.USER = user
+                    next()
                 })
             }
 

@@ -56,57 +56,80 @@ export default async function makePostMaker(postData, editedCB) {
     noFiles.switchVisible(false)
 
     async function getFiles(type, presentFiles) {
-        PostData.files = presentFiles ? presentFiles : []
-        PostData.type = type
-        filesField.element.innerHTML = ""
+        PostData.files = presentFiles ? presentFiles : [];
+        PostData.type = type;
+        filesField.element.innerHTML = "";
 
-        const tags = []
-        if (["image", "imageGroup", "comic"].includes(type)) {
-            tags.push("image")
-        } else if (["video"].includes(type)) {
-            tags.push("animated")
-        }
+        const tags = [];
+        if (["image", "imageGroup", "comic"].includes(type)) tags.push("image");
+        else if (["video", "videoGroup"].includes(type)) tags.push("animated");
 
-        const files = await API("GET", `/api/files?inuse=${postData ? `postID:${postData.id}` : "false"}&t=10${tags.length > 0 ? "&tags=" + tags.join("+") : ""}`)
-        if (files.files.length == 0) {
-            filesField.switchVisible(false)
-            noFiles.switchVisible(true)
-            return
+        const files = await API("GET", `/api/files?inuse=${postData ? `postID:${postData.id}` : "false"}&t=10${tags.length > 0 ? "&tags=" + tags.join("+") : ""}`);
+
+        if (files.files.length === 0) {
+            filesField.switchVisible(false);
+            noFiles.switchVisible(true);
+            return;
         } else {
-            filesField.switchVisible(true)
-            noFiles.switchVisible(false)
+            filesField.switchVisible(true);
+            noFiles.switchVisible(false);
         }
 
-        const switches = {}
+        const switches = {};
+        const fileCards = {};
 
         for (const file of files.files) {
-            const fcard = new FileCard(file, false, filesField.element, { remove: false })
+            const fcard = new FileCard(file, false, filesField.element, { remove: false });
+            fileCards[file.id] = fcard;
 
             switches[file.id] = new SwitchInput(Language.lang.elements.postMaker.include, fcard.element, (state) => {
                 if (["image", "video"].includes(type)) {
                     for (const id in switches) {
-                        if (id == file.id) continue
-                        switches[id].change(false)
+                        if (id == file.id) continue;
+                        switches[id].change(false);
                     }
 
-                    if (state) {
-                        PostData.files = [file.id]
-                    } else {
-                        PostData.files = []
-                    }
+                    PostData.files = state ? [file.id] : [];
                 } else {
-                    const idindex = PostData.files.indexOf(file.id)
-                    if (state) {
-                        if (idindex != -1) return
-                        PostData.files.push(file.id)
-                    } else {
-                        if (idindex == -1) return
-                        PostData.files.splice(idindex, 1)
-                    }
+                    const idindex = PostData.files.indexOf(file.id);
+                    if (state && idindex === -1) PostData.files.push(file.id);
+                    else if (!state && idindex !== -1) PostData.files.splice(idindex, 1);
                 }
-            })
+            });
 
-            if (PostData.files.includes(file.id)) switches[file.id].change(true)
+            const orderRow = new Elem("order-row", fcard.element);
+            orderRow.moveBefore(fcard.fileid.element)
+            if (["image", "video"].includes(type)) { orderRow.switchVisible(false) }
+            new Button("<", orderRow.element, null, () => {
+                moveFile(file.id, -1);
+            });
+            new Button(">", orderRow.element, null, () => {
+                moveFile(file.id, 1);
+            });
+
+            if (PostData.files.includes(file.id)) switches[file.id].change(true);
+        }
+
+        function moveFile(fileId, direction) {
+            const index = PostData.files.indexOf(fileId);
+            if (index === -1) return;
+
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= PostData.files.length) return;
+
+            const otherId = PostData.files[newIndex];
+
+            const parent = filesField.element;
+            const nodeA = fileCards[fileId].element;
+            const nodeB = fileCards[otherId].element;
+
+            [PostData.files[index], PostData.files[newIndex]] = [PostData.files[newIndex], PostData.files[index]];
+
+            if (direction > 0) {
+                parent.insertBefore(nodeB, nodeA);
+            } else {
+                parent.insertBefore(nodeA, nodeB);
+            }
         }
     }
 

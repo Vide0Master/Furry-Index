@@ -477,8 +477,9 @@ const LANG = {
             type: {
                 image: "Image",
                 imageGroup: "Image group",
-                comic: "Comic",
-                video: "Video"
+                video: "Video",
+                videoGroup: "Video group",
+                comic: "Comic"
             },
             editButtons: {
                 visible: "Visible",

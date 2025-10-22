@@ -33,7 +33,6 @@ exports.GetFile = {
     }
 }
 
-
 exports.DeleteFile = {
     method: "delete",
     exec: async (req, res) => {

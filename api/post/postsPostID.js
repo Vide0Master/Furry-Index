@@ -15,9 +15,8 @@ exports.GetPostData = {
 
         const include = {
             files: {
-                select: {
-                    id: true,
-                    fileparams: true
+                orderBy: {
+                    postOrder: "asc"
                 }
             },
             tags: {
@@ -160,6 +159,18 @@ exports.UpdatePost = {
                 },
                 data: updateData
             });
+
+            for (const fileId in req.body.files) {
+                await prisma.file.update({
+                    where: {
+                        id: req.body.files[fileId]
+                    },
+                    data: {
+                        postOrder: parseInt(fileId)
+                    }
+                })
+            }
+
             return res.status(200).json({ updated: true });
         } catch (err) {
             console.error(err);

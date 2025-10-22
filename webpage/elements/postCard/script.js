@@ -19,10 +19,11 @@ export default class PostCard extends Elem {
         const isBlurred = User.Settings.get("contentFiler", "p")[postData.rating].blur || !User.Settings.get("contentFiler", "p")[postData.rating].show
 
         switch (postData.type) {
+            case "videoGroup":
             case "imageGroup": {
                 const barsControl = new Elem("group-bars-container", previewContainer.element)
 
-                postData.files = postData.files.slice().reverse()
+                postData.files = postData.files.slice()
                 const imgs = []
                 for (const file of postData.files) {
                     const img = new Image(`/api/posts/${postData.id}/file/${file.id}?thumbnail=500`, null, previewContainer.element, isBlurred)
