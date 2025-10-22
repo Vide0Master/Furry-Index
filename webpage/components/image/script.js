@@ -9,6 +9,14 @@ export default class Image extends Elem {
 
         this.image = new Elem(null, this.element, "img").element
 
+        if (blurred) {
+            const blur = new Elem("blur-overlay", this.element)
+
+            if (blurred?.text) {
+                new Button(Language.lang.elements.image.removeBlur, blur.element, "blur-rm", () => { blur.kill() })
+            }
+        }
+
         const loadingContainer = new Elem("internal-image-loading-container", this.element).element
 
         const pawCenteringElem = new Elem("paw-container", loadingContainer).element
@@ -26,14 +34,6 @@ export default class Image extends Elem {
         this.image.addEventListener("load", () => {
             loadingContainer.remove()
         });
-
-        if (blurred) {
-            const blur = new Elem("blur-overlay", this.element)
-
-            if (blurred?.text) {
-                new Button(Language.lang.elements.image.removeBlur, blur.element, "blur-rm", () => { blur.kill() })
-            }
-        }
 
         this.image.src = src
         this.image.alt = alt
