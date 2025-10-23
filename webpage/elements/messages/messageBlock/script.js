@@ -32,11 +32,11 @@ export default class MessageBlock extends Elem {
 
         WSController.listen(`messageUpdate-${data.id}`, (data) => {
             switch (data.action) {
-            case "edit": {
-                textRow.text = data.newText
-                editedIcon.switchVisible(true)
-            }; break;
-            case "delete": this.kill()
+                case "edit": {
+                    textRow.text = data.newText
+                    editedIcon.switchVisible(true)
+                }; break;
+                case "delete": this.kill()
             }
         })
 
@@ -45,7 +45,7 @@ export default class MessageBlock extends Elem {
 
             const editIcon = new Icon("edit", controlRow.element, "edit", "10x10")
             editIcon.addEvent("click", () => {
-                new Alert.Input(null, Language.lang.elements.messages.messageElem.editMessage, async (v) => {
+                const editAlert = new Alert.Input(null, Language.lang.elements.messages.messageElem.editMessage, async (v) => {
                     await API("PUT", handler, {
                         msgID: data.id,
                         newText: v
