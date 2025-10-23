@@ -14,7 +14,7 @@ const LANG = {
                 text: "Обнаружены проблемы с подключением к серверу, пытаемся восстановить подключение..."
             }
         },
-        navitaion: {
+        navigation: {
             noAccess: "You can't access this page"
         }
     },
@@ -176,6 +176,19 @@ const LANG = {
             ]
         }
     ],
+    pageTitle: {
+        main: "Главная",
+        posts: "Посты",
+        users: "Пользователи",
+        news: "Новости",
+        settings: "Настройки",
+        upload: "Загрузить файл",
+        postManager: "Мои посты",
+        files: "Мои файлы",
+        adminAppeals: "Жалобы",
+        login: "Войти",
+        register: "Регистрация"
+    },
     header: {
         main: "Главная",
         news: "Новости",
@@ -303,7 +316,8 @@ const LANG = {
             uploadedOn: "Загружено"
         },
         rating: "Рейтинг",
-        favourite: "Избранное"
+        favourite: "Избранное",
+        by: "от"
     },
     profile: {
         noUsername: "Имя пользователя не указано в адресе страницы",

@@ -10,6 +10,7 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 
 export const tag = "postmaster";
 export const tagLimit = 1;
+export const titleID = "postManager"
 
 const itemsPerPage = User.Settings.get("postsPerPage", "p")
 

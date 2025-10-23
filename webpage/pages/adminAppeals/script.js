@@ -4,12 +4,13 @@ import User from "../../scripts/userdata.js";
 
 export const tag = "adminappeals";
 export const tagLimit = 1;
+export const titleID = "adminAppeals"
 
 export async function render() {
     const container = new Elem("template-container")
 
     if (!User.testUserPermission("admin:appeals")) {
-        container.text = Language.lang.SYSTEM.navitaion.noAccess
+        container.text = Language.lang.SYSTEM.navigation.noAccess
         return container.element
     }
 

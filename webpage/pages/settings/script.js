@@ -19,6 +19,7 @@ import BasicCheck from "../../scripts/basicChecks.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
+export const titleID = tag
 
 export async function render(params) {
     const container = new Elem("settings-container")

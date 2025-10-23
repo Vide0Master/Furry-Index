@@ -13,6 +13,7 @@ import User from "../../scripts/userdata.js";
 
 export const tag = "login";
 export const tagLimit = 1;
+export const titleID = tag
 
 export async function render() {
     const container = new Elem("login-container")

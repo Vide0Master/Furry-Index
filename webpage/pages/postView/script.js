@@ -42,6 +42,8 @@ export async function render(params) {
     const PData = postData.post;
     const postDataBlock = new Elem("post-data-block", container.element);
 
+    Router.setTitle(PData.name + " " + Language.lang.postView.by + " " + (PData.owner.visiblename ? PData.owner.visiblename : `@${PData.owner.username}`))
+
     new UserCard(postDataBlock.element, PData.owner, "default", ["shrinkName"])
 
     //render tags

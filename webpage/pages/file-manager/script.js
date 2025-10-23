@@ -10,6 +10,7 @@ import User from "../../scripts/userdata.js";
 
 export const tag = "file-manager";
 export const tagLimit = 1;
+export const titleID = "files"
 
 const itemsPerPage = User.Settings.get("filesPerPage", "p")
 

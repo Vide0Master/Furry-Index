@@ -14,7 +14,7 @@ const LANG = {
                 text: "Server connection issues detected, trying to reconnect..."
             }
         },
-        navitaion: {
+        navigation: {
             noAccess: "You can't access this page"
         }
     },
@@ -180,6 +180,19 @@ const LANG = {
             ]
         }
     ],
+    pageTitle: {
+        main: "Main",
+        posts: "Posts",
+        users: "Users",
+        news: "News",
+        settings: "Settings",
+        upload: "Upload",
+        postManager: "My posts",
+        files: "My files",
+        adminAppeals: "Appeals",
+        login: "Login",
+        register: "Register"
+    },
     header: {
         main: "Main",
         news: "News",
@@ -307,7 +320,8 @@ const LANG = {
             uploadedOn: "Uploaded on",
         },
         rating: "Rating",
-        favourite: "Favourite"
+        favourite: "Favourite",
+        by: "by"
     },
     profile: {
         noUsername: "No username specified in page route",

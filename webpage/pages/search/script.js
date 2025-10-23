@@ -7,6 +7,7 @@ import User from "../../scripts/userdata.js";
 
 export const tag = "search";
 export const tagLimit = 1;
+export const titleID = "posts"
 
 const itemsPerPage = User.Settings.get("postsPerPage", "p")
 
@@ -20,7 +21,7 @@ export async function render() {
     async function renderPosts(tags = [], page = 0, take = itemsPerPage) {
         const postsResp = await postSearch(tags, page, take)
         posts.wipe()
-        
+
         for (const post of postsResp.posts) {
             new PostCard(post, posts.element)
         }

@@ -1,6 +1,7 @@
 import WSController from "./ws.js"
 import Overlay from "../features/overlay/script.js";
 import staticRoutes from "../staticVariables/routerRoutes.js";
+import Language from "./language.js";
 
 class Router {
     static routes = [...staticRoutes];
@@ -106,6 +107,7 @@ class Router {
         const pathname = url.pathname;
         const match = this._matchRoute(pathname);
 
+
         if (!match) {
             this.container.innerHTML = "<h2>Page not found</h2>";
             return;
@@ -119,6 +121,12 @@ class Router {
             const pageModule = await import(route.module);
             if (typeof pageModule.render !== "function") {
                 throw new Error("Module does not export a render() function");
+            }
+
+            if (pageModule.titleID) {
+                this.setTitle(Language.lang.pageTitle[pageModule.titleID])
+            } else {
+                this.setTitle("Furry Index", false)
             }
 
             const content = await pageModule.render(params);
@@ -149,6 +157,13 @@ class Router {
 
     static execNavListeners(route) {
         this.navListeners.forEach(v => v.func(route))
+    }
+
+    static setTitle(text, prefix = true) {
+        let titleText = ""
+        if (prefix) titleText += "Furry Index - "
+        titleText += text
+        document.querySelector("title").innerText = titleText
     }
 }
 
