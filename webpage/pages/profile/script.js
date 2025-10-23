@@ -6,6 +6,7 @@ import PostCard from "../../elements/postCard/script.js";
 import Link from "../../components/link/script.js";
 import UserCard from "../../elements/userCard/script.js";
 import postSearch from "../../scripts/search.js";
+import Router from "../../scripts/router.js";
 
 export const tag = "profile";
 export const tagLimit = 5;
@@ -25,6 +26,8 @@ export async function render(params) {
     }
 
     const Pdata = profileDataRequest.user
+
+    Router.setTitle(Pdata.visiblename ? Pdata.visiblename : `@${Pdata.username}`)
 
     const userCard = new UserCard(container.element, Pdata, "default", [])
 

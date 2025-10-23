@@ -6,6 +6,7 @@ import API from "../../scripts/api.js";
 
 export const tag = "users";
 export const tagLimit = 1;
+export const titleID = tag
 
 const itemsPerPage = 50
 

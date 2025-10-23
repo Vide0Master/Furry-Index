@@ -16,6 +16,7 @@ import processText from "../../scripts/bigTextProcessor.js";
 
 export const tag = "register";
 export const tagLimit = 1;
+export const titleID = tag
 
 export async function render() {
     const container = new Elem("register-container")

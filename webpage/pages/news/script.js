@@ -5,6 +5,7 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 
 export const tag = "news";
 export const tagLimit = 1;
+export const titleID = tag
 
 const newsOnPage = 10
 

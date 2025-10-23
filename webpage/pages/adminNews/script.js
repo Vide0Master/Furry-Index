@@ -11,6 +11,7 @@ import User from "../../scripts/userdata.js";
 
 export const tag = "adminnews";
 export const tagLimit = 1;
+export const titleID = "news"
 
 const newsOnPage = 10
 
@@ -18,7 +19,7 @@ export async function render() {
     const container = new Elem("admin-news-manager")
 
     if (!User.testUserPermission("admin:news")) {
-        container.text = Language.lang.SYSTEM.navitaion.noAccess
+        container.text = Language.lang.SYSTEM.navigation.noAccess
         return container.element
     }
 

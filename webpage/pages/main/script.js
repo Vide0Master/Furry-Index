@@ -8,6 +8,7 @@ import postSearch from "../../scripts/search.js";
 
 export const tag = "main";
 export const tagLimit = 1;
+export const titleID = tag
 
 export async function render() {
     const container = new Elem("main-container")
