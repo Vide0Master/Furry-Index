@@ -56,7 +56,6 @@ ws.on("connection", (uws) => {
         try {
             const request = JSON.parse(data.toString());
             if (request.tData.action === "ping") {
-                // можно ответить pong, если нужно
                 return;
             }
 

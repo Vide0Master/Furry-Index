@@ -63,8 +63,8 @@ class Router {
         this.init();
         if (window.location.pathname + window.location.search !== path || force) {
             window.history.pushState({}, "", path);
-            await this._loadRoute(path);
             WSController.updateRoute()
+            await this._loadRoute(path);
             this.clrNavListeners()
         }
     }

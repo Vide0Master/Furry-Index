@@ -180,7 +180,6 @@ export async function render(params) {
                     pwChangeAlert.removeAlert()
                     new Alert.Simple(Language.lang.settings.user.changePass.succ.text, Language.lang.settings.user.changePass.succ.title, 5000, null, "passChangeSucc")
                 } else { /* empty */ }
-                console.log(resp)
             })
             changeBtn.enabled = false
 
