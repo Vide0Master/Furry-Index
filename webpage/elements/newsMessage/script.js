@@ -11,8 +11,6 @@ export default class NewsMessage extends Elem {
     constructor(newsMessageData, parent, editcb, rmcb) {
         super("news-message-container", parent)
 
-        console.log(newsMessageData)
-
         const msgHeader = new Elem("msg-header", this.element)
 
         new UserCard(msgHeader.element, newsMessageData.author)

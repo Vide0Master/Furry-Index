@@ -116,7 +116,6 @@ export default class TextInputLine extends Elem {
             this.checksInf.errAll = statuses.every(v => !isOk(v))
             this.checksInf.errAny = statuses.some(v => !isOk(v))
 
-            console.log(this.checksInf)
             return this.checksInf.okAll ? val : null
         }
 
