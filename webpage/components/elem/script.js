@@ -1,6 +1,7 @@
 export default class Elem {
     constructor(cname, parent, tag = "div") {
         this.element = document.createElement(tag)
+        this.e = this.element
 
         if (cname) {
             if (typeof cname === "object") {
@@ -15,7 +16,7 @@ export default class Elem {
             parent.appendChild(this.element)
         }
 
-        if (parent) this.append(parent)
+        if (parent) this.append(parent.element || parent.e || parent)
 
         this.moveAfter = (elem) => {
             elem.insertAdjacentElement("afterend", this.element);

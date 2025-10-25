@@ -69,9 +69,11 @@
     input:disabled,
     textarea:disabled {
         border-color: color-mix(in srgb, var(--outline) 50%, #000 50%);
+        cursor: not-allowed;
 
         +label {
             color: color-mix(in srgb, var(--font-main) 50%, #000 50%);
+            cursor: not-allowed;
 
             +.limit-elem {
                 border-color: color-mix(in srgb, var(--outline) 50%, #000 50%);
@@ -102,6 +104,7 @@
         border-radius: 100vh;
         border: 3px solid var(--outline);
         width: fit-content;
+        cursor: default;
     }
 
     .checks-box {

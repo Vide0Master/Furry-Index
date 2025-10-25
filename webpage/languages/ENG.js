@@ -316,8 +316,15 @@ const LANG = {
             type: "Type",
             uploadedBy: "Uploaded by",
             linkedToPost: "Post",
-            resolution: "Resolution",
             uploadedOn: "Uploaded on",
+
+            filesData: {
+                label: "File data",
+                labelS: "Files data",
+                resolution: "Resolution",
+                size: "Size",
+                duration: "Duration"
+            }
         },
         rating: "Rating",
         favourite: "Favourite",

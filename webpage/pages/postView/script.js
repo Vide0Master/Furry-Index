@@ -16,6 +16,8 @@ import PageNavigator from "../../elements/pagenavigator/script.js";
 import MessageBox from "../../elements/messages/script.js";
 import UserCard from "../../elements/userCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
+import formatDuration from "../../scripts/formatDuration.js";
+import Icon from "../../components/icon/script.js";
 
 function capitalizeFirst(str) {
     if (!str) return "";
@@ -40,11 +42,16 @@ export async function render(params) {
     }
 
     const PData = postData.post;
-    const postDataBlock = new Elem("post-data-block", container.element);
 
     Router.setTitle(PData.name + " " + Language.lang.postView.by + " " + (PData.owner.visiblename ? PData.owner.visiblename : `@${PData.owner.username}`))
 
+    const postDataBlock = new Elem("post-data-block", container.element);
+
     new UserCard(postDataBlock.element, PData.owner, "default", ["shrinkName"])
+
+    if (!PData.visible) {
+        new Elem("visible-field", postDataBlock.element).text = Language.lang.postView.hiddenLabel;
+    }
 
     //render tags
     renderTags(PData.tags, postDataBlock.element);
@@ -76,9 +83,7 @@ export async function render(params) {
     new Elem("label", ageRatingBlock.element).text = Language.lang.postView.rating
     new TextLabel(rating.txt, ageRatingBlock.element, rating.clr, true)
 
-
     //region post files
-    const fileDataContainer = new Elem("file-data-container", postDataBlock.element);
     const postimgContainer = new Elem("post-conatiner", container.element);
 
     if (typeof params.query?.tags == "string") {
@@ -106,14 +111,11 @@ export async function render(params) {
     if (["image", "imageGroup", "comic", "video", "videoGroup"].includes(PData.type)) {
         const isBlurred = User.Settings.get("contentFiler", "p")[PData.rating].blur || !User.Settings.get("contentFiler", "p")[postData.post.rating].show ? { text: true } : false
 
-        let avg = { width: 0, height: 0, size: 0 };
-        let count = PData.files.length;
-
-        if (["image", "video"].includes(PData.type)) count = 1;
-
         const fileContainer = new Elem("files-cont", postimgContainer.element)
 
         const filesElems = []
+
+        const fileParams = []
 
         //region post files render
         PData.files.forEach(file => {
@@ -124,9 +126,7 @@ export async function render(params) {
             }
 
             //region post stats
-            avg.width += file.fileparams.width;
-            avg.height += file.fileparams.height;
-            avg.size += file.fileparams.size;
+            fileParams.push({ id: file.id, ...file.fileparams, fileType: file.filetype })
         });
 
         if (filesElems.length > 1) {
@@ -145,20 +145,21 @@ export async function render(params) {
             })
         }
 
-        avg.width = Math.floor(avg.width / count);
-        avg.height = Math.floor(avg.height / count);
-        avg.size = avg.size / count;
+        const fileDataContainer = new Elem("file-data-container", postDataBlock.element);
 
-        let resolution = `${avg.height}x${avg.width}px`;
-        let size = formatFileSize(avg.size);
+        new Elem("post-files-label", fileDataContainer.element).text = Language.lang.postView.file.filesData[fileParams.length > 1 ? "labelS" : "label"]
 
-        if (PData.type === "imageGroup" || PData.type === "comic") {
-            resolution = `~${resolution}`;
-            size = `~${size}`;
+        for (const fileDatID in fileParams) {
+            const fileDat = fileParams[fileDatID]
+            const dataBlock = new Elem("file-data-block", fileDataContainer.element)
+            const fileName = new Elem("file-name", dataBlock)
+            if (fileParams.length > 1) new Elem("counter", fileName).text = parseInt(fileDatID) + 1
+            new Elem("file-name-text", fileName).text = fileDat.id.split("-")[0]
+            new Icon(fileDat.fileType == "mp4" ? "video" : "image", new Elem("icon-cont", fileName))
+            new Elem("data-line", dataBlock).text = `${Language.lang.postView.file.filesData.resolution}: ${fileDat.width}x${fileDat.height}px`
+            if (fileDat.duration) new Elem("data-line", dataBlock).text = `${Language.lang.postView.file.filesData.duration}: ${formatDuration(fileDat.duration)}`
+            new Elem("data-line", dataBlock).text = `${Language.lang.postView.file.filesData.size}: ${formatFileSize(fileDat.size)}`
         }
-
-        new Elem(null, fileDataContainer.element).text = `${Language.lang.postView.file.resolution}: ${resolution}`;
-        new Elem(null, fileDataContainer.element).text = `${Language.lang.postView.file.size}: ${size}`;
     }
 
     const controlBlock = new Elem("control-block", postimgContainer.element)
@@ -243,10 +244,6 @@ export async function render(params) {
                 Router.navigate(`/post/${PData.id}`, false, true)
             })
         })
-    }
-
-    if (!PData.visible) {
-        new Elem(null, postDataBlock.element).text = Language.lang.postView.hiddenLabel;
     }
 
     new MessageBox(container.element, `/api/posts/${PData.id}/messages`)

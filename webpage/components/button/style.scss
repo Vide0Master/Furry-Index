@@ -16,6 +16,6 @@ button {
     &:disabled {
         color: color-mix(in srgb, var(--font-main) 50%, #000 50%);
         border-color: color-mix(in srgb, var(--outline) 50%, #000 50%);
-        pointer-events: none;
+        cursor: not-allowed;
     }
 }

@@ -312,8 +312,14 @@ const LANG = {
             type: "Тип файла",
             uploadedBy: "Загружен",
             linkedToPost: "Пост",
-            resolution: "Разрешение",
-            uploadedOn: "Загружено"
+            uploadedOn: "Загружено",
+            filesData: {
+                label: "Данные файла",
+                labelS: "Данные файлов",
+                resolution: "Разрешение",
+                size: "Размер",
+                duration: "Длительность"
+            }
         },
         rating: "Рейтинг",
         favourite: "Избранное",

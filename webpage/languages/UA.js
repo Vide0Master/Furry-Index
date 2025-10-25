@@ -312,8 +312,14 @@ const LANG = {
             type: "Тип файлу",
             uploadedBy: "Завантажений",
             linkedToPost: "Пост",
-            resolution: "Розширення",
-            uploadedOn: "Завантажено"
+            uploadedOn: "Завантажено",
+            filesData: {
+                label: "Дані файлу",
+                labelS: "Дані файлів",
+                resolution: "Роздільна здатність",
+                size: "Розмір",
+                duration: "Тривалість"
+            }
         },
         rating: "Рейтинг",
         favourite: "Обране",
