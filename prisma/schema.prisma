@@ -56,7 +56,7 @@ model File {
     post       Post?    @relation(fields: [postid], references: [id], onDelete: SetNull)
     locked     Boolean  @default(false)
     avatarfor  User?    @relation("User-Avatar")
-    postOrder Int @default(0)
+    postOrder  Int      @default(0)
 
     @@index([id])
 }
@@ -212,4 +212,25 @@ model NewsLetter {
     author      User     @relation(fields: [authorid], references: [id])
     postedAt    DateTime @default(now())
     tags        Json
+}
+
+enum ReportResolutionState {
+    inQueue
+    onReview
+    resolvedAutomatically
+    resolvedManually
+    resolvedByStaff
+}
+
+model Report {
+    id String @id @unique @default(uuid())
+
+    state ReportResolutionState @default(inQueue)
+
+    userid      String   @default("anon")
+    type        String
+    description String?
+    data        Json
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
 }

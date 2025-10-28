@@ -136,6 +136,11 @@ export default class TextInputLine extends Elem {
         // so, here will be some rework, also some changes that will be implemented in register page...
         // T.T
 
+        // 25.10.2025
+        // here i am again!
+        // i got to think about how to enable and disable checks, but i'll throw it in a bin
+        // not today fuckass app
+
         this.addCheck = (text, testFuncion) => {
             if (!this.checkBlock) {
                 this.checkBlock = new Elem("checks-box", this.element)

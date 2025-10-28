@@ -21,8 +21,6 @@ export default class Icon extends Elem {
                 this.element.classList.add(cname)
             }
         }
-
-        if (parent) parent.appendChild(this.element)
     }
 
     get iconName(){

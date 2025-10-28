@@ -1,0 +1,14 @@
+.internal-overlay .internal-report-cont {
+    border: 3px solid var(--outline);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible;
+    background-color: var(--background);
+
+    >.label {
+        font-size: 20px;
+    }
+}

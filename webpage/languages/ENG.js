@@ -189,7 +189,7 @@ const LANG = {
         upload: "Upload",
         postManager: "My posts",
         files: "My files",
-        adminAppeals: "Appeals",
+        adminReports: "Reports",
         login: "Login",
         register: "Register"
     },
@@ -215,9 +215,8 @@ const LANG = {
         },
         admin: {
             label: "Admin panel",
+            appeals: "Reports",
             news: "News",
-            appeals: "Appeals",
-            users: "Users",
         }
     },
     login: {
@@ -316,8 +315,15 @@ const LANG = {
             type: "Type",
             uploadedBy: "Uploaded by",
             linkedToPost: "Post",
-            resolution: "Resolution",
             uploadedOn: "Uploaded on",
+
+            filesData: {
+                label: "File data",
+                labelS: "Files data",
+                resolution: "Resolution",
+                size: "Size",
+                duration: "Duration"
+            }
         },
         rating: "Rating",
         favourite: "Favourite",
@@ -579,6 +585,32 @@ const LANG = {
                 label: "Confirm",
                 conf: "Do you want to delete message"
             }
+        },
+        reportCard: {
+            anon: "Anonymous",
+            subject: {
+                label: "Report",
+                spam: "spam",
+                advertisement: "advertisement",
+                cp: "child pornography",
+                inappropriateContent: "inappropriate content",
+                inappropriateBehaviour: "inappropriate behaviour",
+                scam: "scam",
+                fraud: "fraud"
+            },
+            reported: "Reported",
+            status: {
+                label: "Status",
+                inQueue: "in queue",
+                onReview: "on review",
+                resolvedAutomatically: "resoled automatically",
+                resolvedManually: "resolved manually",
+                resolvedByStaff: "resolved by staff"
+            },
+            description: {
+                label: "Descrition",
+                no: "No description provided"
+            }
         }
     },
     features: {
@@ -605,6 +637,30 @@ const LANG = {
                 "I'm over 18 and want to see NSFW",
             ],
             ddLabel: "Over 18?"
+        },
+        report: {
+            label: "Report",
+            desc: "Description",
+            descLbl: {
+                req: "required",
+                opt: "optional"
+            },
+            pageDataInc: "Page data will be included in report",
+            submit: "Submit",
+            succ: "Report was sent",
+            types: {
+                label: "Select report type",
+                selLabel: "Report type",
+                spam: "Spam",
+                advertisement: "Advertisement",
+                cp: "Child pornography",
+                inappropriateContent: "Inappropriate content",
+                inappropriateBehaviour: "Inappropriate behaviour",
+                scam: "Scam",
+                fraud: "Fraud",
+                bug: "Bug",
+                featureRequest: "Feature request"
+            }
         }
     }
 }

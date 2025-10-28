@@ -87,7 +87,6 @@ export async function render() {
 
     function testResultsForButton() {
         submitButton.enabled = letterDesc.checksInf.okAll && letterLabel.checksInf.okAll && tagsField.checksInf.okAll
-        console.log(newsData)
     }
 
     const submitButton = new Button(Language.lang.adminNews.editor.button.post, newsEditor.element, null, async () => {

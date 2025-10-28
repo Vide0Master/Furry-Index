@@ -9,6 +9,7 @@ import TextInputLine from "../textinputline/script.js"
 import Button from "../button/script.js"
 import Alert from "../../features/alert/script.js"
 import API from "../../scripts/api.js"
+import ReportOverlay from "../../features/report/script.js"
 
 export default class Footer {
     static element = document.createElement("footer")
@@ -75,3 +76,7 @@ new Link(Language.lang.keyRedeem.label, () => {
         }
     })
 }, Footer.element, false, null, "key")
+
+new Link(Language.lang.features.report.label, () => {
+    new ReportOverlay({ inc: ["bug", "featureRequest"] })
+}, Footer.element, false, null, "shield")

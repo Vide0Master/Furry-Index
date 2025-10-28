@@ -1,6 +1,7 @@
 export default class Elem {
     constructor(cname, parent, tag = "div") {
         this.element = document.createElement(tag)
+        this.e = this.element
 
         if (cname) {
             if (typeof cname === "object") {
@@ -12,17 +13,21 @@ export default class Elem {
         }
 
         this.append = (parent) => {
-            parent.appendChild(this.element)
+            (parent.element || parent.e || parent).appendChild(this.element)
         }
 
         if (parent) this.append(parent)
 
+        const moveElem = (pos, elem) => {
+            (elem.element || elem.e || elem).insertAdjacentElement(pos, this.element)
+        }
+
         this.moveAfter = (elem) => {
-            elem.insertAdjacentElement("afterend", this.element);
+            moveElem("afterend", elem)
         }
 
         this.moveBefore = (elem) => {
-            elem.insertAdjacentElement("beforebegin", this.element);
+            moveElem("beforebegin", elem)
         }
 
         this.switchVisible = (state) => {

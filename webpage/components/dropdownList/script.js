@@ -35,7 +35,6 @@ export default class DropdownList extends Elem {
 
         if (chcb) this.chcb = () => {
             chcb(this.currentOption)
-            console.log(this.currentOption)
         }
 
         label.addEvent("click", () => {

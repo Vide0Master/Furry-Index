@@ -1,0 +1,14 @@
+.admin-reports-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .reports-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}

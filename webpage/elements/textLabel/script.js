@@ -17,4 +17,8 @@ export default class TextLabel extends Elem {
             this.element.style.setProperty("--internal-label-color", color)
         }
     }
+
+    set text(textData) {
+        this.textElement.text = textData
+    }
 }

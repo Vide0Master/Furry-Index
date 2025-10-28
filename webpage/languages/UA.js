@@ -185,7 +185,7 @@ const LANG = {
         upload: "Завантажити",
         postManager: "Мої пости",
         files: "Мої файли",
-        adminAppeals: "Апеляції",
+        adminReports: "Скарги",
         login: "Увійти",
         register: "Реєстрація"
     },
@@ -211,9 +211,8 @@ const LANG = {
         },
         admin: {
             label: "Адмін панель",
-            news: "Новини",
-            appeals: "Апеляції",
-            users: "Користувачі"
+            appeals: "Скарги",
+            news: "Новини"
         }
     },
     login: {
@@ -312,8 +311,14 @@ const LANG = {
             type: "Тип файлу",
             uploadedBy: "Завантажений",
             linkedToPost: "Пост",
-            resolution: "Розширення",
-            uploadedOn: "Завантажено"
+            uploadedOn: "Завантажено",
+            filesData: {
+                label: "Дані файлу",
+                labelS: "Дані файлів",
+                resolution: "Роздільна здатність",
+                size: "Розмір",
+                duration: "Тривалість"
+            }
         },
         rating: "Рейтинг",
         favourite: "Обране",
@@ -575,6 +580,32 @@ const LANG = {
                 label: "Видалення",
                 conf: "Ви впевнені що хочете видалити повідомлення"
             }
+        },
+        reportCard: {
+            anon: "Анонім",
+            subject: {
+                label: "Скарга",
+                spam: "спам",
+                advertisement: "реклама",
+                cp: "дитяча порнографія",
+                inappropriateContent: "неприйнятний контент",
+                inappropriateBehaviour: "неприйнятна поведінка",
+                scam: "шахрайство",
+                fraud: "обман / фальсифікація"
+            },
+            reported: "Створено",
+            status: {
+                label: "Статус",
+                inQueue: "у черзі",
+                onReview: "на розгляді",
+                resolvedAutomatically: "вирішено автоматично",
+                resolvedManually: "вирішено вручну",
+                resolvedByStaff: "вирішено адміністратором"
+            },
+            description: {
+                label: "Опис",
+                no: "Немає опису"
+            }
         }
     },
     features: {
@@ -601,6 +632,30 @@ const LANG = {
                 "Я старше 18 та хочу бачити контент для дорослих"
             ],
             ddLabel: "Старше 18?"
+        },
+        report: {
+            label: "Скарга",
+            desc: "Опис",
+            descLbl: {
+                req: "обов'язково",
+                opt: "опціонально"
+            },
+            pageDataInc: "Дані сторінки будуть додані до скарги",
+            submit: "Відправити",
+            succ: "Скарга була відправлена",
+            types: {
+                label: "Оберіть тип скарги",
+                selLabel: "Тип скарги",
+                spam: "Спам",
+                advertisement: "Реклама",
+                cp: "Дитяча порнографія",
+                inappropriateContent: "Неприйнятний контент",
+                inappropriateBehaviour: "Неприйнятна поведінка",
+                scam: "Шахрайство",
+                fraud: "Обман / фальсифікація",
+                bug: "Помилка",
+                featureRequest: "Запит функції"
+            }
         }
     }
 };
