@@ -18,6 +18,8 @@ import UserCard from "../../elements/userCard/script.js";
 import SearchField from "../../elements/searchfield/script.js";
 import formatDuration from "../../scripts/formatDuration.js";
 import Icon from "../../components/icon/script.js";
+import ReportOverlay from "../../features/report/script.js";
+import Link from "../../components/link/script.js";
 
 function capitalizeFirst(str) {
     if (!str) return "";
@@ -56,11 +58,12 @@ export async function render(params) {
     //render tags
     renderTags(PData.tags, postDataBlock.element);
 
+    new Link(Language.lang.features.report.label, () => { new ReportOverlay({ exc: ["inappropriateBehaviour", "scam", "fraud", "accountAccess"], data: { post: PData } }) }, new Elem("report-cont", postDataBlock), null, null, "shield")
+
     //region upload data
     const postUploadData = new Elem("post-upload-data", postDataBlock.element);
     const uploadedOn = new Elem("when", postUploadData.element);
     uploadedOn.text = `${Language.lang.postView.file.uploadedOn}: ${formatDate(PData.createdOn)}`;
-
 
     //region age rating
     const rating = { txt: PData.rating, clr: "" }

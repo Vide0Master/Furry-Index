@@ -13,8 +13,6 @@ export default class Link extends Elem {
         this.textElem = new Elem("link-text", this.element)
         this.textElem.text = text ? text : ""
 
-        if (parent) parent.appendChild(this.element)
-
         if (cname) {
             if (typeof cname === "object") {
                 for (const cn of cname)

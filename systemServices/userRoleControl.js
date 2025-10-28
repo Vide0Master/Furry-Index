@@ -12,7 +12,7 @@ const roleTemplates = {
         permissions: [
             "admin:news",
             "admin:posts",
-            "admin:appeals",
+            "admin:reports",
             "admin:users"
         ]
     },
@@ -24,7 +24,7 @@ const roleTemplates = {
         permissions: [
             "admin:news",
             "admin:posts",
-            "admin:appeals",
+            "admin:reports",
             "admin:users"
         ]
     },
@@ -35,7 +35,7 @@ const roleTemplates = {
         hiddable: false,
         permissions: [
             "admin:posts",
-            "admin:appeals"
+            "admin:reports"
         ]
     },
     artist: {

@@ -50,7 +50,6 @@ for (let i = 0; i < apiFiles.length; i++) {
         const funcName = moduleFunc?.name || moduleFunc?.n
         const funcPerm = moduleFunc?.permissions || moduleFunc?.p || modulePermissions
         const funcExec = moduleFunc?.exec || moduleFunc?.e
-        // eslint-disable-next-line no-unused-vars
         const funcInc = moduleFunc?.include || moduleFunc?.i || moduleInclude
 
         if (globalVariables.DEVmode) {

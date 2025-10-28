@@ -23,7 +23,7 @@ export async function render() {
 
     async function updateNewsList(p) {
         newsList.wipe()
-        const messages = await API("GET", `/api/news?p=${p - 1}`)
+        const messages = await API("GET", `/api/news?p=${p - 1}&t=${newsOnPage}`)
 
         for (const message of messages.news) {
             new NewsMessage(message, newsList.element)
@@ -39,10 +39,3 @@ export async function render() {
 
     return container.element;
 }
-
-// this is template page
-// all pages should have:
-// - some tag name for page
-// - tag limit for count of preloaded pages (deprecated)
-// - render function that has params argument (optional) and returns element as shown
-// page folder should have script and style for this page specifically, and class of page element should be unique

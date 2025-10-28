@@ -185,7 +185,7 @@ const LANG = {
         upload: "Загрузить файл",
         postManager: "Мои посты",
         files: "Мои файлы",
-        adminAppeals: "Жалобы",
+        adminReports: "Жалобы",
         login: "Войти",
         register: "Регистрация"
     },
@@ -211,9 +211,8 @@ const LANG = {
         },
         admin: {
             label: "Админ панель",
-            news: "Новости",
-            appeals: "Апеляции",
-            users: "Пользователи"
+            appeals: "Жалобы",
+            news: "Новости"
         }
     },
     login: {
@@ -581,6 +580,32 @@ const LANG = {
                 label: "Удаление",
                 conf: "Вы уверены что хотите удалить сообщение"
             }
+        },
+        reportCard: {
+            anon: "Аноним",
+            subject: {
+                label: "Жалоба",
+                spam: "спам",
+                advertisement: "реклама",
+                cp: "детская порнография",
+                inappropriateContent: "неподобающий контент",
+                inappropriateBehaviour: "неподобающее поведение",
+                scam: "мошенничество",
+                fraud: "фальсификация / обман"
+            },
+            reported: "Создано",
+            status: {
+                label: "Статус",
+                inQueue: "в очереди",
+                onReview: "на рассмотрении",
+                resolvedAutomatically: "решено автоматически",
+                resolvedManually: "решено вручную",
+                resolvedByStaff: "решено администратором"
+            },
+            description: {
+                label: "Описание",
+                no: "Нет описания"
+            }
         }
     },
     features: {
@@ -607,6 +632,30 @@ const LANG = {
                 "Я старше 18 и я хочу видеть контент для взрослых"
             ],
             ddLabel: "Старше 18?"
+        },
+        report: {
+            label: "Жалоба",
+            desc: "Описание",
+            descLbl: {
+                req: "требуется",
+                opt: "опционально"
+            },
+            pageDataInc: "Данные страницы будут включены в жалобу",
+            submit: "Отправить",
+            succ: "Жалоба отправлена",
+            types: {
+                label: "Выберите тип жалобы",
+                selLabel: "Тип жалобы",
+                spam: "Спам",
+                advertisement: "Реклама",
+                cp: "Детская порнография",
+                inappropriateContent: "Неподобающий контент",
+                inappropriateBehaviour: "Неподобающее поведение",
+                scam: "Мошенничество",
+                fraud: "Фальсификация / обман",
+                bug: "Ошибка",
+                featureRequest: "Предложение функции"
+            }
         }
     }
 };
