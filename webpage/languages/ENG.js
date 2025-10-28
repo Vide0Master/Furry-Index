@@ -371,6 +371,8 @@ const LANG = {
                 themes: {
                     "default-dark": "Default",
                     "nature": "Nature",
+                    "blueberry": "Bluenerry",
+                    "bloody-mary": "Bloody Mary"
                 }
             }
         },

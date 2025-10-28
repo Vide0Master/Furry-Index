@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     overflow: hidden;
+    transition: 0.2s;
 }
 
 //region dark theme
@@ -28,13 +29,63 @@
     --message-font: #000;
 }
 
-//region dark theme
+//region nature theme
 .theme-nature {
     --font-main: #fff;
     --font-hover: #00b035;
 
     --background: #1f251f;
     --background-s: #303a30;
+
+    --outline: var(--font-main);
+    --outline-highlight: var(--font-hover);
+
+    --interactible-passive: var(--font-main);
+    --interactible-hover: var(--font-hover);
+
+    --icon-color: var(--font-main);
+
+    --alert-timer-color: #3a9e1f;
+
+    --ok-color: rgb(96, 156, 30);
+    --nok-color: rgb(182, 45, 45);
+
+    --message-bg: #202020;
+    --message-font: #ffffff;
+}
+
+//region blueberry theme
+.theme-blueberry {
+    --font-main: #fff;
+    --font-hover: #009dff;
+
+    --background: #002839;
+    --background-s: #003850;
+
+    --outline: var(--font-main);
+    --outline-highlight: var(--font-hover);
+
+    --interactible-passive: var(--font-main);
+    --interactible-hover: var(--font-hover);
+
+    --icon-color: var(--font-main);
+
+    --alert-timer-color: #3a9e1f;
+
+    --ok-color: rgb(96, 156, 30);
+    --nok-color: rgb(182, 45, 45);
+
+    --message-bg: #004d79;
+    --message-font: #ffffff;
+}
+
+//region bloody mary theme
+.theme-bloody-mary {
+    --font-main: #fff;
+    --font-hover: #ce1f00;
+
+    --background: #2b0e0a;
+    --background-s: #3f1813;
 
     --outline: var(--font-main);
     --outline-highlight: var(--font-hover);

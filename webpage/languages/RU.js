@@ -365,7 +365,9 @@ const LANG = {
                 label: "Тема",
                 themes: {
                     "default-dark": "Стандарт",
-                    nature: "Природа"
+                    nature: "Природа",
+                    blueberry: "Голубика",
+                    "bloody-mary": "Кровавая Мэри"
                 }
             }
         },
