@@ -66,7 +66,7 @@ export async function render(params) {
         }, Language.lang.settings.webpage.language.label + ": ")
 
     //region themes
-    const themesList = ["default-dark", "nature"]
+    const themesList = ["default-dark", "nature", "blueberry", "bloody-mary"]
     const themes = new DropdownList(themesList.map(v => {
         return {
             name: Language.lang.settings.webpage.theme.themes[v],
@@ -78,6 +78,10 @@ export async function render(params) {
 
     const currentTheme = User.Settings.get("theme", "p")
     if (currentTheme) themes.selectOption(currentTheme)
+
+    Array.from(themes.optionsBlock.e.children).forEach((elem, i) => {
+        elem.classList.add("theme-" + themesList[i])
+    })
 
     //region item counts for posts
     const itemCounts = [25, 50, 75, 100, 150, 200]
