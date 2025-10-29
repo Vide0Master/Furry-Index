@@ -9,6 +9,9 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - COMPACTINTRO=${COMPACTINTRO}
       - FIPORT=${FIPORT}
+      - MAILSERVER=${MAILSERVER}
+      - MAILBOX=${MAILBOX}
+      - MAILBOXPASS=${MAILBOXPASS}
       - ISFRESH=${ISFRESH}
     volumes:
       - ./file_storage:/app/file_storage

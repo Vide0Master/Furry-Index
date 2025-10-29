@@ -32,8 +32,6 @@ const blocks = {
         </div>`}
 }
 
-console.log(globalVariables.mailServer, globalVariables.mailBox, globalVariables.mailBoxPass)
-
 async function sendMail(textArr = [], subject = "Furry Index", address, features = []) {
     const transporter = nodemailer.createTransport({
         host: globalVariables.mailServer,
