@@ -412,6 +412,21 @@ const LANG = {
                 },
                 change: "Змінити",
                 cancel: "Відмінити"
+            },
+            email: {
+                input: "Email",
+                msgAlert: [
+                    "Лист відправлено",
+                    "Перевірте свою пошту для продовження верифікації.",
+                    "Якщо ви не бачите листа, перевірте спам."
+                ],
+                linkLabel: "Прив'язати",
+                unlink: "Відв'язати",
+                unlinked: "Email відв'язано",
+                link: {
+                    link: "Email прив'язано",
+                    noLink: "Email не прив'язано"
+                }
             }
         }
     },
@@ -425,7 +440,8 @@ const LANG = {
             fix: "Виправте помилки в ключі"
         },
         succ: {
-            superadminassign: "Роль суперадміна присвоєна"
+            superadminassign: "Роль суперадміна присвоєна",
+            emailLik: "Email прив'язано!"
         }
     },
     adminNews: {
@@ -616,6 +632,13 @@ const LANG = {
                 ok: "Так",
                 no: "Ні",
                 cancel: "Відміна"
+            },
+            succ: "Успіх",
+            err: {
+                tryAgainLater: {
+                    title: "Сталась помилка",
+                    text: "Спробуйте знову пізніше..."
+                }
             }
         },
         favs: {

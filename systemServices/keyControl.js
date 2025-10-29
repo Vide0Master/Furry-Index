@@ -24,7 +24,7 @@ class KeyController {
     static async createKey(type, data = {}, rewrite = false) {
         if (rewrite) {
             const existing = await prisma.reddemableKey.findFirst({
-                where: { type }
+                where: { type, data: { equals: data } }
             });
 
             if (existing) {
@@ -75,9 +75,19 @@ class KeyController {
         }
 
         switch (keyData.type) {
-        case "superadminassign": {
-            roleControl.assignRole(userid, "superAdmin")
-        }; break;
+            case "superadminassign": {
+                roleControl.assignRole(userid, "superAdmin")
+            }; break;
+            case "verifyEmail": {
+                await prisma.user.update({
+                    where: {
+                        id: keyData.data.userID,
+                    },
+                    data: {
+                        email: keyData.data.email
+                    }
+                })
+            }; break;
         }
 
         await prisma.reddemableKey.update({

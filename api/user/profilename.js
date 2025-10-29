@@ -10,7 +10,7 @@ exports.ROUTE = "/api/profile/:username"
 exports.GetUserData = {
     m: "get",
     e: async (req, res) => {
-        const user = await getUserByUsername(req.params.username, ["privateprofileparams"])
+        const user = await getUserByUsername(req.params.username, ["privateprofileparams", "email"])
 
         if (!user) return res.status(404).send("User not found")
 
@@ -31,7 +31,8 @@ exports.UpdateUserData = {
             password: true,
             id: false,
             username: false,
-            createdAt: false
+            createdAt: false,
+            email: false
         }
 
         const data = req.body
@@ -46,12 +47,12 @@ exports.UpdateUserData = {
 
         if (data.password) data.password = await bcrypt.hash(data.password, 10)
 
-            await prisma.user.update({
-                where: {
-                    id: sessionUser.id
-                },
-                data
-            })
+        await prisma.user.update({
+            where: {
+                id: sessionUser.id
+            },
+            data
+        })
 
         return res.status(200).send("Profile updated successfully")
     }
@@ -70,7 +71,8 @@ exports.ClearUserDat = {
             password: false,
             id: false,
             username: false,
-            createdAt: false
+            createdAt: false,
+            email: true
         }
 
         const data = req.body
@@ -92,5 +94,36 @@ exports.ClearUserDat = {
         })
 
         return res.status(200).send("Profile updated successfully")
+    }
+}
+
+const keyControl = require("../../systemServices/keyControl")
+
+const mailer = require("../../systemServices/mailer")
+
+//region email
+exports.SetEmail = {
+    m: "post",
+    route: "/api/profile/:username/email",
+    i: ["USER"],
+    e: async (req, res) => {
+        if (!req.USER) return res.status(404).send("No such user")
+        if (req.USER.username !== req.params.username) return res.status(403).send("Action forbidden")
+        if (!req?.body?.email) return res.status(400).send("No body or email in body")
+
+        const emailKey = await keyControl.createKey("verifyEmail", { userID: req.USER.id, email: req.body.email }, true)
+
+        await mailer(
+            [
+                "Furry Index Email verification",
+                `Hello, ${req.USER.visiblename || req.USER.username}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
+                emailKey,
+                "If it was not you, delete this letter"
+            ],
+            "Furry Index Email verification",
+            req.body.email
+        )
+
+        return res.status(200).send("Check email")
     }
 }

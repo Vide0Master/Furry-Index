@@ -9,24 +9,27 @@ datasource db {
 }
 
 model User {
-    id                   String        @id @unique @default(uuid())
-    username             String        @unique
-    visiblename          String?
-    password             String
-    createdAt            DateTime      @default(now())
-    avatarID             String?       @unique
-    avatar               File?         @relation("User-Avatar", fields: [avatarID], references: [id])
-    sessions             Session[]
-    files                File[]        @relation("User-Files")
-    posts                Post[]
+    id          String   @id @unique @default(uuid())
+    username    String   @unique
+    visiblename String?
+    password    String
+    createdAt   DateTime @default(now())
+    avatarID    String?  @unique
+    email       String?
+
     globalprofileparams  Json?
     privateprofileparams Json?
-    scores               Score[]
-    favourites           Favourite[]
-    directChats          Chat[]
-    userMessages         ChatMessage[]
-    roles                Role[]
-    NewsLetter           NewsLetter[]
+
+    avatar       File?         @relation("User-Avatar", fields: [avatarID], references: [id])
+    sessions     Session[]
+    files        File[]        @relation("User-Files")
+    posts        Post[]
+    scores       Score[]
+    favourites   Favourite[]
+    directChats  Chat[]
+    userMessages ChatMessage[]
+    roles        Role[]
+    NewsLetter   NewsLetter[]
 
     @@index([username, id])
 }

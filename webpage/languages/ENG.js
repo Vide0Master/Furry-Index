@@ -417,6 +417,18 @@ const LANG = {
                 },
                 change: "Change",
                 cancel: "Cancel"
+            },
+            email: {
+                input: "Email",
+                msgAlert: [
+                    "Message sent",
+                    "Check your email to continue linking process.",
+                    "If you don't see it, check spam."
+                ],
+                linkLabel: "Link",
+                unlink: "Unlink",
+                unlinked: "Email unlinked",
+                link: { link: "Email linked", noLink: "Email unlinked" }
             }
         }
     },
@@ -430,7 +442,8 @@ const LANG = {
             fix: "Fix errors in key"
         },
         succ: {
-            superadminassign: "Superadmin role assigned"
+            superadminassign: "Superadmin role assigned",
+            emailLik: "Email was linked!"
         }
     },
     adminNews: {
@@ -621,6 +634,13 @@ const LANG = {
                 ok: "Yes",
                 no: "No",
                 cancel: "Cancel"
+            },
+            succ: "Success",
+            err: {
+                tryAgainLater: {
+                    title: "Error occured",
+                    text: "Try again later..."
+                }
             }
         },
         favs: {

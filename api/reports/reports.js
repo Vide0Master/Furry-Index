@@ -27,7 +27,7 @@ exports.GetReports = {
 
             for (const report of reportList) {
                 if (report.userid != "anon") {
-                    report.author = await getUserByID(report.userid, ["privateprofileparams"])
+                    report.author = await getUserByID(report.userid, ["privateprofileparams", "email"])
                 } else {
                     report.author = "anon"
                 }

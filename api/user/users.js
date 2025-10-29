@@ -48,7 +48,7 @@ exports.GetUsers = {
         });
 
         for (const usrIndex in users) {
-            users[usrIndex] = await getUserByID(users[usrIndex].id, ["privateprofileparams"]);
+            users[usrIndex] = await getUserByID(users[usrIndex].id, ["privateprofileparams", "email"]);
         }
 
         res.status(200).json({ users });

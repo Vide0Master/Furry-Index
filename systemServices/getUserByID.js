@@ -24,7 +24,8 @@ module.exports = async function getUserByID(id, exclude = []) {
                     specialData: true,
                     hidden: true
                 }
-            }
+            },
+            email: true
         }
     })
 

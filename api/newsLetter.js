@@ -23,7 +23,7 @@ exports.GetNews = {
             })
 
             for (const post of newsList) {
-                post.author = await getUserByID(post.authorid, ["privateprofileparams"])
+                post.author = await getUserByID(post.authorid, ["privateprofileparams", "email"])
             }
 
             res.status(200).json({ news: newsList })
