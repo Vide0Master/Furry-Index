@@ -412,6 +412,21 @@ const LANG = {
                 },
                 change: "Изменить",
                 cancel: "Отменить"
+            },
+            email: {
+                input: "Email",
+                msgAlert: [
+                    "Сообщение отправлено",
+                    "Проверьте свою почту что-бы продолжить привязку.",
+                    "Если вы не видите письма, проверьте спам."
+                ],
+                linkLabel: "Привязать",
+                unlink: "Отвязать",
+                unlinked: "Email отвязан",
+                link: {
+                    link: "Email привязан",
+                    noLink: "Email не привязан"
+                }
             }
         }
     },
@@ -425,7 +440,8 @@ const LANG = {
             fix: "Исправьте ошибки в ключе"
         },
         succ: {
-            superadminassign: "Роль суперадминистратора назначена"
+            superadminassign: "Роль суперадминистратора назначена",
+            emailLik: "Email привязан!"
         }
     },
     adminNews: {
@@ -616,6 +632,13 @@ const LANG = {
                 ok: "Да",
                 no: "Нет",
                 cancel: "Отмена"
+            },
+            succ: "Успех",
+            err: {
+                tryAgainLater: {
+                    title: "Произошла ошибка",
+                    text: "Попробуйте снова позже..."
+                }
             }
         },
         favs: {

@@ -11,7 +11,7 @@ const keyResponses = {
 }
 
 exports.RedeemKey = {
-    m: "get",
+    m: "post",
     e: async (req, res) => {
         const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
 

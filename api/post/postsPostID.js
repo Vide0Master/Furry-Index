@@ -73,7 +73,7 @@ exports.GetPostData = {
 
         if (post.favourites) post.favourites = post.favourites.length
 
-        post.owner = await getUserByID(post.ownerid, ["privateprofileparams"])
+        post.owner = await getUserByID(post.ownerid, ["privateprofileparams", "email"])
 
         res.status(200).json({ post })
     }

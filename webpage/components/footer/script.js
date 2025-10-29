@@ -66,7 +66,11 @@ new Link(Language.lang.keyRedeem.label, () => {
 
             switch (result.key.type) {
                 case "superadminassign": {
-                    new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, "Success", 5000, null, "superadminroleass")
+                    new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, Language.lang.features.alert.succ, 5000, null, "superadminroleass")
+                }; break;
+                case "verifyEmail": {
+                    location.reload()
+                    new Alert.Simple(Language.lang.keyRedeem.succ.emailLik, Language.lang.features.alert.succ, 5000, null, "email-was-verified")
                 }; break;
             }
 

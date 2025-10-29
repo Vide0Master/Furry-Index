@@ -16,6 +16,7 @@ import SwitchInput from "../../components/switchinput/script.js";
 import Theme from "../../scripts/themeController.js";
 import PasswordInput from "../../components/passwordinput/script.js";
 import BasicCheck from "../../scripts/basicChecks.js";
+import TextLabel from "../../elements/textLabel/script.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -300,6 +301,45 @@ export async function render(params) {
             },
             `${Language.lang.settings.user.filesPerPage}: `
         )
+
+        const linkedEmail = new Elem("email-link", pages.user)
+        const emailStatus = new TextLabel(".", linkedEmail)
+
+        const emailLinkPending = new Elem("email-link-pending", linkedEmail)
+        const emailField = new TextInputLine(Language.lang.settings.user.email.input, emailLinkPending)
+        new Button(Language.lang.settings.user.email.linkLabel, emailLinkPending, null, async () => {
+            const resp = await API("post", `/api/profile/${User.data.username}/email`, { email: emailField.value })
+            if (resp.HTTPCODE === 200) {
+                new Alert.Simple(`${Language.lang.settings.user.email.msgAlert[1]}\n${Language.lang.settings.user.email.msgAlert[2]}`, Language.lang.settings.user.email.msgAlert[0], 0, null, "email-verify")
+            } else {
+                new Alert.Simple(Language.lang.features.aler.err.tryAgainLater.text, Language.lang.features.aler.err.tryAgainLater.title, 5000, null, "msg-error")
+            }
+        })
+
+        const unlinkBtn = new Button(Language.lang.settings.user.email.unlink, linkedEmail, null, async () => {
+            const reqResult = await API("delete", `/api/profile/${User.data.username}`, { email: true })
+            if (reqResult.HTTPCODE === 200) {
+                new Alert.Simple(Language.lang.settings.user.email.unlinked, null, 5000, null, "email-unlink")
+
+                emailStatus.text = Language.lang.settings.user.email.link.noLink
+                emailStatus.setColor("var(--nok-color)")
+                emailLinkPending.switchVisible(true)
+                unlinkBtn.switchVisible(false)
+            } else {
+                new Alert.Simple(Language.lang.features.aler.err.tryAgainLater.text, Language.lang.features.aler.err.tryAgainLater.title, 5000, null, "msg-error")
+            }
+        })
+
+        if (User.data.email) {
+            emailStatus.text = Language.lang.settings.user.email.link.link + ": " + User.data.email
+            emailStatus.setColor("var(--ok-color)")
+            emailLinkPending.switchVisible(false)
+        } else {
+            emailStatus.text = Language.lang.settings.user.email.link.noLink
+            emailStatus.setColor("var(--nok-color)")
+            unlinkBtn.switchVisible(false)
+        }
+
     }
 
     if (["webpage", "user"].includes(params?.query?.t)) ddlist.selectOption(params?.query?.t)
