@@ -312,7 +312,7 @@ export async function render(params) {
             if (resp.HTTPCODE === 200) {
                 new Alert.Simple(`${Language.lang.settings.user.email.msgAlert[1]}\n${Language.lang.settings.user.email.msgAlert[2]}`, Language.lang.settings.user.email.msgAlert[0], 0, null, "email-verify")
             } else {
-                new Alert.Simple(Language.lang.features.aler.err.tryAgainLater.text, Language.lang.features.aler.err.tryAgainLater.title, 5000, null, "msg-error")
+                new Alert.Simple(Language.lang.features.alert.err.tryAgainLater.text, Language.lang.features.alert.err.tryAgainLater.title, 5000, null, "msg-error")
             }
         })
 
