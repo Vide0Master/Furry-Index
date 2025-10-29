@@ -75,6 +75,10 @@
                 flex-direction: row;
                 gap: 5px;
                 align-items: start;
+
+                &.hidden {
+                    display: none;
+                }
             }
         }
     }
