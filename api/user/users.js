@@ -1,4 +1,6 @@
 const getUserByID = require("../../systemServices/getUserByID");
+const KeyController = require("../../systemServices/keyControl");
+const sendMail = require("../../systemServices/mailer");
 const prisma = require("../../systemServices/prisma");
 
 exports.ROUTE = "/api/users";
@@ -52,5 +54,43 @@ exports.GetUsers = {
         }
 
         res.status(200).json({ users });
+    }
+}
+
+exports.PWDReset = {
+    m: "post",
+    r: "/api/users/password-reset",
+    e: async (req, res) => {
+        const email = req.body.email
+
+        if (!email) return res.status(400).send("No user email provided")
+
+        const userByEmail = await prisma.user.findFirst({
+            where: {
+                email: email
+            },
+            select: {
+                id: true
+            }
+        })
+
+        if (!userByEmail) return res.status(404).send("User was not found")
+
+        const user = await getUserByID(userByEmail.id)
+
+        const pwdResetKey = await KeyController.createKey("passwordReset", { userID: user.id, email: email }, true)
+
+        await sendMail(
+            [
+                "Furry Index password reset",
+                `Hello, ${user.visiblename || `@${user.username}`}\nYou requested password reset for your account.\nRedeem this key to reset your password and get new password.`,
+                pwdResetKey,
+                "If this action was not made by you, delete this letter"
+            ],
+            "Furry Index password reset",
+            email
+        )
+
+        return res.status(200).send("Check email")
     }
 }

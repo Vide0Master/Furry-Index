@@ -3,9 +3,9 @@ const { mainAuthTokenKey } = require("../systemServices/globalVariables")
 const keyControl = require("../systemServices/keyControl")
 
 exports.ROUTE = "/api/key/:key"
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
 
 const keyResponses = {
+    "403": "You can't redeem this key",
     "404": "Key not found",
     "405": "Key was already redeemed",
 }
@@ -20,7 +20,7 @@ exports.RedeemKey = {
         if (!keyControl.verifyKey(key)) {
             return res.status(406).send("Key is malformed, key should be in format XXXXXX-XXXXXX-XXXXXX-XXXXXX")
         } else {
-            const status = await keyControl.redeemKey(key, user.id)
+            const status = await keyControl.redeemKey(key, user?.id)
             if (status.code == 200) {
                 return res.status(200).json({ key: status.key })
             } else {

@@ -116,9 +116,9 @@ exports.SetEmail = {
         await mailer(
             [
                 "Furry Index Email verification",
-                `Hello, ${req.USER.visiblename || req.USER.username}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
+                `Hello, ${req.USER.visiblename || `@${req.USER.username}`}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
                 emailKey,
-                "If it was not you, delete this letter"
+                "If this action was not made by you, delete this letter"
             ],
             "Furry Index Email verification",
             req.body.email

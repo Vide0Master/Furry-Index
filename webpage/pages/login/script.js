@@ -1,11 +1,13 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import Header from "../../components/header/script.js";
+import Link from "../../components/link/script.js";
 import PasswordInput from "../../components/passwordinput/script.js";
 import SwitchInput from "../../components/switchinput/script.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import UserLabel from "../../elements/userLabel/script.js";
 import Alert from "../../features/alert/script.js";
+import Overlay from "../../features/overlay/script.js";
 import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
 import Router from "../../scripts/router.js";
@@ -34,6 +36,33 @@ export async function render() {
     new PasswordInput(Language.lang.login.fields.password, container.element, null, async (value) => {
         loginData.password = value
     })
+
+    new Link(Language.lang.login.pwdReset.label, () => {
+        const overlay = new Overlay(false)
+        const pwdResetCont = new Elem("password-reset-cont", overlay)
+
+        new Elem("label", pwdResetCont).text = Language.lang.login.pwdReset.label
+        new Elem("desc", pwdResetCont).text = Language.lang.login.pwdReset.desc
+
+        const emailLine = new TextInputLine("Email", pwdResetCont, null, "default")
+
+        const btnRow = new Elem("btn-row", pwdResetCont)
+        new Button(Language.lang.login.pwdReset.send, btnRow, null, async () => {
+            if (emailLine.value.length < 3) {
+                new Alert.Simple(Language.lang.login.pwdReset.emailShort, Language.lang.features.alert.error, 5000, null, "shortEmail")
+                return
+            }
+            const resp = await API("post", "/api/users/password-reset", { email: emailLine.value })
+            if (resp.HTTPCODE == 200) {
+                new Alert.Simple(Language.lang.login.pwdReset.sent, Language.lang.features.alert.succ)
+            } else if (resp.HTTPCODE == 404) {
+                new Alert.Simple(Language.lang.login.pwdReset.notLinked, Language.lang.features.alert.error, 5000, null, "msg-error")
+            } else {
+                new Alert.Simple(Language.lang.features.alert.err.tryAgainLater.text, Language.lang.features.alert.err.tryAgainLater.title, 5000, null, "msg-error")
+            }
+        })
+        new Button(Language.lang.def.cancel, btnRow, null, () => { overlay.close() })
+    }, container, null, null, "key")
 
     new SwitchInput(Language.lang.login.fields.keepmeloggedin, container.element, (state) => {
         loginData.remember = state
