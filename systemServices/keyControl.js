@@ -1,6 +1,8 @@
 const prisma = require("./prisma");
 const crypto = require("crypto")
 const roleControl = require("./userRoleControl")
+const bcrypt = require("bcrypt");
+const sendMail = require("./mailer");
 
 function generateKey() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -76,6 +78,7 @@ class KeyController {
 
         switch (keyData.type) {
             case "superadminassign": {
+                if (!userid) return { code: 403 }
                 roleControl.assignRole(userid, "superAdmin")
             }; break;
             case "verifyEmail": {
@@ -87,6 +90,36 @@ class KeyController {
                         email: keyData.data.email
                     }
                 })
+            }; break;
+            case "passwordReset": {
+                const newPass = generateKey()
+
+                await prisma.user.update({
+                    where: {
+                        id: keyData.data.userID
+                    },
+                    data: {
+                        password: await bcrypt.hash(newPass, 10)
+                    }
+                })
+
+                await prisma.session.deleteMany({
+                    where: {
+                        userid: keyData.data.userID
+                    }
+                })
+
+                await sendMail(
+                    [
+                        "Furry index new password notification",
+                        "Hello, your password was successfully reset, use this password to enter into your account.",
+                        newPass,
+                        "This action automatically clears all user sessions.",
+                        "If this action was not made by you, enter your account with this password and reset it in settings"
+                    ],
+                    "Furry index new password notification",
+                    keyData.data.email
+                )
             }; break;
         }
 

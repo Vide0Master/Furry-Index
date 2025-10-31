@@ -302,6 +302,7 @@ export async function render(params) {
             `${Language.lang.settings.user.filesPerPage}: `
         )
 
+        //region email
         const linkedEmail = new Elem("email-link", pages.user)
         const emailStatus = new TextLabel(".", linkedEmail)
 

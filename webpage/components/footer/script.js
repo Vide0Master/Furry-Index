@@ -56,15 +56,21 @@ new Link(Language.lang.keyRedeem.label, () => {
 
             switch (result.HTTPCODE) {
                 case 200: break;
+                case 403: {
+                    new Alert.Simple(Language.lang.keyRedeem.err.notPermitted, Language.lang.features.alert.error, 5000, null, "keynotavailable")
+                }; break;
                 case 404: {
-                    new Alert.Simple(Language.lang.keyRedeem.err.notFound, "Error", 5000, null, "keynotfound")
+                    new Alert.Simple(Language.lang.keyRedeem.err.notFound, Language.lang.features.alert.error, 5000, null, "keynotfound")
                 }; return
                 case 405: {
-                    new Alert.Simple(Language.lang.keyRedeem.err.redeemed, "Error", 5000, null, "keywasredeemed")
+                    new Alert.Simple(Language.lang.keyRedeem.err.redeemed, Language.lang.features.alert.error, 5000, null, "keywasredeemed")
                 }; return
             }
 
             switch (result.key.type) {
+                case "passwordReset": {
+                    new Alert.Simple(Language.lang.keyRedeem.succ.passwordReset, Language.lang.features.alert.succ, 5000, null, "superadminroleass")
+                }; break;
                 case "superadminassign": {
                     new Alert.Simple(Language.lang.keyRedeem.succ.superadminassign, Language.lang.features.alert.succ, 5000, null, "superadminroleass")
                 }; break;

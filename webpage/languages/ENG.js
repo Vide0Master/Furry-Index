@@ -1,4 +1,7 @@
 const LANG = {
+    def: {
+        cancel: "Cancel"
+    },
     cmd: {
         warn: "Do not copy or edit anything in DevTools uless this action is authorized by the developer.",
         eval: "This is evaluation build, this build is intented to test and fix features and fixes before release.",
@@ -234,7 +237,15 @@ const LANG = {
         success: [
             "Logged in as",
             "Success"
-        ]
+        ],
+        pwdReset: {
+            label: "Forgot password",
+            desc: "Enter email that is linked to your account.",
+            emailShort: "Email is too short",
+            send: "Send",
+            sent: "Message was sent to your email",
+            notLinked: "No user with this email found"
+        }
     },
     register: {
         label: "Register",
@@ -437,12 +448,14 @@ const LANG = {
         malformedKey: "Correct key",
         redeem: "Redeem",
         err: {
+            notPermitted: "You are not able to redeem this key",
             notFound: "Key was not found",
             redeemed: "Key was already redeemed",
             fix: "Fix errors in key"
         },
         succ: {
-            superadminassign: "Superadmin role assigned",
+            passwordReset: "Password was reset and new password sent to your email.\nChange it as soon as possible.",
+            superadminassign: "Superadmin role assigned.",
             emailLik: "Email was linked!"
         }
     },
@@ -636,6 +649,7 @@ const LANG = {
                 cancel: "Cancel"
             },
             succ: "Success",
+            error: "Error",
             err: {
                 tryAgainLater: {
                     title: "Error occured",
