@@ -77,8 +77,8 @@ exports.DeleteMessage = {
 
         let rmtype = undefined
 
-        if (user.permissionsList.includes("admin:rmMessages")) rmtype = "admin"
-        if (user.id === postData.ownerid) rmtype = "postOwner"
+        if (user.permissionsList.includes("admin:rmMessages") && user.id !== msgData.userID) rmtype = "admin"
+        if (user.id === postData.ownerid && user.id !== msgData.userID) rmtype = "postOwner"
 
         const rmrslt = await ChatController.removeChatMessage(req.body.msgID, user.id, rmtype)
 
