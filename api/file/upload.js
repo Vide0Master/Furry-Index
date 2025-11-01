@@ -14,7 +14,7 @@ function getUploadHashHandle(Fhash, uname) {
 
 exports.ROUTE = "/api/upload"
 
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
+exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 const chunkStorage = {}
 

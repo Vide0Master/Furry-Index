@@ -13,7 +13,8 @@ const roleTemplates = {
             "admin:news",
             "admin:posts",
             "admin:reports",
-            "admin:users"
+            "admin:users",
+            "admin:rmMessages"
         ]
     },
     admin: {
@@ -25,7 +26,8 @@ const roleTemplates = {
             "admin:news",
             "admin:posts",
             "admin:reports",
-            "admin:users"
+            "admin:users",
+            "admin:rmMessages"
         ]
     },
     moderator: {
@@ -35,7 +37,8 @@ const roleTemplates = {
         hiddable: false,
         permissions: [
             "admin:posts",
-            "admin:reports"
+            "admin:reports",
+            "admin:rmMessages"
         ]
     },
     artist: {

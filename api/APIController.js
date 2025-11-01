@@ -48,9 +48,9 @@ for (let i = 0; i < apiFiles.length; i++) {
         const funcMethod = (moduleFunc?.method || moduleFunc?.m)?.toLowerCase()
         const funcRoute = moduleFunc?.route || moduleFunc?.r || moduleRoute
         const funcName = moduleFunc?.name || moduleFunc?.n
-        const funcPerm = moduleFunc?.permissions || moduleFunc?.p || modulePermissions
+        const funcPerm = (moduleFunc?.permissions || moduleFunc?.p || modulePermissions || []).map(v => v.toLowerCase())
         const funcExec = moduleFunc?.exec || moduleFunc?.e
-        const funcInc = moduleFunc?.include || moduleFunc?.i || moduleInclude
+        const funcInc = (moduleFunc?.include || moduleFunc?.i || moduleInclude || []).map(v => v.toLowerCase())
 
         if (globalVariables.DEVmode) {
             if (typeof funcMethod !== "string") {
@@ -86,7 +86,10 @@ for (let i = 0; i < apiFiles.length; i++) {
         } else {
             const middlewares = []
 
-            if (funcPerm?.includes("REQUIRECOOKIE")) {
+            //region PERMS
+            // Checks for cookie, if none = fail request
+            // "reqcookie" perm in api routes
+            if (funcPerm.includes("reqcookie") || funcPerm.includes("requser")) {
                 middlewares.push(async (req, res, next) => {
                     const userToken = req.cookies[globalVariables.mainAuthTokenKey]
                     if (!userToken) {
@@ -99,7 +102,9 @@ for (let i = 0; i < apiFiles.length; i++) {
                 })
             }
 
-            if (funcPerm?.includes("REQUIREUSER")) {
+            // Checks for user in db, if none = fail
+            // "requser" perm in api routes
+            if (funcPerm.includes("requser")) {
                 middlewares.push(async (req, res, next) => {
                     const user = await getUserBySessionCookie(req.cookies[globalVariables.mainAuthTokenKey])
                     if (!user) {
@@ -112,10 +117,19 @@ for (let i = 0; i < apiFiles.length; i++) {
                 })
             }
 
-            if (funcInc?.includes("USER")) {
+            //region INCLUDE
+            if (funcInc.length > 0)
+                middlewares.push(async (req, res, next) => {
+                    req.inc = {}
+                    next()
+                })
+
+            // Includes user data in route based on cookie inside the request
+            // "user" inclusion in api routes
+            if (funcInc.includes("user")) {
                 middlewares.push(async (req, res, next) => {
                     const user = await getUserBySessionCookie(req.cookies[globalVariables.mainAuthTokenKey])
-                    req.USER = user
+                    req.inc.user = user
                     next()
                 })
             }
@@ -125,7 +139,10 @@ for (let i = 0; i < apiFiles.length; i++) {
             webServer[funcMethod](funcRoute, ...middlewares)
 
             if (globalVariables.DEVmode)
-                cmd.info(`Registered ${cmd.colorize(cmd.preps.APIs[funcMethod.toUpperCase()].text, cmd.preps.APIs[funcMethod.toUpperCase()].color)} listener for ${funcRoute}`, [cmd.preps.Debug, cmd.preps.API, cmd.preps.http])
+                cmd.info(
+                    `Route ${funcRoute} registered ${cmd.colorize(cmd.preps.APIs[funcMethod.toUpperCase()].text, cmd.preps.APIs[funcMethod.toUpperCase()].color)} listener ${funcPerm.length > 0 ? `permissions: ${funcPerm.join(", ")}` : ""} ${funcInc.length > 0 ? `includes: ${funcInc.join(", ")}` : ""}`,
+                    [cmd.preps.Debug, cmd.preps.API, cmd.preps.http]
+                )
         }
     }
 }

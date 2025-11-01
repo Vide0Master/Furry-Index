@@ -2,7 +2,7 @@ const getUserBySessionCookie = require("../../systemServices/getUserBySessionCoo
 const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
 const prisma = require("../../systemServices/prisma")
 
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
+exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 exports.ROUTE = "/api/files/tags"
 

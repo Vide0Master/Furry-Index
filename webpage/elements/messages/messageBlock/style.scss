@@ -32,6 +32,10 @@
         @media (max-width: 700px) {
             max-width: unset;
         }
+
+        &.deleted {
+            color: color-mix(in srgb, var(--message-font) 50%, var(--message-bg) 50%);
+        }
     }
 
     .time-row {

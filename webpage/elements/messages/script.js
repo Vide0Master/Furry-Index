@@ -25,10 +25,10 @@ export default class MessageBox extends Elem {
 
             const url = `${handler}?${params.toString()}`;
 
-            const chat = await API("get", url);
+            const messagesResp = await API("get", url);
 
-            if (chat.chat?.chatMessages) {
-                for (const msg of chat.chat.chatMessages) {
+            if (messagesResp?.messages) {
+                for (const msg of messagesResp.messages) {
                     new MessageBlock(this.chatBox.element, msg, handler)
                     noMessages.switchVisible(false)
                 }
