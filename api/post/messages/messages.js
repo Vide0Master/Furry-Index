@@ -1,7 +1,6 @@
 
+const ChatController = require("../../../systemServices/chatController")
 const getUserByID = require("../../../systemServices/getUserByID")
-const getUserBySessionCookie = require("../../../systemServices/getUserBySessionCookie")
-const { mainAuthTokenKey } = require("../../../systemServices/globalVariables")
 const prisma = require("../../../systemServices/prisma")
 const WSController = require("../../../systemServices/WebSocket")
 
@@ -13,62 +12,30 @@ exports.GetPostMessages = {
         const page = req.query.p ? parseInt(req.query.p) : 0;
         const take = req.query.t ? parseInt(req.query.t) : 20;
 
-        const chatData = await prisma.chat.findFirst({
-            where: {
-                postID: req.params.postID
-            },
-            include: {
-                chatMessages: {
-                    orderBy: {
-                        sentAt: "desc"
-                    },
-                    take,
-                    skip: page * take
-                }
-            }
-        })
+        const messages = await ChatController.getChatMessagesOfPost(req.params.postID, page, take)
 
-        if (!chatData) return res.status(404).send("Chat not found")
+        if (!messages) return res.status(404).send("No messages")
 
-        for (const message of chatData.chatMessages) {
-            message.user = await getUserByID(message.userID, ["privateprofileparams", "email"])
-        }
-
-        res.status(200).json({ chat: chatData })
+        res.status(200).json({ messages })
     }
 }
 
 exports.CreateMessage = {
     m: "post",
+    p: ["USER"],
+    i: ["USER"],
     e: async (req, res) => {
-        const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
+        const user = req.inc.user
+        if (!user) return res.status(403).send("You are not authorized")
 
-        const chat = await prisma.chat.upsert({
-            where: {
-                postID: req.params.postID,
-                linkType: "post"
-            },
-            update: {},
-            create: {
-                postID: req.params.postID,
-                linkType: "post"
-            }
-        })
+        let chat = await ChatController.findChat({ settings: { path: ["postID"], equals: req.params.postID } })
+        if (!chat) chat = await ChatController.createChat({ postID: req.params.postID })
 
-        const msg = await prisma.chatMessage.create({
-            data: {
-                chatID: chat.id,
-                userID: user.id,
-                text: req.body.text,
-                specialData: req.body.specialData
-            }
-        })
-
-        msg.user = await getUserByID(msg.userID)
+        const msg = await ChatController.createMessage(chat.id, user.id, req.body.text, req.body.specialData)
+        msg.user = await getUserByID(msg.userID, ["privateprofileparams", "email"])
 
         if (msg) {
             res.status(200).send()
-
             WSController.broadcast("newMessage", { message: msg }, `/post/${req.params.postID}`)
         } else {
             res.status(500).send()
@@ -78,25 +45,10 @@ exports.CreateMessage = {
 
 exports.UpdateMessage = {
     m: "put",
+    p: ["USER"],
+    i: ["USER"],
     e: async (req, res) => {
-        const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
-
-        const msg = await prisma.chatMessage.findUnique({
-            where: {
-                id: req.body.msgID
-            }
-        })
-
-        if (msg.userID != user.id) return res.status(403).send(`You can't change message of another user`)
-
-        const upd = await prisma.chatMessage.update({
-            where: {
-                id: req.body.msgID
-            },
-            data: {
-                text: req.body.newText
-            }
-        })
+        const upd = await ChatController.updateMessage(req.body.msgID, req.inc.user.id, { text: req.body.newText })
 
         if (upd) {
             res.status(200).send()
@@ -110,27 +62,30 @@ exports.UpdateMessage = {
 
 exports.DeleteMessage = {
     m: "delete",
+    p: ["USER"],
+    i: ["USER"],
     e: async (req, res) => {
-        const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
+        const user = req.inc.user
 
-        const msg = await prisma.chatMessage.findUnique({
-            where: {
-                id: req.body.msgID
-            }
+        const postData = await prisma.post.findUnique({
+            where: { id: req.params.postID }
         })
 
-        if (msg.userID != user.id) return res.status(403).send(`You can't delete message of another user`)
-
-        const rmrslt = await prisma.chatMessage.delete({
-            where: {
-                id: req.body.msgID
-            }
+        const msgData = await prisma.chatMessage.findUnique({
+            where: { id: req.body.msgID }
         })
+
+        let rmtype = undefined
+
+        if (user.permissionsList.includes("admin:rmMessages")) rmtype = "admin"
+        if (user.id === postData.ownerid) rmtype = "postOwner"
+
+        const rmrslt = await ChatController.removeChatMessage(req.body.msgID, user.id, rmtype)
 
         if (rmrslt) {
             res.status(200).send()
 
-            WSController.broadcast(`messageUpdate-${req.body.msgID}`, { action: "delete" }, `/post/${req.params.postID}`)
+            WSController.broadcast(`messageUpdate-${req.body.msgID}`, { action: "delete", deleter: rmrslt.deleted }, `/post/${req.params.postID}`)
         } else {
             res.status(500).send()
         }

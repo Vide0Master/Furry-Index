@@ -577,7 +577,13 @@ const LANG = {
             messageElem: {
                 editedAt: "Message edited at",
                 editMessage: "Edit message",
-                removeMessage: "Remove message"
+                removeMessage: "Remove message",
+                deleted: {
+                    label: "Deleted by",
+                    admin: "admin",
+                    user: "user",
+                    postOwner: "post owner"
+                }
             }
         },
         search: {

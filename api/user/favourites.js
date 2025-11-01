@@ -4,7 +4,7 @@ const prisma = require("../../systemServices/prisma")
 
 exports.ROUTE = "/api/favourites"
 
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
+exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 exports.GetFavs = {
     m: "get",

@@ -4,7 +4,7 @@ const prisma = require("../../systemServices/prisma")
 
 exports.ROUTE = "/api/auth"
 
-exports.PERMISSIONS = ["REQUIRECOOKIE"]
+exports.PERMISSIONS = ["REQCOOKIE"]
 
 exports.GetAuth = {
     method: "get",

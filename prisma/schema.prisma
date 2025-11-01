@@ -26,7 +26,6 @@ model User {
     posts        Post[]
     scores       Score[]
     favourites   Favourite[]
-    directChats  Chat[]
     userMessages ChatMessage[]
     roles        Role[]
     NewsLetter   NewsLetter[]
@@ -117,7 +116,6 @@ model Post {
     score       Int         @default(0)
     scores      Score[]
     favourites  Favourite[]
-    comments    Chat[]
 
     @@index([id])
 }
@@ -150,24 +148,18 @@ model Favourite {
     @@index([userid, postid])
 }
 
-enum ChatLink {
-    userDM
-    post
-}
-
 model Chat {
-    id       String   @id @unique @default(uuid())
-    linkType ChatLink
-
-    userID String? @unique
-    user   User?   @relation(fields: [userID], references: [id], onDelete: Cascade)
-
-    postID String? @unique
-    post   Post?   @relation(fields: [postID], references: [id], onDelete: Cascade)
-
+    id           String        @id @unique @default(uuid())
+    settings     Json?
     chatMessages ChatMessage[]
 
-    @@index([userID, postID, id])
+    @@index([id])
+}
+
+enum MsgDeletedBy {
+    user
+    admin
+    postOwner
 }
 
 model ChatMessage {
@@ -175,13 +167,12 @@ model ChatMessage {
 
     chatID String
     chat   Chat   @relation(fields: [chatID], references: [id], onDelete: Cascade)
-
     userID String
     user   User   @relation(fields: [userID], references: [id], onDelete: Cascade)
 
-    text String
-
+    text        String
     specialData Json?
+    deleted     MsgDeletedBy?
 
     sentAt   DateTime @default(now())
     editedAt DateTime @default(now()) @updatedAt()

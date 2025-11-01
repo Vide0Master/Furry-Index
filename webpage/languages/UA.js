@@ -575,7 +575,13 @@ const LANG = {
             messageElem: {
                 editedAt: "Повідомлення відредаговано",
                 editMessage: "Редагувати повідомлення",
-                removeMessage: "Видалити повідомлення"
+                removeMessage: "Видалити повідомлення",
+                deleted: {
+                    label: "Видалено",
+                    admin: "адміністратором",
+                    user: "користувачем",
+                    postOwner: "автором посту"
+                }
             }
         },
         search: {

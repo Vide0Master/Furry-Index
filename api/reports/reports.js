@@ -9,8 +9,8 @@ exports.INCLUDE = ["USER"]
 exports.GetReports = {
     m: "get",
     e: async (req, res) => {
-        if (!req.USER) return res.status(403).send("Restricted")
-        if (!testUserPermission(req.USER.id, "admin:reports")) return res.status(403).send("Restricted")
+        if (!req.inc.user) return res.status(403).send("Restricted")
+        if (!testUserPermission(req.inc.user.id, "admin:reports")) return res.status(403).send("Restricted")
 
         const page = req.query.p ? parseInt(req.query.p) : 0;
         const take = req.query.t ? parseInt(req.query.t) : 50;

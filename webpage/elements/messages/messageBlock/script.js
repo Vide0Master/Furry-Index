@@ -16,7 +16,12 @@ export default class MessageBlock extends Elem {
         new UserCard(this.element, data.user, "messageHeader")
 
         const textRow = new Elem("text", this.element)
-        textRow.text = data.text
+        if (data.deleted) {
+            textRow.text = `${Language.lang.elements.messages.messageElem.deleted.label} ${Language.lang.elements.messages.messageElem.deleted[data.deleted]}`
+            textRow.addClass("deleted")
+        } else {
+            textRow.text = data.text
+        }
 
         const specialsRow = new Elem("specials-row", this.element)
         specialsRow.switchVisible(false)
@@ -25,26 +30,16 @@ export default class MessageBlock extends Elem {
 
         const editedIcon = new Icon("edit", timeRow.element, "edited-icon", "10x10")
         editedIcon.title = `${Language.lang.elements.messages.messageElem.editedAt} ${formatDate(data.editedAt)}`
-        editedIcon.switchVisible(data.sentAt != data.editedAt)
+        editedIcon.switchVisible(data.sentAt != data.editedAt && !data.deleted)
 
         const sent = new Elem("sent-at", timeRow.element)
         sent.text = formatDate(data.sentAt)
 
-        WSController.listen(`messageUpdate-${data.id}`, (data) => {
-            switch (data.action) {
-                case "edit": {
-                    textRow.text = data.newText
-                    editedIcon.switchVisible(true)
-                }; break;
-                case "delete": this.kill()
-            }
-        })
-
-        if (User?.data?.username == data.user.username) {
+        if (User?.data?.username == data.user.username && !data.deleted) {
             const controlRow = new Elem("control-row", timeRow.element)
 
-            const editIcon = new Icon("edit", controlRow.element, "edit", "10x10")
-            editIcon.addEvent("click", () => {
+            this.editIcon = new Icon("edit", controlRow.element, "edit", "10x10")
+            this.editIcon.addEvent("click", () => {
                 const editAlert = new Alert.Input(null, Language.lang.elements.messages.messageElem.editMessage, async (v) => {
                     await API("PUT", handler, {
                         msgID: data.id,
@@ -52,17 +47,32 @@ export default class MessageBlock extends Elem {
                     })
                 }, null, "bigField", textRow.text, null, `${data.id}-EDIT`)
             })
-            editIcon.title = Language.lang.elements.messages.messageElem.editMessage
+            this.editIcon.title = Language.lang.elements.messages.messageElem.editMessage
 
-            const rmIcon = new Icon("cross", controlRow.element, "rm", "10x10")
-            rmIcon.addEvent("click", () => {
+            this.rmIcon = new Icon("cross", controlRow.element, "rm", "10x10")
+            this.rmIcon.addEvent("click", () => {
                 new Alert.Confirm(`"${textRow.text}"`, Language.lang.elements.messages.messageElem.removeMessage, async () => {
                     await API("DELETE", handler, {
                         msgID: data.id
                     })
                 }, null, null, `${data.id}-DELETE`)
             })
-            rmIcon.title = Language.lang.elements.messages.messageElem.removeMessage
+            this.rmIcon.title = Language.lang.elements.messages.messageElem.removeMessage
         }
+
+        WSController.listen(`messageUpdate-${data.id}`, (data) => {
+            switch (data.action) {
+                case "edit": {
+                    textRow.text = data.newText
+                    editedIcon.switchVisible(true)
+                }; break;
+                case "delete": {
+                    textRow.text = `${Language.lang.elements.messages.messageElem.deleted.label} ${Language.lang.elements.messages.messageElem.deleted[data.deleter]}`
+                    textRow.addClass("deleted")
+                    this.editIcon.kill()
+                    this.rmIcon.kill()
+                }; break;
+            }
+        })
     }
 }

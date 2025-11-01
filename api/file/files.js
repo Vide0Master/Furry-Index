@@ -4,7 +4,7 @@ const prisma = require("../../systemServices/prisma")
 
 exports.ROUTE = "/api/files"
 
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
+exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 
 // little fun notation

@@ -7,7 +7,7 @@ const path = require("path")
 
 exports.ROUTE = "/file/:fileID"
 
-exports.PERMISSIONS = ["REQUIRECOOKIE", "REQUIREUSER"]
+exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 exports.GetFile = {
     method: "get",
