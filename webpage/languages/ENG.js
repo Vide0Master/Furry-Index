@@ -655,7 +655,8 @@ const LANG = {
         userCard: {
             addRole: "Add role",
             rmRole: "Remove role",
-            roleDD: "Select role"
+            roleDD: "Select role",
+            verified: "Verified"
         }
     },
     features: {

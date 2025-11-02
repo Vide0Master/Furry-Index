@@ -14,6 +14,8 @@ const roleTemplates = {
         roleColor: "#e5e838ff",
         hiddable: false,
         manuallyAppendable: false,
+        selfRemovable: false,
+        selfAppendable: false,
         permissions: [
             "admin:news",
             "admin:posts",
@@ -28,6 +30,8 @@ const roleTemplates = {
         roleColor: "#e83838ff",
         hiddable: false,
         manuallyAppendable: true,
+        selfRemovable: false,
+        selfAppendable: false,
         permissions: [
             "admin:news",
             "admin:posts",
@@ -42,6 +46,8 @@ const roleTemplates = {
         roleColor: "#ab32ccff",
         hiddable: false,
         manuallyAppendable: true,
+        selfRemovable: false,
+        selfAppendable: false,
         permissions: [
             "admin:posts",
             "admin:reports",
@@ -53,6 +59,8 @@ const roleTemplates = {
         roleIcon: "paint-palette",
         roleColor: "#38cbe8ff",
         manuallyAppendable: true,
+        selfRemovable: true,
+        selfAppendable: true,
         hiddable: false,
         permissions: []
     },
@@ -61,6 +69,8 @@ const roleTemplates = {
         roleIcon: "shield-bolt",
         roleColor: "#ffff00ff",
         manuallyAppendable: true,
+        selfRemovable: true,
+        selfAppendable: true,
         hiddable: true,
         permissions: []
     },
@@ -69,14 +79,19 @@ const roleTemplates = {
         roleIcon: "shield-bolt",
         roleColor: "#2626cdff",
         manuallyAppendable: false,
+        selfRemovable: false,
+        selfAppendable: false,
         hiddable: false,
-        permissions: []
+        visible: false,
+        permissions: ["emailVerified"]
     },
     verifiedPaymentEntity: {
         type: "verifiedPaymentEntity",
         roleIcon: "shield-bolt",
         roleColor: "#4138e8ff",
         manuallyAppendable: true,
+        selfRemovable: true,
+        selfAppendable: true,
         hiddable: true,
         visible: false,
         permissions: []
@@ -92,9 +107,9 @@ class roleController {
             }
         })
 
-        const isRolePresent = this.testRole(role)
+        const roleFromDb = this.getRole(role)
 
-        if (!isRolePresent) {
+        if (!roleFromDb) {
             return
         }
 
@@ -102,6 +117,9 @@ class roleController {
             userid,
             type: role
         }
+
+        if (typeof roleFromDb.visible === "boolean")
+            roleData.visible = roleFromDb.visible
 
         if (!roleDataDB && roleData) {
             await prisma.role.create({ data: roleData })

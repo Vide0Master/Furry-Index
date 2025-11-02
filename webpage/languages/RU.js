@@ -653,7 +653,8 @@ const LANG = {
         userCard: {
             addRole: "Добавить роль",
             rmRole: "Убрать роль",
-            roleDD: "Выберите роль"
+            roleDD: "Выберите роль",
+            verified: "Верифицирован"
         }
     },
     features: {

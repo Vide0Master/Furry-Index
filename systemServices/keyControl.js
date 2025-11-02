@@ -90,6 +90,8 @@ class KeyController {
                         email: keyData.data.email
                     }
                 })
+
+                await roleControl.assignRole(keyData.data.userID, "verifiedUser")
             }; break;
             case "removeEmail": {
                 await prisma.user.update({
@@ -100,6 +102,8 @@ class KeyController {
                         email: null
                     }
                 })
+
+                await roleControl.removeRole(keyData.data.userID, "verifiedUser")
             }; break;
             case "passwordReset": {
                 const newPass = generateKey()

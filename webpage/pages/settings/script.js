@@ -355,16 +355,16 @@ export async function render(params) {
 
         // for some seen future, maybe some editor, idk
 
-        // const roleLine = new Elem("role-line", pages.user)
-        // for (const role of User.data.roles) {
-        //     const roleLabel = new RoleLabel(role, roleLine)
-        //     if (role.hiddable) {
-        //         const visSwitch = new SwitchInput("Visible", roleLabel, async (v) => {
-        //             const apiResp = await API("put", `/api/profile/${User.data.username}/role`, { action: "visible", visible: v })
-        //             if (apiResp.HTTPCODE !== 200) visSwitch.change()
-        //         }, role.visible)
-        //     }
-        // }
+        const roleLine = new Elem("role-line", pages.user)
+        for (const role of User.data.roles) {
+            const roleLabel = new RoleLabel(role, roleLine)
+            if (role.hiddable) {
+                const visSwitch = new SwitchInput("Visible", roleLabel, async (v) => {
+                    const apiResp = await API("put", `/api/profile/${User.data.username}/role`, { action: "visible", visible: v })
+                    if (apiResp.HTTPCODE !== 200) visSwitch.change()
+                }, role.visible)
+            }
+        }
     }
 
     if (["webpage", "user"].includes(params?.query?.t)) ddlist.selectOption(params?.query?.t)
