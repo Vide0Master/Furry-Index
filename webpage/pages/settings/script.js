@@ -308,28 +308,37 @@ export async function render(params) {
         const emailStatus = new TextLabel(".", linkedEmail)
 
         const emailLinkPending = new Elem("email-link-pending", linkedEmail)
-        const emailField = new TextInputLine(Language.lang.settings.user.email.input, emailLinkPending)
-        new Button(Language.lang.settings.user.email.linkLabel, emailLinkPending, null, async () => {
-            const resp = await API("post", `/api/profile/${User.data.username}/email`, { email: emailField.value })
+        const emailField = new TextInputLine(Language.lang.settings.user.email.input, emailLinkPending, null, "def", () => {
+            emailLinkBtn.enabled = emailField.checksInf.okAll
+        })
+        const emailLinkBtn = new Button(Language.lang.settings.user.email.linkLabel, emailLinkPending, null, async () => {
+            const resp = await API("put", `/api/profile/${User.data.username}`, { email: emailField.value })
             if (resp.HTTPCODE === 200) {
-                new Alert.Simple(`${Language.lang.settings.user.email.msgAlert[1]}\n${Language.lang.settings.user.email.msgAlert[2]}`, Language.lang.settings.user.email.msgAlert[0], 0, null, "email-verify")
+                new Alert.Simple(`${Language.lang.settings.user.email.linkAlert[1]}\n${Language.lang.settings.user.email.linkAlert[2]}`, Language.lang.settings.user.email.linkAlert[0], 0, null, "email-verify")
             } else {
                 new Alert.Simple(Language.lang.features.alert.err.tryAgainLater.text, Language.lang.features.alert.err.tryAgainLater.title, 5000, null, "msg-error")
             }
         })
+        emailLinkBtn.enabled = false
+
+        emailField.addCheck("Correct email", async (v) => {
+            const reStrict = /^[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,}$/
+            return reStrict.test(String(v).trim());
+        })
+
+        emailField.addCheck("Email available", async (v) => {
+            return !(await API("get", `/api/users/email-test?email=${v}`)).found
+        })
 
         const unlinkBtn = new Button(Language.lang.settings.user.email.unlink, linkedEmail, null, async () => {
-            const reqResult = await API("delete", `/api/profile/${User.data.username}`, { email: true })
-            if (reqResult.HTTPCODE === 200) {
-                new Alert.Simple(Language.lang.settings.user.email.unlinked, null, 5000, null, "email-unlink")
-
-                emailStatus.text = Language.lang.settings.user.email.link.noLink
-                emailStatus.setColor("var(--nok-color)")
-                emailLinkPending.switchVisible(true)
-                unlinkBtn.switchVisible(false)
-            } else {
-                new Alert.Simple(Language.lang.features.aler.err.tryAgainLater.text, Language.lang.features.aler.err.tryAgainLater.title, 5000, null, "msg-error")
-            }
+            new Alert.Confirm(null, "Unlink email", async () => {
+                const reqResult = await API("delete", `/api/profile/${User.data.username}`, { email: true })
+                if (reqResult.HTTPCODE === 200) {
+                    new Alert.Simple(`${Language.lang.settings.user.email.unlinkAlert[1]}\n${Language.lang.settings.user.email.unlinkAlert[2]}`, Language.lang.settings.user.email.unlinkAlert[0], 0, null, "email-unlink")
+                } else {
+                    new Alert.Simple(Language.lang.features.aler.err.tryAgainLater.text, Language.lang.features.aler.err.tryAgainLater.title, 5000, null, "msg-error")
+                }
+            })
         })
 
         if (User.data.email) {

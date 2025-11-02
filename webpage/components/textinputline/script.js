@@ -50,7 +50,7 @@ export default class TextInputLine extends Elem {
 
         this.limit = limit
 
-        const limitElem = new Elem("limit-elem", this.element)
+        const limitElem = new TextLabel(";)", this)
         if (!limit) limitElem.switchVisible(false)
         if (desc) limitElem.moveAfter(this.label.element)
 

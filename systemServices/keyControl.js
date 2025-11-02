@@ -91,6 +91,16 @@ class KeyController {
                     }
                 })
             }; break;
+            case "removeEmail": {
+                await prisma.user.update({
+                    where: {
+                        id: keyData.data.userID,
+                    },
+                    data: {
+                        email: null
+                    }
+                })
+            }; break;
             case "passwordReset": {
                 const newPass = generateKey()
 

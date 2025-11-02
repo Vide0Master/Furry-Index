@@ -94,3 +94,20 @@ exports.PWDReset = {
         return res.status(200).send("Check email")
     }
 }
+
+exports.EmailAvailable = {
+    m: "get",
+    p: ["user"],
+    r: "+/email-test",
+    e: async (req, res) => {
+        const email = req.query.email
+        if (!email) return res.status(400).send("No email in query")
+
+        const usrByEmail = await prisma.user.findFirst({
+            where: { email },
+            select: { id: true }
+        })
+
+        return res.status(200).json({ found: !!usrByEmail })
+    }
+}
