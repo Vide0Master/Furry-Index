@@ -40,12 +40,13 @@ module.exports = async function getUserByID(id, exclude = []) {
 
             const tempRoles = []
 
-            for (const role of Object.values(roleController.roleTemplates)) {
+            for (const roleName in roleController.roleTemplates) {
+                const role = roleController.roleTemplates[roleName]
                 if (!userData.roles.some(v => v.type == role.type)) continue
 
                 tempRoles.push(role)
 
-                if (!exclude.includes("rolePermissionsList")) role.permissions.forEach(v => {
+                if (!exclude.includes("rolePermissionsList") && role?.permissions) role.permissions.forEach(v => {
                     if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)
                 })
             }
