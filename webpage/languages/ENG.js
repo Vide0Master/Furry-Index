@@ -431,9 +431,14 @@ const LANG = {
             },
             email: {
                 input: "Email",
-                msgAlert: [
+                linkAlert: [
                     "Message sent",
                     "Check your email to continue linking process.",
+                    "If you don't see it, check spam."
+                ],
+                unlinkAlert: [
+                    "Message sent",
+                    "Check your email to continue unlinking process.",
                     "If you don't see it, check spam."
                 ],
                 linkLabel: "Link",
@@ -456,7 +461,8 @@ const LANG = {
         succ: {
             passwordReset: "Password was reset and new password sent to your email.\nChange it as soon as possible.",
             superadminassign: "Superadmin role assigned.",
-            emailLik: "Email was linked!"
+            emailLink: "Email was linked!",
+            emaiunlLink: "Email was unlinked!"
         }
     },
     adminNews: {

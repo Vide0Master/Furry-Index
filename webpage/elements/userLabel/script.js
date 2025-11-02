@@ -3,6 +3,7 @@ import Image from "../../components/image/script.js";
 import Link from "../../components/link/script.js";
 import Language from "../../scripts/language.js";
 import User from "../../scripts/userdata.js";
+import RoleLabel from "../roleLabel/script.js";
 
 const container = new Elem("user-label")
 
@@ -15,7 +16,10 @@ const userCont = new Link(null, "/profile", container.element, true, ["user-cont
 userCont.textElem.element.remove()
 const avatarContainer = new Elem("user-avatar-container", userCont.element)
 const userAvatar = new Image("", "user-avatar", avatarContainer.element)
-const userName = new Elem("", userCont.element)
+const userContData = new Elem("user-data",userCont)
+const userName = new Elem("user-name", userContData)
+const userRoles = new Elem("user-roles", userContData)
+userRoles.switchVisible(false)
 
 class UserLabel {
     static append(parent) {
@@ -27,6 +31,7 @@ class UserLabel {
         if (User.data) {
             this.updateUserData()
             this.showUserData()
+            this.updateUserRoles()
             userCont.element.href = "/profile/" + User.data.username
         } else {
             this.showLoginRegisterLinks()
@@ -41,6 +46,18 @@ class UserLabel {
     static showUserData() {
         regNloginCont.element.classList.add("hidden")
         userCont.element.classList.remove("hidden")
+    }
+
+    static updateUserRoles() {
+        userRoles.wipe()
+        if (User?.data?.roles) {
+            userRoles.switchVisible(true)
+            for (const role of User.data.roles) {
+                new RoleLabel(role, userRoles, true)
+            }
+        } else {
+            userRoles.switchVisible(false)
+        }
     }
 
     static updateUserData() {

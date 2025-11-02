@@ -39,17 +39,19 @@ module.exports = async function getUserByID(id, exclude = []) {
                 userData.permissionsList = []
             }
 
-            for (const role of userData.roles) {
-                if (roleController.roleTemplates[role.type].roleColor) role.roleColor = roleController.roleTemplates[role.type].roleColor
-                if (roleController.roleTemplates[role.type].roleIcon) role.roleIcon = roleController.roleTemplates[role.type].roleIcon
+            const tempRoles = []
 
-                role.permissions = roleController.roleTemplates[role.type].permissions
-                role.hiddable = roleController.roleTemplates[role.type].hiddable
+            for (const role of Object.values(roleController.roleTemplates)) {
+                if (!userData.roles.some(v => v.type == role.type)) continue
+
+                tempRoles.push(role)
 
                 if (!exclude.includes("rolePermissionsList")) role.permissions.forEach(v => {
                     if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)
                 })
             }
+
+            userData.roles = tempRoles
         }
 
         return userData

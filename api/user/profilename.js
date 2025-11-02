@@ -20,9 +20,11 @@ exports.GetUserData = {
 
 exports.UpdateUserData = {
     m: "put",
+    p: ["user"],
+    i: ["user"],
     e: async (req, res) => {
-        const sessionUser = await getUserBySessionCookie(req.cookies[mainAuthTokenKey])
-        if (sessionUser.username !== req.params.username) return res.status(403).send("You are not authorized to modify this user")
+        const sessionUser = req.inc.user
+        if (sessionUser.username !== req.params.username) return res.status(403).send("You are forbidden to modify this user")
         const varialbes = {
             visiblename: true,
             avatarID: true,
@@ -32,7 +34,7 @@ exports.UpdateUserData = {
             id: false,
             username: false,
             createdAt: false,
-            email: false
+            email: true
         }
 
         const data = req.body
@@ -41,6 +43,23 @@ exports.UpdateUserData = {
             const check = varialbes[datVar]
             if (typeof check != "boolean") return res.status(400).send(`Invalid variable [${datVar}]`)
             if (!check) return res.status(403).send(`Variable [${datVar}] is restricted to change`)
+        }
+
+        if (data.email) {
+            const emailKey = await keyControl.createKey("verifyEmail", { userID: req.inc.user.id, email: data.email }, true)
+
+            await mailer(
+                [
+                    "Furry Index Email verification",
+                    `Hello, ${req.inc.user.visiblename || `@${req.inc.user.username}`}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
+                    emailKey,
+                    "If this action was not made by you, delete this letter"
+                ],
+                "Furry Index Email verification",
+                req.body.email
+            )
+
+            return res.status(200).send("Check email")
         }
 
         if (data.avatarID) updateFileLastActivity(data.avatarID)
@@ -60,8 +79,10 @@ exports.UpdateUserData = {
 
 exports.ClearUserDat = {
     m: "delete",
+    p: ["user"],
+    i: ["user"],
     e: async (req, res) => {
-        const sessionUser = await getUserBySessionCookie(req.cookies[mainAuthTokenKey])
+        const sessionUser = req.inc.user
         if (sessionUser.username !== req.params.username) return res.status(403).send("You are not authorized to modify this user")
         const varialbes = {
             visiblename: true,
@@ -84,6 +105,23 @@ exports.ClearUserDat = {
             data[datVar] ? data[datVar] = null : delete data[datVar]
         }
 
+        if (data.email === null) {
+            const emailKey = await keyControl.createKey("removeEmail", { userID: req.inc.user.id }, true)
+
+            await mailer(
+                [
+                    "Furry Index Email removal",
+                    `Hello, ${req.inc.user.visiblename || `@${req.inc.user.username}`}!\nYou tried unlink this email address from your account.\nTo verify this, redeem key provided below`,
+                    emailKey,
+                    "If this action was not made by you, delete this letter"
+                ],
+                "Furry Index Email removal",
+                sessionUser.email
+            )
+
+            return res.status(200).send("Check email")
+        }
+
         if (data.avatarID == null) updateFileLastActivity(sessionUser.avatarID)
 
         await prisma.user.update({
@@ -104,31 +142,31 @@ const getUserByID = require("../../systemServices/getUserByID")
 const roleController = require("../../systemServices/userRoleControl")
 
 //region email
-exports.SetEmail = {
-    m: "post",
-    route: "/api/profile/:username/email",
-    i: ["USER"],
-    e: async (req, res) => {
-        if (!req.inc.user) return res.status(404).send("No such user")
-        if (req.inc.user.username !== req.params.username) return res.status(403).send("Action forbidden")
-        if (!req?.body?.email) return res.status(400).send("No body or email in body")
+// exports.SetEmail = {
+//     m: "post",
+//     route: "/api/profile/:username/email",
+//     i: ["USER"],
+//     e: async (req, res) => {
+//         if (!req.inc.user) return res.status(404).send("No such user")
+//         if (req.inc.user.username !== req.params.username) return res.status(403).send("Action forbidden")
+//         if (!req?.body?.email) return res.status(400).send("No body or email in body")
 
-        const emailKey = await keyControl.createKey("verifyEmail", { userID: req.inc.user.id, email: req.body.email }, true)
+//         const emailKey = await keyControl.createKey("verifyEmail", { userID: req.inc.user.id, email: req.body.email }, true)
 
-        await mailer(
-            [
-                "Furry Index Email verification",
-                `Hello, ${req.inc.user.visiblename || `@${req.inc.user.username}`}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
-                emailKey,
-                "If this action was not made by you, delete this letter"
-            ],
-            "Furry Index Email verification",
-            req.body.email
-        )
+//         await mailer(
+//             [
+//                 "Furry Index Email verification",
+//                 `Hello, ${req.inc.user.visiblename || `@${req.inc.user.username}`}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
+//                 emailKey,
+//                 "If this action was not made by you, delete this letter"
+//             ],
+//             "Furry Index Email verification",
+//             req.body.email
+//         )
 
-        return res.status(200).send("Check email")
-    }
-}
+//         return res.status(200).send("Check email")
+//     }
+// }
 
 
 
