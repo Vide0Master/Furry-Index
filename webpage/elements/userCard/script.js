@@ -104,7 +104,6 @@ export default class UserCard extends Elem {
                         alert.alertCont,
                         Language.lang.elements.userCard.dd,
                         async (v) => {
-                            console.log(v)
                             const resp = await API("put", `/api/profile/${userData.username}/role`, { action: "add", role: v })
                             if (resp.HTTPCODE == 200) {
                                 userData.roles = resp.roles
@@ -149,7 +148,6 @@ export default class UserCard extends Elem {
                         alert.alertCont,
                         Language.lang.elements.userCard.dd,
                         async (v) => {
-                            console.log(v)
                             const resp = await API("put", `/api/profile/${userData.username}/role`, { action: "remove", role: v })
                             if (resp.HTTPCODE == 200) {
                                 userData.roles = resp.roles
