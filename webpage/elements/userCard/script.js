@@ -82,12 +82,12 @@ export default class UserCard extends Elem {
                     }
 
                     if (ddData.length == 0) return
-                    const alert = new Alert.Simple(null, "Add role", null, null, "addRole")
+                    const alert = new Alert.Simple(null, Language.lang.elements.userCard.addRole, null, null, "addRole")
                     
                     const ddlist = new DropdownList(
                         ddData,
                         alert.alertCont,
-                        "Add role",
+                        Language.lang.elements.userCard.dd,
                         async (v) => {
                             console.log(v)
                             const resp = await API("put", `/api/profile/${userData.username}/role`, { action: "add", role: v })
@@ -124,12 +124,12 @@ export default class UserCard extends Elem {
 
                     if (ddData.length == 0) return
 
-                    const alert = new Alert.Simple(null, "Add role", null, null, "addRole")
+                    const alert = new Alert.Simple(null, Language.lang.elements.userCard.rmRole, null, null, "rmrole")
 
                     const ddlist = new DropdownList(
                         ddData,
                         alert.alertCont,
-                        "Remove role",
+                        Language.lang.elements.userCard.dd,
                         async (v) => {
                             console.log(v)
                             const resp = await API("put", `/api/profile/${userData.username}/role`, { action: "remove", role: v })

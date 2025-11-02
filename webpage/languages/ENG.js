@@ -645,6 +645,11 @@ const LANG = {
                 label: "Descrition",
                 no: "No description provided"
             }
+        },
+        userCard: {
+            addRole: "Add role",
+            rmRole: "Remove role",
+            roleDD: "Select role"
         }
     },
     features: {
