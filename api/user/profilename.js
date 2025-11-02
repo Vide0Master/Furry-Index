@@ -100,6 +100,8 @@ exports.ClearUserDat = {
 const keyControl = require("../../systemServices/keyControl")
 
 const mailer = require("../../systemServices/mailer")
+const getUserByID = require("../../systemServices/getUserByID")
+const roleController = require("../../systemServices/userRoleControl")
 
 //region email
 exports.SetEmail = {
@@ -125,5 +127,45 @@ exports.SetEmail = {
         )
 
         return res.status(200).send("Check email")
+    }
+}
+
+
+
+exports.UpdateUserRole = {
+    m: "put",
+    r: "+/role",
+    p: ["requser"],
+    i: ["user"],
+    e: async (req, res) => {
+        const userReqr = req.inc.user
+        const tgtUser = req.params.username === userReqr.username ? userReqr : await getUserByUsername(req.params.username)
+
+        if (userReqr.id !== tgtUser.id && !userReqr.permissionsList.includes("admin:userRoles"))
+            return res.status(403).send("Forbidden")
+
+        const data = req.body
+
+        if ((data.add || data.rm) && !userReqr.permissionsList.includes("admin:userRoles"))
+            return res.status(403).send("Forbidden")
+
+        let rslt = null
+        switch (data.action) {
+            case "visible": {
+                rslt = await roleController.switchRoleVisibility(tgtUser.id, data.role, data.visible)
+            }; break;
+            case "remove": {
+                rslt = await roleController.removeRole(tgtUser.id, data.role)
+            }; break;
+            case "add": {
+                rslt = await roleController.assignRole(tgtUser.id, data.role)
+            }; break;
+        }
+
+        if (rslt === null) return res.status(500).send("Internal server error")
+
+        const user = await getUserByID(tgtUser.id)
+
+        return res.status(200).json({ roles: user.roles })
     }
 }
