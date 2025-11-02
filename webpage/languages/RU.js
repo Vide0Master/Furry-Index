@@ -643,6 +643,11 @@ const LANG = {
                 label: "Описание",
                 no: "Нет описания"
             }
+        },
+        userCard: {
+            addRole: "Добавить роль",
+            rmRole: "Убрать роль",
+            roleDD: "Выберите роль"
         }
     },
     features: {
