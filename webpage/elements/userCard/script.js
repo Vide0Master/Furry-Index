@@ -27,17 +27,19 @@ export default class UserCard extends Elem {
 
         const sideBlock = new Elem("side-block", this.element)
 
+        this.userNameLine = new Elem("user-name-line", sideBlock)
+
         switch (cardType) {
             case "messageHeader": {
                 this.addClass("message-header")
-                new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, "user-link")
+                new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, this.userNameLine, true, "user-link")
             }; break;
             default: {
                 if (features.includes("shrinkName")) {
-                    new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true)
+                    new Link(userData.visiblename ? userData.visiblename : `@${userData.username}`, `/profile/${userData.username}`, this.userNameLine, true)
                 } else {
                     if (userData.visiblename) {
-                        new Elem(null, sideBlock.element).text = userData.visiblename
+                        new Elem(null, this.userNameLine).text = userData.visiblename
                     }
                     new Link(`@${userData.username}`, `/profile/${userData.username}`, sideBlock.element, true, "user-link")
                 }
@@ -50,7 +52,16 @@ export default class UserCard extends Elem {
         const updateRoles = () => {
             rolesLn.wipe()
             for (const role of userData.roles) {
-                new RoleLabel(role, rolesLn, ["messageHeader"].includes(cardType))
+                if (role.type == "verifiedUser") {
+                    const verifiedIcon = new Elem("verified-icon", this.userNameLine)
+                    for (let i = 0; i < 4; i++) {
+                        new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
+                    }
+                    new Elem("check", verifiedIcon).text = "✓"
+                    verifiedIcon.title = Language.lang.elements.userCard.verified
+                } else {
+                    new RoleLabel(role, rolesLn, ["messageHeader"].includes(cardType))
+                }
             }
             rolesLn.switchVisible(userData.roles.length > 0)
         }
@@ -70,7 +81,11 @@ export default class UserCard extends Elem {
                     for (const role in staticRoles) {
                         const roleData = staticRoles[role]
 
-                        if (!roleData.manuallyAppendable || userData.roles.some(v => v.type == roleData.type)) continue
+                        if (
+                            !roleData.manuallyAppendable ||
+                            userData.roles.some(v => v.type == roleData.type) ||
+                            (userData.id === User.data.id && !roleData.selfAppendable)
+                        ) continue
 
                         const roleName = Language.lang.elements.roleLabel[roleData.type]
 
@@ -83,7 +98,7 @@ export default class UserCard extends Elem {
 
                     if (ddData.length == 0) return
                     const alert = new Alert.Simple(null, Language.lang.elements.userCard.addRole, null, null, "addRole")
-                    
+
                     const ddlist = new DropdownList(
                         ddData,
                         alert.alertCont,
@@ -111,7 +126,10 @@ export default class UserCard extends Elem {
                     for (const role in staticRoles) {
                         const roleData = staticRoles[role]
 
-                        if (!userData.roles.some(v => v.type == roleData.type) || userData.roles[0].type == roleData.type) continue
+                        if (
+                            !userData.roles.some(v => v.type == roleData.type) ||
+                            (userData.id === User.data.id && !roleData.selfAppendable)
+                        ) continue
 
                         const roleName = Language.lang.elements.roleLabel[roleData.type]
 

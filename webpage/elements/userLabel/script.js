@@ -16,8 +16,9 @@ const userCont = new Link(null, "/profile", container.element, true, ["user-cont
 userCont.textElem.element.remove()
 const avatarContainer = new Elem("user-avatar-container", userCont.element)
 const userAvatar = new Image("", "user-avatar", avatarContainer.element)
-const userContData = new Elem("user-data",userCont)
-const userName = new Elem("user-name", userContData)
+const userContData = new Elem("user-data", userCont)
+const userNameLine = new Elem("user-name-line", userContData)
+const userName = new Elem("user-name", userNameLine)
 const userRoles = new Elem("user-roles", userContData)
 userRoles.switchVisible(false)
 
@@ -53,7 +54,16 @@ class UserLabel {
         if (User?.data?.roles) {
             userRoles.switchVisible(true)
             for (const role of User.data.roles) {
-                new RoleLabel(role, userRoles, true)
+                if (role.type == "verifiedUser") {
+                    const verifiedIcon = new Elem("verified-icon", userNameLine)
+                    for (let i = 0; i < 4; i++) {
+                        new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
+                    }
+                    new Elem("check", verifiedIcon).text = "✓"
+                    verifiedIcon.title = Language.lang.elements.userCard.verified
+                } else {
+                    new RoleLabel(role, userRoles, true)
+                }
             }
         } else {
             userRoles.switchVisible(false)
