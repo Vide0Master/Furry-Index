@@ -12,7 +12,6 @@ const roleTemplates = {
         type: "superAdmin",
         roleIcon: "shield-bolt",
         roleColor: "#e5e838ff",
-        hiddable: false,
         manuallyAppendable: false,
         selfRemovable: false,
         selfAppendable: false,
@@ -28,7 +27,6 @@ const roleTemplates = {
         type: "admin",
         roleIcon: "shield",
         roleColor: "#e83838ff",
-        hiddable: false,
         manuallyAppendable: true,
         selfRemovable: false,
         selfAppendable: false,
@@ -44,7 +42,6 @@ const roleTemplates = {
         type: "moderator",
         roleIcon: "shield",
         roleColor: "#ab32ccff",
-        hiddable: false,
         manuallyAppendable: true,
         selfRemovable: false,
         selfAppendable: false,
@@ -61,7 +58,6 @@ const roleTemplates = {
         manuallyAppendable: true,
         selfRemovable: true,
         selfAppendable: true,
-        hiddable: false,
         permissions: []
     },
     supporter: {
@@ -71,7 +67,6 @@ const roleTemplates = {
         manuallyAppendable: true,
         selfRemovable: true,
         selfAppendable: true,
-        hiddable: true,
         permissions: []
     },
     verifiedUser: {
@@ -81,8 +76,6 @@ const roleTemplates = {
         manuallyAppendable: false,
         selfRemovable: false,
         selfAppendable: false,
-        hiddable: false,
-        visible: false,
         permissions: ["emailVerified"]
     },
     verifiedPaymentEntity: {
@@ -92,8 +85,6 @@ const roleTemplates = {
         manuallyAppendable: true,
         selfRemovable: true,
         selfAppendable: true,
-        hiddable: true,
-        visible: false,
         permissions: []
     },
 }
@@ -117,9 +108,6 @@ class roleController {
             userid,
             type: role
         }
-
-        if (typeof roleFromDb.visible === "boolean")
-            roleData.visible = roleFromDb.visible
 
         if (!roleDataDB && roleData) {
             await prisma.role.create({ data: roleData })
@@ -165,28 +153,6 @@ class roleController {
     }
 
     static roleTemplates = roleTemplates
-
-    static async switchRoleVisibility(userID, roleName, visible) {
-        const role = await prisma.role.findFirst({
-            where: {
-                userid: userID,
-                type: roleName
-            }
-        })
-
-        if (!role) return null
-
-        const roleupd = await prisma.role.update({
-            where: {
-                id: role.id
-            },
-            data: {
-                visible: !visible
-            }
-        })
-
-        return roleupd
-    }
 }
 
 module.exports = roleController
