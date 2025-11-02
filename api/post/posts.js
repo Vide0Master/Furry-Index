@@ -7,8 +7,9 @@ exports.ROUTE = "/api/posts"
 
 exports.GetPosts = {
     m: "get",
+    i: ["user"],
     e: async (req, res) => {
-        const user = await getUserBySessionCookie(req.cookies[mainAuthTokenKey] || null);
+        const user = req.inc.user
 
         const page = req.query.p ? parseInt(req.query.p) : 0;
         const take = req.query.t ? parseInt(req.query.t) : 50;

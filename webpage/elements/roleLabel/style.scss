@@ -5,12 +5,15 @@
     align-items: center;
     gap: 2px;
 
-    color: var(--role-color);
     border: solid 1px var(--role-color);
     background-color: color-mix(in srgb, var(--role-color) 20%, transparent 80%);
 
     padding: 2px 4px;
     border-radius: 100vh;
+
+    .role-label-text {
+        color: var(--role-color);
+    }
 
     &.short {
         cursor: help;

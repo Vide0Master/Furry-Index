@@ -22,7 +22,7 @@ module.exports = async function getUserByID(id, exclude = []) {
                     id: true,
                     type: true,
                     specialData: true,
-                    hidden: true
+                    visible: true
                 }
             },
             email: true
@@ -44,6 +44,7 @@ module.exports = async function getUserByID(id, exclude = []) {
                 if (roleController.roleTemplates[role.type].roleIcon) role.roleIcon = roleController.roleTemplates[role.type].roleIcon
 
                 role.permissions = roleController.roleTemplates[role.type].permissions
+                role.hiddable = roleController.roleTemplates[role.type].hiddable
 
                 if (!exclude.includes("rolePermissionsList")) role.permissions.forEach(v => {
                     if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)

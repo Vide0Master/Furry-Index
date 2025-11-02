@@ -34,9 +34,9 @@ const WSController = require("../systemServices/WebSocket");
 for (let i = 0; i < apiFiles.length; i++) {
     const module = require(apiFiles[i])
 
-    const moduleRoute = module.ROUTE
-    const modulePermissions = module.PERMISSIONS
-    const moduleInclude = module.INCLUDE
+    const moduleRoute = module.ROUTE || ""
+    const modulePermissions = module.PERMISSIONS || []
+    const moduleInclude = module.INCLUDE || []
 
     //region method perm
     for (const func in module) {
@@ -46,7 +46,10 @@ for (let i = 0; i < apiFiles.length; i++) {
         if (moduleFunc?.kill || moduleFunc?.k) continue
 
         const funcMethod = (moduleFunc?.method || moduleFunc?.m)?.toLowerCase()
-        const funcRoute = moduleFunc?.route || moduleFunc?.r || moduleRoute
+        const funcRouteRaw = moduleFunc?.route || moduleFunc?.r;
+        const funcRoute = funcRouteRaw?.startsWith("+")
+            ? moduleRoute + funcRouteRaw.slice(1)
+            : funcRouteRaw ? funcRouteRaw : moduleRoute;
         const funcName = moduleFunc?.name || moduleFunc?.n
         const funcPerm = (moduleFunc?.permissions || moduleFunc?.p || modulePermissions || []).map(v => v.toLowerCase())
         const funcExec = moduleFunc?.exec || moduleFunc?.e

@@ -2,7 +2,7 @@
     background-color: var(--background);
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: start;
     gap: 5px;
     padding: 5px;
     border-radius: 10px;
@@ -20,34 +20,6 @@
                 border-radius: 2.5px;
             }
         }
-
-        &.shape-round {
-            .avatar-border {
-                border-radius: 100vh;
-
-                .internal-image-container {
-                    border-radius: 100vh
-                }
-            }
-        }
-
-        &.shape-portrait {
-            .avatar-border {
-                .internal-image-container {
-                    max-height: 120px;
-                    max-width: 60px;
-                }
-            }
-        }
-
-        &.shape-landscape {
-            .avatar-border {
-                .internal-image-container {
-                    max-height: 60px;
-                    max-width: 120px;
-                }
-            }
-        }
     }
 
     .side-block {
@@ -58,6 +30,20 @@
 
         .user-link {
             font-size: 12px;
+        }
+
+        .role-line {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 200px;
+            gap: 5px;
+
+            &.hidden {
+                display: none;
+            }
         }
     }
 
@@ -86,6 +72,42 @@
             align-items: center;
 
             .user-link {}
+        }
+    }
+
+    &.shape-round {
+        border-radius: 100vh 10px 10px 100vh;
+
+        .avatar-cont {
+            .avatar-border {
+                border-radius: 100vh;
+
+                .internal-image-container {
+                    border-radius: 100vh
+                }
+            }
+        }
+    }
+
+    &.shape-portrait {
+        .avatar-cont {
+            .avatar-border {
+                .internal-image-container {
+                    max-height: 120px;
+                    max-width: 60px;
+                }
+            }
+        }
+    }
+
+    &.shape-landscape {
+        .avatar-cont {
+            .avatar-border {
+                .internal-image-container {
+                    max-height: 60px;
+                    max-width: 120px;
+                }
+            }
         }
     }
 }

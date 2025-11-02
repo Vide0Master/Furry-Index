@@ -10,10 +10,10 @@ exports.INCLUDE = ["", ""]
 // route
 exports.route = {
     name: "", // REQUIRED FOR WS!!! sets name for route(only for debug)/wslistener, alias: n 
-    method: "GET", // REQUIRED!!!, alias: m
+    method: "GET", // REQUIRED!!!, case unsensetive, alias: m
     route: "/", // override for default route, alias: r
-    permissions: "", // override for default permissions, alias: p
-    include: "", // override for default data inclusion, alias: i
+    permissions: "", // override for default permissions, case unsensetive, alias: p
+    include: "", // override for default data inclusion, case unsensetive, alias: i
     // eslint-disable-next-line no-unused-vars
     exec: async (req, res) => { //alias: e
         // code

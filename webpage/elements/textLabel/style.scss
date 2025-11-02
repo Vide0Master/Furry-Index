@@ -21,4 +21,16 @@
         background-color: color-mix(in srgb, color-mix(in srgb, var(--internal-label-color, var(--outline)) 30%, var(--background) 70%) 60%, transparent 40%);
         backdrop-filter: blur(2px);
     }
+
+    &.clickable {
+        cursor: pointer;
+
+        .text {
+            cursor: pointer;
+        }
+
+        &:hover {
+            box-shadow: 0 0 3px var(--internal-label-color, var(--outline));
+        }
+    }
 }

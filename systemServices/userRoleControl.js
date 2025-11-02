@@ -3,17 +3,22 @@ const prisma = require("./prisma")
 // ROLE PERMISSIONS LIST AND DESCRIPTION
 // tbd :D
 
+// 01.11.2025
+// so, there is some progress and understanding of what goes where and what it does
+// atm there is some forgotten frontend pieces of data
+
 const roleTemplates = {
     superAdmin: {
         type: "superAdmin",
         roleIcon: "shield-bolt",
         roleColor: "#e5e838ff",
         hiddable: false,
+        manuallyAppendable: false,
         permissions: [
             "admin:news",
             "admin:posts",
             "admin:reports",
-            "admin:users",
+            "admin:userRoles",
             "admin:rmMessages"
         ]
     },
@@ -22,11 +27,12 @@ const roleTemplates = {
         roleIcon: "shield",
         roleColor: "#e83838ff",
         hiddable: false,
+        manuallyAppendable: true,
         permissions: [
             "admin:news",
             "admin:posts",
             "admin:reports",
-            "admin:users",
+            "admin:userRoles",
             "admin:rmMessages"
         ]
     },
@@ -35,6 +41,7 @@ const roleTemplates = {
         roleIcon: "shield",
         roleColor: "#ab32ccff",
         hiddable: false,
+        manuallyAppendable: true,
         permissions: [
             "admin:posts",
             "admin:reports",
@@ -44,7 +51,8 @@ const roleTemplates = {
     artist: {
         type: "artist",
         roleIcon: "paint-palette",
-        roleColor: "#e8e538ff",
+        roleColor: "#38cbe8ff",
+        manuallyAppendable: true,
         hiddable: false,
         permissions: []
     },
@@ -52,6 +60,7 @@ const roleTemplates = {
         type: "supporter",
         roleIcon: "shield-bolt",
         roleColor: "#ffff00ff",
+        manuallyAppendable: true,
         hiddable: true,
         permissions: []
     },
@@ -59,6 +68,7 @@ const roleTemplates = {
         type: "verifiedUser",
         roleIcon: "shield-bolt",
         roleColor: "#2626cdff",
+        manuallyAppendable: false,
         hiddable: false,
         permissions: []
     },
@@ -66,8 +76,9 @@ const roleTemplates = {
         type: "verifiedPaymentEntity",
         roleIcon: "shield-bolt",
         roleColor: "#4138e8ff",
+        manuallyAppendable: true,
         hiddable: true,
-        hidden: true,
+        visible: false,
         permissions: []
     },
 }
@@ -103,12 +114,14 @@ class roleController {
     }
 
     static async removeRole(userid, role) {
-        await prisma.role.delete({
+        const cnt = await prisma.role.deleteMany({
             where: {
                 userid,
                 type: role
             }
         })
+
+        return cnt.count > 0 ? true : null
     }
 
     static async testUserPermission(userid, permission) {
@@ -134,6 +147,28 @@ class roleController {
     }
 
     static roleTemplates = roleTemplates
+
+    static async switchRoleVisibility(userID, roleName, visible) {
+        const role = await prisma.role.findFirst({
+            where: {
+                userid: userID,
+                type: roleName
+            }
+        })
+
+        if (!role) return null
+
+        const roleupd = await prisma.role.update({
+            where: {
+                id: role.id
+            },
+            data: {
+                visible: !visible
+            }
+        })
+
+        return roleupd
+    }
 }
 
 module.exports = roleController

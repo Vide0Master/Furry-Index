@@ -29,7 +29,7 @@ export async function render(params) {
 
     Router.setTitle(Pdata.visiblename ? Pdata.visiblename : `@${Pdata.username}`)
 
-    const userCard = new UserCard(container.element, Pdata, "default", [])
+    const userCard = new UserCard(container.element, Pdata, "default", ["roleEdit"])
 
     if (User.data.username == Pdata.username) {
         const editprofile = new Link("", `/settings?t=user`, userCard.element, true, "edit-profile", "edit")

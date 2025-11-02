@@ -17,6 +17,7 @@ import Theme from "../../scripts/themeController.js";
 import PasswordInput from "../../components/passwordinput/script.js";
 import BasicCheck from "../../scripts/basicChecks.js";
 import TextLabel from "../../elements/textLabel/script.js";
+import RoleLabel from "../../elements/roleLabel/script.js";
 
 export const tag = "settings";
 export const tagLimit = 1;
@@ -341,6 +342,20 @@ export async function render(params) {
             unlinkBtn.switchVisible(false)
         }
 
+        //region roles
+
+        // for some seen future, maybe some editor, idk
+
+        // const roleLine = new Elem("role-line", pages.user)
+        // for (const role of User.data.roles) {
+        //     const roleLabel = new RoleLabel(role, roleLine)
+        //     if (role.hiddable) {
+        //         const visSwitch = new SwitchInput("Visible", roleLabel, async (v) => {
+        //             const apiResp = await API("put", `/api/profile/${User.data.username}/role`, { action: "visible", visible: v })
+        //             if (apiResp.HTTPCODE !== 200) visSwitch.change()
+        //         }, role.visible)
+        //     }
+        // }
     }
 
     if (["webpage", "user"].includes(params?.query?.t)) ddlist.selectOption(params?.query?.t)
