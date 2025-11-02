@@ -141,35 +141,6 @@ const mailer = require("../../systemServices/mailer")
 const getUserByID = require("../../systemServices/getUserByID")
 const roleController = require("../../systemServices/userRoleControl")
 
-//region email
-// exports.SetEmail = {
-//     m: "post",
-//     route: "/api/profile/:username/email",
-//     i: ["USER"],
-//     e: async (req, res) => {
-//         if (!req.inc.user) return res.status(404).send("No such user")
-//         if (req.inc.user.username !== req.params.username) return res.status(403).send("Action forbidden")
-//         if (!req?.body?.email) return res.status(400).send("No body or email in body")
-
-//         const emailKey = await keyControl.createKey("verifyEmail", { userID: req.inc.user.id, email: req.body.email }, true)
-
-//         await mailer(
-//             [
-//                 "Furry Index Email verification",
-//                 `Hello, ${req.inc.user.visiblename || `@${req.inc.user.username}`}!\nYou tried to link this email address to your account.\nTo verify this, redeem key provided below`,
-//                 emailKey,
-//                 "If this action was not made by you, delete this letter"
-//             ],
-//             "Furry Index Email verification",
-//             req.body.email
-//         )
-
-//         return res.status(200).send("Check email")
-//     }
-// }
-
-
-
 exports.UpdateUserRole = {
     m: "put",
     r: "+/role",
@@ -189,9 +160,6 @@ exports.UpdateUserRole = {
 
         let rslt = null
         switch (data.action) {
-            case "visible": {
-                rslt = await roleController.switchRoleVisibility(tgtUser.id, data.role, data.visible)
-            }; break;
             case "remove": {
                 rslt = await roleController.removeRole(tgtUser.id, data.role)
             }; break;

@@ -194,7 +194,6 @@ model Role {
     type        String
     userid      String
     user        User    @relation(fields: [userid], references: [id])
-    visible     Boolean @default(true)
     specialData Json?
 }
 
