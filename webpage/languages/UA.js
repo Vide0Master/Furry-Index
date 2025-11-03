@@ -333,7 +333,10 @@ const LANG = {
         },
         rating: "Рейтинг",
         favourite: "Обране",
-        by: "від"
+        by: "від",
+        download: "Завантажити",
+        downloadAll: "Завантажити усі",
+        fileLn: "Файл"
     },
     profile: {
         noUsername: "Ім'я користувача не вказане в адресі сторінки",

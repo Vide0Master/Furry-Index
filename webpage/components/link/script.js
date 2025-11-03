@@ -12,6 +12,7 @@ export default class Link extends Elem {
 
         this.textElem = new Elem("link-text", this.element)
         this.textElem.text = text ? text : ""
+        if (!text) this.textElem.switchVisible(false)
 
         if (cname) {
             if (typeof cname === "object") {
@@ -24,12 +25,12 @@ export default class Link extends Elem {
 
         if (link) {
             switch (typeof link) {
-            case "function": {
-                this.addEvent("click", link)
-            }; break;
-            default: {
-                this.element.href = link
-            }; break;
+                case "function": {
+                    this.addEvent("click", link)
+                }; break;
+                default: {
+                    this.element.href = link
+                }; break;
             }
         } else {
             console.error(this.element, Language.lang.cmd.erorrs.NOLINK)
@@ -48,5 +49,6 @@ export default class Link extends Elem {
 
     set text(text) {
         this.textElem.text = text
+        this.textElem.switchVisible(!!text)
     }
 }

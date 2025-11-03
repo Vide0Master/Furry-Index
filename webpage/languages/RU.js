@@ -333,7 +333,10 @@ const LANG = {
         },
         rating: "Рейтинг",
         favourite: "Избранное",
-        by: "от"
+        by: "от",
+        download: "Скачать",
+        downloadAll: "Скачать все",
+        fileLn: "Файл"
     },
     profile: {
         noUsername: "Имя пользователя не указано в адресе страницы",

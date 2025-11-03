@@ -338,7 +338,10 @@ const LANG = {
         },
         rating: "Rating",
         favourite: "Favourite",
-        by: "by"
+        by: "by",
+        download: "Download",
+        downloadAll: "Download all",
+        fileLn: "File"
     },
     profile: {
         noUsername: "No username specified in page route",
