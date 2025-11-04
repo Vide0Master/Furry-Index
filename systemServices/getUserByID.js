@@ -46,13 +46,9 @@ module.exports = async function getUserByID(id, exclude = []) {
 
                 tempRoles.push(role)
 
-                if (!exclude.includes("rolePermissionsList") && role?.permissions) {
-                    role.permissions.forEach(v => {
-                        if (!userData.permissionsList.includes(v)) {
-                            userData.permissionsList.push(v)
-                        }
-                    })
-                }
+                if (!exclude.includes("rolePermissionsList") && role?.permissions) role.permissions.forEach(v => {
+                    if (!userData.permissionsList.includes(v)) userData.permissionsList.push(v)
+                })
             }
 
             userData.roles = tempRoles
