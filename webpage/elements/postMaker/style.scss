@@ -1,33 +1,52 @@
 .postmaker-post-container {
-    border: 3px solid var(--outline);
+    border: 2px solid var(--outline);
     padding: 10px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow: visible;
-    background-color: var(--background);
+    background-color: var(--background-s);
 
-    .files-list {
+    .file-selector {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
 
-        &.hidden {
-            display: none;
-        }
+        .files-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
 
-        .file-card {
-            .order-row {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                width: 100%;
+            &.hidden {
+                display: none;
+            }
 
-                &.hidden {
-                    display: none;
+            .file-card {
+                .order-row {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    width: 100%;
+                    padding: 0 5px;
+
+                    &.hidden {
+                        display: none;
+                    }
+                }
+
+                .include-btn {
+                    position: absolute;
+                    bottom: 10%;
+                    left: 50%;
+                    transform: translateX(-50%);
                 }
             }
         }

@@ -345,7 +345,8 @@ const LANG = {
         latestPosts: "Последние посты"
     },
     upload: {
-        groupUpload: "Загрузить всё"
+        group: "Загрузить все",
+        single: "Загрузить"
     },
     postMaster: {
         newPost: "Создать"
@@ -498,7 +499,7 @@ const LANG = {
             fsize: "Размер",
             bytes: "Байт",
             segments: "Сегментов",
-            ftype: "Тип",
+            fformat: "Формат",
             segment: [
                 "Сегмент",
                 "Вес"

@@ -28,7 +28,6 @@ export default class Video extends Elem {
         if (savedMuted !== null) this.video.muted = savedMuted === "1"
 
         this.element.appendChild(this.video)
-        if (parent) parent.appendChild(this.element)
 
         this.video.addEventListener("volumechange", () => {
             localStorage.setItem("video-volume", String(this.video.volume))

@@ -22,6 +22,14 @@ const userName = new Elem("user-name", userNameLine)
 const userRoles = new Elem("user-roles", userContData)
 userRoles.switchVisible(false)
 
+const verifiedIcon = new Elem("verified-icon", userNameLine)
+for (let i = 0; i < 4; i++) {
+    new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
+}
+new Elem("check", verifiedIcon).text = "✓"
+verifiedIcon.title = Language.lang.elements.userCard.verified
+verifiedIcon.switchVisible(false)
+
 class UserLabel {
     static append(parent) {
         container.append(parent)
@@ -51,16 +59,12 @@ class UserLabel {
 
     static updateUserRoles() {
         userRoles.wipe()
+        verifiedIcon.switchVisible(false)
         if (User?.data?.roles) {
             userRoles.switchVisible(true)
             for (const role of User.data.roles) {
                 if (role.type == "verifiedUser") {
-                    const verifiedIcon = new Elem("verified-icon", userNameLine)
-                    for (let i = 0; i < 4; i++) {
-                        new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
-                    }
-                    new Elem("check", verifiedIcon).text = "✓"
-                    verifiedIcon.title = Language.lang.elements.userCard.verified
+                    verifiedIcon.switchVisible(true)
                 } else {
                     new RoleLabel(role, userRoles, true)
                 }

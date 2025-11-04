@@ -20,32 +20,45 @@ export default class FileCard extends Elem {
     constructor(file, isUploadable, parent, options = { remove: true, avatar: true, onUpload: () => { } }) {
         super("file-card", parent)
 
-        if (isUploadable) {
-            this.filename = new Elem("file-name", this.element)
-            this.filename.element.innerText = file.name
-            this.filename.element.title = Language.lang.elements.fileCard.fnameNotBeSaved
-            this.fileContainer = new Elem("file-container", this.element)
+        this.fileContainer = new Elem("file-container", this)
 
-            switch (true) {
-                case file.type.startsWith("image"): {
-                    this.image = new Image(URL.createObjectURL(file), "file image", this.fileContainer.element)
+        this.fileData = new Elem("file-data", this)
+
+        const makePreview = (type, link) => {
+            switch (type) {
+                case "image": {
+                    this.image = new Image(link, "file image", this.fileContainer)
                 }; break;
-                case file.type.startsWith("video"): {
-                    this.video = new Video(URL.createObjectURL(file), this.fileContainer.element, { muted: true, loop: true })
+                case "video": {
+                    this.video = new Video(link, this.fileContainer, { muted: true, loop: true })
                 }; break;
             }
+        }
 
-            this.filesize = new Elem("file-size", this.element)
-            this.filesize.element.innerText = `${Language.lang.elements.fileCard.fsize}: ` + formatFileSize(file.size)
+        if (isUploadable) {
+            makePreview(file.type.startsWith("image") ? "image" : "video", URL.createObjectURL(file))
+        } else {
+            makePreview("image", `/file/${file.id}?thumbnail=150`)
+        }
+
+        // this.filename = new Elem("file-name", this.fileData)
+        // this.filename.text = isUploadable ? file.name : file.id
+        // if (isUploadable) {
+        //     this.filename.element.title = Language.lang.elements.fileCard.fnameNotBeSaved
+        // }
+
+        this.filesize = new Elem("file-size", this.fileData)
+        this.filesize.text = `${Language.lang.elements.fileCard.fsize}: ` + formatFileSize(file?.size ? file?.size : file?.fileparams?.size)
+
+        this.filetype = new Elem("file-type", this.fileData)
+        this.filetype.text = `${Language.lang.elements.fileCard.fformat}: ${file?.type ? file?.type.split("/")[1] : file?.filetype}`
+
+        if (isUploadable) {
             const segments = Math.ceil(file.size / (1024 * 1024))
-            this.filesize.element.title = `${file.size} ${Language.lang.elements.fileCard.bytes}\n${segments} ${Language.lang.elements.fileCard.segments}`
-
-            this.filetype = new Elem("file-type", this.element)
-            this.filetype.element.innerText = `${Language.lang.elements.fileCard.ftype}: ` + file.type
+            this.filesize.title = `${file.size} ${Language.lang.elements.fileCard.bytes}\n${segments} ${Language.lang.elements.fileCard.segments}`
 
             this.uploadFile = async () => {
                 options.onUpload()
-                this.uploadButton.element.remove()
 
                 const fileHash = await getFileHash(file)
                 const requestAdress = `/api/upload?hash=${fileHash}&filetype=${file.type.split("/")[1]}&segments=${segments}`
@@ -128,34 +141,28 @@ export default class FileCard extends Elem {
 
                 uploadSegmentsSequentially();
             }
-
-            this.uploadButton = new Button(Language.lang.elements.fileCard.uploadBtn, this.element, null, this.uploadFile)
         } else {
-            this.fileid = new Elem("file-id", this.element)
-            this.fileid.text = file.id
-
-            this.fileContainer = new Elem("file-container", this.element)
-
-            this.image = new Image(`/file/${file.id}?thumbnail=150`, "file image", this.fileContainer.element)
-
-            this.uploaded = new Elem("uploaded-on", this.element)
-            new Icon("upload", this.uploaded.element)
-            new Elem("uploaded-on-text", this.uploaded.element).text = formatDate(file.createdAt)
+            // this.uploaded = new Elem("uploaded-on", this.fileData)
+            // new Icon("upload", this.uploaded.element)
+            // new Elem("uploaded-on-text", this.uploaded.element).text = formatDate(file.createdAt)
 
             if (file.eraseOn) {
-                this.eraseOn = new Elem("erase-on", this.element)
+                this.eraseOn = new Elem("erase-on", this.fileData)
                 new Icon("delete-file", this.eraseOn.element)
                 this.eraseOnCntdown = new Countdown(file.eraseOn, this.eraseOn.element, file.updatedAt)
             }
 
-            const tagsList = new Elem("tags-list", this.element)
+            const tagsList = new Elem("tags-list", this.fileData)
+
+            file.tags = file.tags.sort((a, b) => a.name.length - b.name.length)
 
             for (const tag of file.tags) {
-                new Tag(tag, tagsList.element)
+                new Tag(tag, tagsList)
             }
 
             if (file.post || file.avatarfor) {
-                this.txtLbl = new TextLabel(null, this.element, "green", true)
+                this.txtLbl = new TextLabel(null, this, "green", true)
+                this.txtLbl.addClass("low-label")
                 new Elem(null, this.txtLbl.element).text = `${Language.lang.elements.fileCard.linked.label}`
 
                 if (file.post) {
@@ -168,7 +175,7 @@ export default class FileCard extends Elem {
             }
 
             if (file.fileparams.width == file.fileparams.height && !file.avatarfor && !file.post && !User.data?.avatar?.file && options.avatar) {
-                this.setAvatarBtn = new Button(Language.lang.elements.fileCard.useAsAvatar, this.element, null, async () => {
+                this.setAvatarBtn = new Button(Language.lang.elements.fileCard.useAsAvatar, this.fileData, null, async () => {
                     const avatarSetResult = await API("PUT", `/api/profile/${User.data.username}`, { avatarID: file.id })
                     if (avatarSetResult.HTTPCODE == 200) {
                         await User.updateUserData()
@@ -191,7 +198,7 @@ export default class FileCard extends Elem {
                     if (options.onRM) options.onRM()
                 }
 
-                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.element, null, (e) => {
+                this.removeButton = new Button(Language.lang.elements.fileCard.delete.buttonLabel, this.fileData, null, (e) => {
                     if (e.shiftKey) {
                         this.delete(e)
                         return
@@ -200,5 +207,17 @@ export default class FileCard extends Elem {
                 })
             }
         }
+
+        const drawerBtn = new Elem("drawer-btn", this.fileData)
+        new Elem("arrow", drawerBtn).text = "▼"
+        drawerBtn.addEvent("click", () => {
+            this.fileData.e.classList.toggle("open")
+        })
+
+        document.addEventListener("click", (e) => {
+            if (!this.fileData.element.contains(e.target)) {
+                this.fileData.rmClass("open")
+            }
+        })
     }
 }

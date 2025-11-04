@@ -37,6 +37,5 @@ export default class Image extends Elem {
 
         this.image.src = src
         this.image.alt = alt
-        if (parent) parent.appendChild(this.element)
     }
 }

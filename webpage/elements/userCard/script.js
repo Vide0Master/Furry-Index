@@ -49,16 +49,20 @@ export default class UserCard extends Elem {
         const rolesCont = new Elem("role-line", sideBlock)
         const rolesLn = new Elem("role-line", rolesCont)
 
+        const verifiedIcon = new Elem("verified-icon", this.userNameLine)
+        for (let i = 0; i < 4; i++) {
+            new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
+        }
+        new Elem("check", verifiedIcon).text = "✓"
+        verifiedIcon.title = Language.lang.elements.userCard.verified
+        verifiedIcon.switchVisible(false)
+
         const updateRoles = () => {
             rolesLn.wipe()
+            verifiedIcon.switchVisible(false)
             for (const role of userData.roles) {
                 if (role.type == "verifiedUser") {
-                    const verifiedIcon = new Elem("verified-icon", this.userNameLine)
-                    for (let i = 0; i < 4; i++) {
-                        new Elem("ln", verifiedIcon).setStyleProperty("--rotation", `${i * 45}deg`)
-                    }
-                    new Elem("check", verifiedIcon).text = "✓"
-                    verifiedIcon.title = Language.lang.elements.userCard.verified
+                    verifiedIcon.switchVisible(true)
                 } else {
                     new RoleLabel(role, rolesLn, ["messageHeader"].includes(cardType))
                 }

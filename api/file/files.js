@@ -17,6 +17,8 @@ exports.PERMISSIONS = ["REQCOOKIE", "REQUSER"]
 
 // but fuck it, it works, i dont need to touch it, until some day...
 
+// 04.11.2025 - it's rework time boyyys
+
 exports.GetFiles = {
     method: "get",
     exec: async (req, res) => {
@@ -29,14 +31,52 @@ exports.GetFiles = {
             ? req.query.tags.split(/[ +]+/).map(tag => tag.trim()).filter(Boolean)
             : []
 
+        const filterHandlers = {
+            "id": (value, negative) => {
+                const clause = { OR: value.split(",").map(v => ({ id: v })) };
+                return negative ? { NOT: clause } : clause;
+            },
+            "usedByPost": (value, negative) => {
+                const clause = { postid: value };
+                return negative ? { NOT: clause } : clause;
+            },
+            "notUsed": (value, negative) => {
+                const clause = { postid: null, avatarfor: null };
+                return negative ? { NOT: clause } : clause;
+            },
+            "isAvatar": (value, negative) => {
+                const clause = { avatarfor: value };
+                return negative ? { NOT: clause } : clause;
+            }
+        };
+
         const positiveTagNames = []
         const negativeTagNames = []
+        const processedFilters = []
 
         for (let rawTag of tagFilter) {
-            if (rawTag.startsWith("-")) {
-                negativeTagNames.push(rawTag.slice(1))
+            let negative = false;
+            let tag = rawTag;
+
+            if (tag.startsWith("-")) {
+                negative = true;
+                tag = tag.slice(1);
+            }
+
+            const fieldMatch = tag.match(/^([a-zA-Z]+):(.+)$/);
+            if (fieldMatch) {
+                const [, field, value] = fieldMatch;
+                if (filterHandlers[field]) {
+                    const clause = filterHandlers[field](value, negative)
+                    if (clause) processedFilters.push(clause);
+                }
+                continue;
+            }
+
+            if (negative) {
+                negativeTagNames.push(tag);
             } else {
-                positiveTagNames.push(rawTag)
+                positiveTagNames.push(tag);
             }
         }
 
@@ -58,25 +98,6 @@ exports.GetFiles = {
             })
         }
 
-        const inUse = req.query.inuse
-        let postFilter
-        if (inUse === "false") {
-            postFilter = { post: null, avatarfor: null }
-        } else if (inUse?.startsWith("postID:")) {
-            const postID = inUse.split(":", 2)[1]
-            postFilter = {
-                OR: [{ post: { id: postID } }, { post: null }],
-                avatarfor: null
-            }
-        } else if (inUse?.startsWith("avatarID")) {
-            postFilter = {
-                OR: [{ avatarfor: { id: user.id } }, { avatarfor: null }],
-                post: null
-            }
-        } else {
-            postFilter = {}
-        }
-
         const delay = new Date()
         delay.setDate(delay.getDate() - 1)
 
@@ -88,13 +109,13 @@ exports.GetFiles = {
             ],
             AND: [
                 { ownerid: user.id },
-                postFilter,
-                ...tagFilters
+                ...tagFilters,
+                ...processedFilters
             ]
         }
 
         const orderBy = {}
-        if (inUse) {
+        if (tagFilter.some(v => v.startsWith("usedByPost"))) {
             orderBy.postOrder = "asc"
         } else {
             orderBy.createdAt = "desc"

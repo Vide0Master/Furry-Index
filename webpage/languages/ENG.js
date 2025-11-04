@@ -350,7 +350,8 @@ const LANG = {
         latestPosts: "Latest posts"
     },
     upload: {
-        groupUpload: "Upload all",
+        group: "Upload all",
+        single: "Upload"
     },
     postMaster: {
         newPost: "Create",
@@ -500,7 +501,7 @@ const LANG = {
             fsize: "File size",
             bytes: "Bytes",
             segments: "Segments",
-            ftype: "File type",
+            fformat: "Format",
             segment: [
                 "Segment",
                 "Weight"
