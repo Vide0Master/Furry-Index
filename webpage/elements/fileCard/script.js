@@ -15,9 +15,10 @@ import Language from "../../scripts/language.js";
 import Countdown from "../countdown/script.js";
 import User from "../../scripts/userdata.js";
 import UserLabel from "../userLabel/script.js";
+import downloadFile from "../../scripts/downloadFile.js";
 
 export default class FileCard extends Elem {
-    constructor(file, isUploadable, parent, options = { remove: true, avatar: true, onUpload: () => { } }) {
+    constructor(file, isUploadable, parent, options = { remove: true, avatar: true, onUpload: () => { }, download: false }) {
         super("file-card", parent)
 
         this.fileContainer = new Elem("file-container", this)
@@ -182,6 +183,14 @@ export default class FileCard extends Elem {
                         UserLabel.checkUserData()
                         location.reload()
                     }
+                })
+            }
+
+            if (options.download) {
+                new Button(Language.lang.postView.download, this.fileData, null, async () => {
+                    await downloadFile(`/file/${file.id}`,
+                        "Furry Index " + file.id
+                    )
                 })
             }
 

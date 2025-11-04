@@ -145,12 +145,8 @@ class roleController {
     static getRole(name) {
         const requiredRole = roleTemplates[name]
         if (!requiredRole) return null
-
-        const cloned = { ...requiredRole }
-        delete cloned.permissions
-        return cloned
+        return requiredRole
     }
-    
 
     static testRole(name) {
         return roleTemplates[name] ? true : false

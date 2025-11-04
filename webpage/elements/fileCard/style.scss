@@ -20,6 +20,16 @@
 
         .internal-video-container {
             height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+
+            video {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                display: block;
+            }
         }
 
         .upload-segments-container {
@@ -84,9 +94,9 @@
             &.complete,
             &.err,
             &.processing {
-                flex-direction: column;
+                flex-direction: column-reverse;
                 align-items: end;
-                justify-content: start;
+                justify-content: end;
                 gap: 5px;
                 padding: 5px;
             }
@@ -100,11 +110,13 @@
         right: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        background-color: color-mix(in srgb, var(--background) 50%, transparent 50%);
         padding: 5px;
         display: flex;
         flex-direction: column;
         gap: 5px;
+
+        backdrop-filter: blur(4px);
 
         .file-name {
             max-width: 150px;
@@ -140,12 +152,10 @@
             width: 100%;
             padding: 3px;
             border-radius: 0 0 10px 10px;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: color-mix(in srgb, var(--background) 50%, transparent 50%);
             text-align: center;
             cursor: pointer;
             user-select: none;
-
-            
 
             &:hover {
                 color: var(--interactible-hover);
@@ -158,6 +168,8 @@
             .drawer-btn {
                 top: unset;
                 bottom: 0;
+                background-color: transparent;
+                backdrop-filter: none;
 
                 .arrow {
                     transform: rotateZ(180deg);

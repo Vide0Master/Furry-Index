@@ -570,7 +570,6 @@ const LANG = {
             tags: "Tags",
             createPost: "Create",
             editPost: "Edit",
-            include: "Include",
             successCreate: [
                 "Post",
                 "created successfully"
@@ -578,7 +577,11 @@ const LANG = {
             successEdit: [
                 "Post",
                 "edited successfully"
-            ]
+            ],
+            usedFiles: "Used files",
+            availableFiles: "Available files",
+            include: "Include",
+            exclude: "Exclude",
         },
         messages: {
             noMsg: "No messages... for now",

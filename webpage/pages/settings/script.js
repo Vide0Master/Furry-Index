@@ -217,7 +217,7 @@ export async function render(params) {
         const selAvatar = new Button(Language.lang.settings.user.selectAvatar, avatarLine.element, null, async () => {
             const overlay = new Overlay()
             const avatarSelector = new Elem("avatar-selector", overlay.element)
-            const files = await API("GET", `/api/files&tags=image+isAvatar:${User.data.id}&t=5`)
+            const files = await API("GET", `/api/files?tags=image+notUsed:1&t=5`)
             new Elem("label", avatarSelector.element).text = Language.lang.settings.user.selectAvatar
             const fileList = new Elem("file-list", avatarSelector.element)
             for (const file of files.files) {
