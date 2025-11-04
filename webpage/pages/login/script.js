@@ -38,7 +38,7 @@ export async function render() {
     })
 
     new Link(Language.lang.login.pwdReset.label, () => {
-        const overlay = new Overlay(false)
+        const overlay = new Overlay({ closeOnClick: false })
         const pwdResetCont = new Elem("password-reset-cont", overlay)
 
         new Elem("label", pwdResetCont).text = Language.lang.login.pwdReset.label

@@ -51,10 +51,10 @@ export default async function makePostMaker(postData, editedCB) {
     postType.value = PostData.type != "" ? PostData.type : "placeholder"
 
     const fileSelector = new Elem("file-selector", container)
-    new Elem("label", fileSelector).text = "Used files"
+    new Elem("label", fileSelector).text = Language.lang.elements.postMaker.usedFiles
     const usedFilesField = new Elem("files-list", fileSelector)
     const usedPageNav = new PageNavigator(1, 1, fileSelector, true)
-    new Elem("label", fileSelector).text = "Available files"
+    new Elem("label", fileSelector).text = Language.lang.elements.postMaker.availableFiles
     const availalbeFilesField = new Elem("files-list", fileSelector)
     const availalbePageNav = new PageNavigator(1, 1, fileSelector, true)
 
@@ -63,15 +63,10 @@ export default async function makePostMaker(postData, editedCB) {
     new Link(Language.lang.settings.user.uploadFile, "/upload", noFiles.element, true, null, "upload")
     noFiles.switchVisible(false)
 
-    // Updated file selector helpers: include/exclude/move + id:<ids> tag search + PageNavigator integration
-    // Assumes the following globals exist in your environment:
-    // - Elem, Button, Link, FileCard, API, PostData, postData, postsPerPageInSelectors, PageNavigator
-
     async function searchFiles(tags = [], page = 0, take = 10, count = false) {
         const params = new URLSearchParams();
 
         if (tags && tags.length > 0) {
-            // tags are joined by + as your backend expects; tags can contain commas (eg. id:1,2,3)
             params.set("tags", tags.join("+"));
         }
 
@@ -158,7 +153,7 @@ export default async function makePostMaker(postData, editedCB) {
 
                 const fcard = new FileCard(file, false, usedFilesField.element, { remove: false });
 
-                new Button("exclude", fcard.element, "include-btn", () => {
+                new Button(Language.lang.elements.postMaker.exclude, fcard.element, "include-btn", () => {
                     const idx = PostData.files.indexOf(file.id);
                     if (idx !== -1) PostData.files.splice(idx, 1);
                     rerender(0, 0);
@@ -201,7 +196,7 @@ export default async function makePostMaker(postData, editedCB) {
             for (const file of visibleFiles) {
                 const fcard = new FileCard(file, false, availalbeFilesField.element, { remove: false });
 
-                new Button("include", fcard.element, "include-btn", () => {
+                new Button(Language.lang.elements.postMaker.include, fcard.element, "include-btn", () => {
                     if (["image", "video"].includes(type)) {
                         PostData.files = [file.id];
                     } else {

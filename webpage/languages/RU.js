@@ -568,7 +568,6 @@ const LANG = {
             tags: "Теги",
             createPost: "Создать",
             editPost: "Редактировать",
-            include: "Вложить",
             successCreate: [
                 "Пост",
                 "успешно создан"
@@ -576,7 +575,11 @@ const LANG = {
             successEdit: [
                 "Пост",
                 "успешно отредактирован"
-            ]
+            ],
+            usedFiles: "Используемые файлы",
+            availableFiles: "Доступные файлы",
+            include: "Вложить",
+            exclude: "Убрать"
         },
         messages: {
             noMsg: "Нет сообщений... пока что",

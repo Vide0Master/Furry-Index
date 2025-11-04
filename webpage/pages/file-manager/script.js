@@ -36,7 +36,7 @@ export async function render() {
         fileField.wipe()
         for (const file of filesResp.files) {
             const fcard = new FileCard(file, false, fileField.element,
-                { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true }
+                { onRM: () => { renderFiles(currentTags, 0, itemsPerPage) }, remove: true, download: true }
             )
 
             fcard.image.image.setAttribute("draggable", "false")
@@ -45,12 +45,12 @@ export async function render() {
                 const overlay = new Overlay()
                 const scrollCont = new Elem("file-manager-preview-scroll-cont", overlay.element)
                 switch (true) {
-                case ["mp4", "webm", "mkv"].includes(file.filetype): {
-                    new Video(`/file/${file.id}`, scrollCont.element)
-                }; break
-                default: {
-                    new Image(`/file/${file.id}`, "file image", scrollCont.element)
-                }; break
+                    case ["mp4", "webm", "mkv"].includes(file.filetype): {
+                        new Video(`/file/${file.id}`, scrollCont.element)
+                    }; break
+                    default: {
+                        new Image(`/file/${file.id}`, "file image", scrollCont.element)
+                    }; break
                 }
             })
         }

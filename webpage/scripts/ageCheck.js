@@ -7,7 +7,11 @@ import User from "./userdata.js";
 const isAgeCheckComplete = localStorage.getItem("ageCheck") === "complete"
 
 if (!isAgeCheckComplete) {
-    const overlay = new Overlay(false)
+    const overlay = new Overlay({
+        closeOnClick: false,
+        closeOnEscape: false,
+        closeOnPopState: false
+    })
 
     const block = new Elem("age-check-cont", overlay.element)
 
