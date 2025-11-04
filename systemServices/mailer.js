@@ -31,6 +31,8 @@ const blocks = {
         ${text}
         </div>`}
 }
+if (globalVariables.DEVmode)
+    cmd.info(`Mailserver initiated using ${globalVariables.mailServer} mailserver and ${globalVariables.mailBox} mailbox`, [cmd.preps.Debug, cmd.preps.System, cmd.preps.mail])
 
 async function sendMail(textArr = [], subject = "Furry Index", address, features = []) {
     const transporter = nodemailer.createTransport({

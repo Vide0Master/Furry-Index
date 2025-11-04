@@ -1,7 +1,6 @@
 import Button from "../../components/button/script.js";
 import Elem from "../../components/elem/script.js";
 import DropdownList from "../../components/dropdownList/script.js";
-import SwitchInput from "../../components/switchinput/script.js";
 import TextInputLine from "../../components/textinputline/script.js";
 import FileCard from "../../elements/fileCard/script.js";
 import Alert from "../../features/alert/script.js";
@@ -10,9 +9,12 @@ import API from "../../scripts/api.js";
 import Language from "../../scripts/language.js";
 import BigTextField from "../../components/bigtextfield/script.js";
 import Link from "../../components/link/script.js";
+import PageNavigator from "../pagenavigator/script.js";
 
 export default async function makePostMaker(postData, editedCB) {
     const overlay = new Overlay(false)
+
+    const postsPerPageInSelectors = 10
 
     const container = new Elem("postmaker-post-container", overlay.element)
 
@@ -48,89 +50,186 @@ export default async function makePostMaker(postData, editedCB) {
     )
     postType.value = PostData.type != "" ? PostData.type : "placeholder"
 
-    const filesField = new Elem(["files-list", "hidden"], container.element)
+    const fileSelector = new Elem("file-selector", container)
+    new Elem("label", fileSelector).text = "Used files"
+    const usedFilesField = new Elem("files-list", fileSelector)
+    const usedPageNav = new PageNavigator(1, 1, fileSelector, true)
+    new Elem("label", fileSelector).text = "Available files"
+    const availalbeFilesField = new Elem("files-list", fileSelector)
+    const availalbePageNav = new PageNavigator(1, 1, fileSelector, true)
 
     const noFiles = new Elem("no-files", container.element)
     new Elem(null, noFiles.element).text = Language.lang.elements.postMaker.noFilesText
     new Link(Language.lang.settings.user.uploadFile, "/upload", noFiles.element, true, null, "upload")
     noFiles.switchVisible(false)
 
-    async function getFiles(type, presentFiles) {
-        PostData.files = presentFiles ? presentFiles : [];
-        PostData.type = type;
-        filesField.element.innerHTML = "";
+    // Updated file selector helpers: include/exclude/move + id:<ids> tag search + PageNavigator integration
+    // Assumes the following globals exist in your environment:
+    // - Elem, Button, Link, FileCard, API, PostData, postData, postsPerPageInSelectors, PageNavigator
 
-        const tags = [];
-        if (["image", "imageGroup", "comic"].includes(type)) tags.push("image");
-        else if (["video", "videoGroup"].includes(type)) tags.push("animated");
+    async function searchFiles(tags = [], page = 0, take = 10, count = false) {
+        const params = new URLSearchParams();
 
-        const files = await API("GET", `/api/files?inuse=${postData ? `postID:${postData.id}` : "false"}&t=10${tags.length > 0 ? "&tags=" + tags.join("+") : ""}`);
+        if (tags && tags.length > 0) {
+            // tags are joined by + as your backend expects; tags can contain commas (eg. id:1,2,3)
+            params.set("tags", tags.join("+"));
+        }
 
-        if (files.files.length === 0) {
-            filesField.switchVisible(false);
-            noFiles.switchVisible(true);
-            return;
+        if (count) {
+            params.set("count", "true");
         } else {
-            filesField.switchVisible(true);
-            noFiles.switchVisible(false);
+            if (page) params.set("p", page);
+            if (take) params.set("t", take);
         }
 
-        const switches = {};
-        const fileCards = {};
+        const query = params.toString() ? `?${params.toString()}` : "";
+        const resp = await API("GET", `/api/files${query}`);
+        return resp;
+    }
 
-        for (const file of files.files) {
-            const fcard = new FileCard(file, false, filesField.element, { remove: false });
-            fileCards[file.id] = fcard;
+    async function getFiles(type, presentFiles) {
+        PostData.files = presentFiles ? presentFiles.slice() : [];
+        PostData.type = type;
 
-            switches[file.id] = new SwitchInput(Language.lang.elements.postMaker.include, fcard.element, (state) => {
-                if (["image", "video"].includes(type)) {
-                    for (const id in switches) {
-                        if (id == file.id) continue;
-                        switches[id].change(false);
-                    }
+        usedFilesField.wipe();
+        availalbeFilesField.wipe();
 
-                    PostData.files = state ? [file.id] : [];
-                } else {
-                    const idindex = PostData.files.indexOf(file.id);
-                    if (state && idindex === -1) PostData.files.push(file.id);
-                    else if (!state && idindex !== -1) PostData.files.splice(idindex, 1);
-                }
-            });
+        let postFileType = "";
+        if (["image", "imageGroup", "comic"].includes(type)) postFileType = "image";
+        else if (["video", "videoGroup"].includes(type)) postFileType = "animated";
 
-            const orderRow = new Elem("order-row", fcard.element);
-            orderRow.moveBefore(fcard.fileid.element)
-            if (["image", "video"].includes(type)) { orderRow.switchVisible(false) }
-            new Button("<", orderRow.element, null, () => {
-                moveFile(file.id, -1);
-            });
-            new Button(">", orderRow.element, null, () => {
-                moveFile(file.id, 1);
-            });
+        const tagsForAvailableBase = () => [postFileType, `notUsed:1`].filter(Boolean);
+        const tagsForUsedBase = () => {
+            if (PostData.files && PostData.files.length > 0) {
+                return [postFileType, `id:${PostData.files.join(",")}`].filter(Boolean);
+            }
+            return [postFileType, `usedByPost:${postData.id}`].filter(Boolean);
+        };
 
-            if (PostData.files.includes(file.id)) switches[file.id].change(true);
-        }
-
-        function moveFile(fileId, direction) {
-            const index = PostData.files.indexOf(fileId);
-            if (index === -1) return;
-
-            const newIndex = index + direction;
-            if (newIndex < 0 || newIndex >= PostData.files.length) return;
-
-            const otherId = PostData.files[newIndex];
-
-            const parent = filesField.element;
-            const nodeA = fileCards[fileId].element;
-            const nodeB = fileCards[otherId].element;
-
-            [PostData.files[index], PostData.files[newIndex]] = [PostData.files[newIndex], PostData.files[index]];
-
-            if (direction > 0) {
-                parent.insertBefore(nodeB, nodeA);
+        function refreshNoFilesBlock() {
+            if (!PostData.files || PostData.files.length === 0) {
+                usedFilesField.switchVisible(false);
+                noFiles.switchVisible(true);
             } else {
-                parent.insertBefore(nodeA, nodeB);
+                usedFilesField.switchVisible(true);
+                noFiles.switchVisible(false);
             }
         }
+
+        function moveFileInArray(fileId, direction) {
+            const idx = PostData.files.indexOf(fileId);
+            if (idx === -1) return;
+            const newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= PostData.files.length) return;
+            const tmp = PostData.files[newIdx];
+            PostData.files[newIdx] = PostData.files[idx];
+            PostData.files[idx] = tmp;
+        }
+
+        async function rerender(currentUsedPage = 0, currentAvailPage = 0) {
+            await Promise.all([
+                searchForUsedFiles(currentUsedPage, postsPerPageInSelectors),
+                searchUnusedFiles(currentAvailPage, postsPerPageInSelectors)
+            ]);
+        }
+
+        async function searchForUsedFiles(page = 0, take = postsPerPageInSelectors) {
+            refreshNoFilesBlock();
+
+            const tags = tagsForUsedBase();
+
+            if (tags.includes(`id:`) && (!PostData.files || PostData.files.length === 0)) {
+                usedFilesField.wipe();
+                usedPageNav.renderButtons(1, 1);
+                return;
+            }
+
+            const resp = await searchFiles(tags, page, take);
+            usedFilesField.wipe();
+
+            const filesMap = {};
+            for (const f of resp.files || []) filesMap[f.id] = f;
+
+            const orderToRender = (PostData.files && PostData.files.length > 0) ? PostData.files : (resp.files || []).map(f => f.id);
+
+            for (const fid of orderToRender) {
+                const file = filesMap[fid];
+                if (!file) continue;
+
+                const fcard = new FileCard(file, false, usedFilesField.element, { remove: false });
+
+                new Button("exclude", fcard.element, "include-btn", () => {
+                    const idx = PostData.files.indexOf(file.id);
+                    if (idx !== -1) PostData.files.splice(idx, 1);
+                    rerender(0, 0);
+                });
+
+                if (!["image", "video"].includes(type)) {
+                    const orderRow = new Elem("order-row", fcard.element);
+
+                    new Button("<", orderRow.element, null, () => {
+                        moveFileInArray(file.id, -1);
+                        rerender(0, 0);
+                    });
+                    new Button(">", orderRow.element, null, () => {
+                        moveFileInArray(file.id, 1);
+                        rerender(0, 0);
+                    });
+                }
+            }
+
+            try {
+                const countResp = await searchFiles(tags, 0, 0, true);
+                const pages = Math.max(1, Math.ceil((countResp.count || 0) / postsPerPageInSelectors));
+                const curr = Math.min(Math.max(1, page + 1), pages);
+                usedPageNav.renderButtons(pages, curr);
+            } catch {
+                usedPageNav.renderButtons(1, 1);
+            }
+
+            refreshNoFilesBlock();
+        }
+
+        async function searchUnusedFiles(page = 0, take = postsPerPageInSelectors) {
+            const tags = tagsForAvailableBase();
+            const resp = await searchFiles(tags, page, take);
+
+            availalbeFilesField.wipe();
+
+            const visibleFiles = (resp.files || []).filter(f => !PostData.files.includes(f.id));
+
+            for (const file of visibleFiles) {
+                const fcard = new FileCard(file, false, availalbeFilesField.element, { remove: false });
+
+                new Button("include", fcard.element, "include-btn", () => {
+                    if (["image", "video"].includes(type)) {
+                        PostData.files = [file.id];
+                    } else {
+                        if (!PostData.files.includes(file.id)) PostData.files.push(file.id);
+                    }
+                    rerender(0, page);
+                });
+            }
+
+            try {
+                const countResp = await searchFiles(tags, 0, 0, true);
+                const pages = Math.max(1, Math.ceil((countResp.count || 0) / postsPerPageInSelectors));
+                const curr = Math.min(Math.max(1, page + 1), pages);
+                availalbePageNav.renderButtons(pages, curr);
+            } catch {
+                availalbePageNav.renderButtons(1, 1);
+            }
+        }
+
+        usedPageNav.addNavCB(async (page) => {
+            await searchForUsedFiles(page - 1, postsPerPageInSelectors);
+        });
+
+        availalbePageNav.addNavCB(async (page) => {
+            await searchUnusedFiles(page - 1, postsPerPageInSelectors);
+        });
+
+        await rerender(0, 0);
     }
 
     if (PostData.files.length != 0) getFiles(postType.value, PostData.files)

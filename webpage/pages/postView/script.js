@@ -20,6 +20,7 @@ import formatDuration from "../../scripts/formatDuration.js";
 import Icon from "../../components/icon/script.js";
 import ReportOverlay from "../../features/report/script.js";
 import Link from "../../components/link/script.js";
+import downloadFile from "../../scripts/downloadFile.js";
 
 function capitalizeFirst(str) {
     if (!str) return "";
@@ -150,7 +151,17 @@ export async function render(params) {
 
         const fileDataContainer = new Elem("file-data-container", postDataBlock.element);
 
-        new Elem("post-files-label", fileDataContainer.element).text = Language.lang.postView.file.filesData[fileParams.length > 1 ? "labelS" : "label"]
+        const postFilesLabel = new Elem("post-files-label", fileDataContainer.element)
+        new Elem("", postFilesLabel).text = Language.lang.postView.file.filesData[fileParams.length > 1 ? "labelS" : "label"]
+        if (PData.files.length > 1)
+            new Link(Language.lang.postView.downloadAll, () => {
+                for (const fileID in PData.files) {
+                    const file = PData.files[fileID]
+                    downloadFile(`/api/posts/${params.postID}/file/${file.id}`,
+                        "Furry Index " + PData.name + " " + Language.lang.postView.by + " " + (PData.owner.visiblename ? PData.owner.visiblename : `@${PData.owner.username}`) + ` ${Language.lang.postView.fileLn} ` + fileID
+                    )
+                }
+            }, postFilesLabel, false, null, "download")
 
         for (const fileDatID in fileParams) {
             const fileDat = fileParams[fileDatID]
@@ -158,6 +169,11 @@ export async function render(params) {
             const fileName = new Elem("file-name", dataBlock)
             if (fileParams.length > 1) new Elem("counter", fileName).text = parseInt(fileDatID) + 1
             new Elem("file-name-text", fileName).text = fileDat.id.split("-")[0]
+            new Link(null, async () => {
+                await downloadFile(`/api/posts/${params.postID}/file/${fileDat.id}`,
+                    "Furry Index " + PData.name + " " + Language.lang.postView.by + " " + (PData.owner.visiblename ? PData.owner.visiblename : `@${PData.owner.username}`)
+                )
+            }, fileName, false, null, "download").title = Language.lang.postView.download
             new Icon(fileDat.fileType == "mp4" ? "video" : "image", new Elem("icon-cont", fileName))
             new Elem("data-line", dataBlock).text = `${Language.lang.postView.file.filesData.resolution}: ${fileDat.width}x${fileDat.height}px`
             if (fileDat.duration) new Elem("data-line", dataBlock).text = `${Language.lang.postView.file.filesData.duration}: ${formatDuration(fileDat.duration)}`

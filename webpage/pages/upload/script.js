@@ -18,7 +18,7 @@ export async function render() {
 
     let fileList = []
 
-    const groupUploadBtn = new Button(Language.lang.upload.groupUpload, container.element, "hidden", async () => {
+    const groupUploadBtn = new Button("", container.element, "hidden", async () => {
         for (const fCard of fileList) {
             fCard.uploadFile()
         }
@@ -31,7 +31,13 @@ export async function render() {
         fileList = []
         fileManagerField.element.innerHTML = ""
 
-        groupUploadBtn.switchVisible(files.length > 1)
+        if (files.length > 1) {
+            groupUploadBtn.text = Language.lang.upload.group
+        } else {
+            groupUploadBtn.text = Language.lang.upload.single
+        }
+
+        groupUploadBtn.switchVisible(true)
 
         for (const file of files) {
             fileList.push(new FileCard(file, true, fileManagerField.element, { onUpload: () => { groupUploadBtn.switchVisible(false) } }))

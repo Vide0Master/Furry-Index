@@ -333,7 +333,10 @@ const LANG = {
         },
         rating: "Рейтинг",
         favourite: "Избранное",
-        by: "от"
+        by: "от",
+        download: "Скачать",
+        downloadAll: "Скачать все",
+        fileLn: "Файл"
     },
     profile: {
         noUsername: "Имя пользователя не указано в адресе страницы",
@@ -342,7 +345,8 @@ const LANG = {
         latestPosts: "Последние посты"
     },
     upload: {
-        groupUpload: "Загрузить всё"
+        group: "Загрузить все",
+        single: "Загрузить"
     },
     postMaster: {
         newPost: "Создать"
@@ -495,7 +499,7 @@ const LANG = {
             fsize: "Размер",
             bytes: "Байт",
             segments: "Сегментов",
-            ftype: "Тип",
+            fformat: "Формат",
             segment: [
                 "Сегмент",
                 "Вес"

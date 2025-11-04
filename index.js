@@ -45,6 +45,21 @@ async function init() {
         ENVError = true
     }
 
+    if (!process.env.MAILSERVER) {
+        cmd.cerr("No MAILSERVER mentioned in env!", [cmd.preps.System, cmd.preps.config])
+        ENVError = true
+    }
+
+    if (!process.env.MAILBOX) {
+        cmd.cerr("No MAILBOX mentioned in env!", [cmd.preps.System, cmd.preps.config])
+        ENVError = true
+    }
+
+    if (!process.env.MAILBOXPASS) {
+        cmd.cerr("No MAILBOXPASS mentioned in env!", [cmd.preps.System, cmd.preps.config])
+        ENVError = true
+    }
+
     if (process.env.ISFRESH) {
         cmd.cerr(".env config is fresh, edit it!", [cmd.preps.System, cmd.preps.config])
         ENVError = true

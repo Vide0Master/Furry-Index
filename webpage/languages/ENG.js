@@ -338,7 +338,10 @@ const LANG = {
         },
         rating: "Rating",
         favourite: "Favourite",
-        by: "by"
+        by: "by",
+        download: "Download",
+        downloadAll: "Download all",
+        fileLn: "File"
     },
     profile: {
         noUsername: "No username specified in page route",
@@ -347,7 +350,8 @@ const LANG = {
         latestPosts: "Latest posts"
     },
     upload: {
-        groupUpload: "Upload all",
+        group: "Upload all",
+        single: "Upload"
     },
     postMaster: {
         newPost: "Create",
@@ -497,7 +501,7 @@ const LANG = {
             fsize: "File size",
             bytes: "Bytes",
             segments: "Segments",
-            ftype: "File type",
+            fformat: "Format",
             segment: [
                 "Segment",
                 "Weight"

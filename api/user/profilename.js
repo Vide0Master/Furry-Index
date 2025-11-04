@@ -1,7 +1,5 @@
 const { updateFileLastActivity } = require("../../systemServices/DBFunctions")
-const getUserBySessionCookie = require("../../systemServices/getUserBySessionCookie")
 const getUserByUsername = require("../../systemServices/getUserByUsername")
-const { mainAuthTokenKey } = require("../../systemServices/globalVariables")
 const prisma = require("../../systemServices/prisma")
 const bcrypt = require("bcrypt");
 

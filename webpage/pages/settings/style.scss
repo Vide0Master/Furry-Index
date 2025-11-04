@@ -109,6 +109,13 @@
         justify-content: center;
         gap: 10px;
         flex-wrap: wrap;
+
+        .select-avatar{
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     }
 
     .no-files-label {

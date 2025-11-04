@@ -65,11 +65,15 @@ module.exports = async function sendFileByName(res, filename) {
 
 function sendFileWithCache(res, filePath) {
     const stat = fs.statSync(filePath);
+    const mimeType = mime.lookup(filePath) || "application/octet-stream";
+    const filename = "file" + path.extname(filePath);
+
     const options = {
         headers: {
-            "Content-Type": mime.lookup(filePath) || "application/octet-stream",
+            "Content-Type": mimeType,
             "Content-Length": stat.size,
             "Cache-Control": "public, max-age=3600",
+            "Content-Disposition": `attachment; filename="${filename}"`
         },
         etag: true,
     };

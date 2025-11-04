@@ -64,6 +64,12 @@
             flex-direction: column;
             gap: 10px;
 
+            .post-files-label {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
             .file-data-block {
                 display: flex;
                 flex-direction: column;
@@ -92,6 +98,8 @@
 
                     .icon-cont {
                         margin-left: auto;
+                        height: 16px;
+                        box-sizing: content-box;
                     }
                 }
 

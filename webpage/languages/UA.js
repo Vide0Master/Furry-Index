@@ -333,7 +333,10 @@ const LANG = {
         },
         rating: "Рейтинг",
         favourite: "Обране",
-        by: "від"
+        by: "від",
+        download: "Завантажити",
+        downloadAll: "Завантажити усі",
+        fileLn: "Файл"
     },
     profile: {
         noUsername: "Ім'я користувача не вказане в адресі сторінки",
@@ -342,7 +345,8 @@ const LANG = {
         latestPosts: "Останні пости"
     },
     upload: {
-        groupUpload: "Завантажити усе"
+        group: "Завантажити усі",
+        single: "Завантажити"
     },
     postMaster: {
         newPost: "Створити"
@@ -495,7 +499,7 @@ const LANG = {
             fsize: "Розмір",
             bytes: "Байтів",
             segments: "Сегментів",
-            ftype: "Тип",
+            fformat: "Формат",
             segment: [
                 "Сегмент",
                 "Вага"

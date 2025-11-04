@@ -124,7 +124,8 @@ class cmd {
             PATCH: { text: "PATCH", color: "magenta" },
             DELETE: { text: "DELETE", color: "red" },
             WS: { text: "WS", color: "green" }
-        }
+        },
+        mail: { text: "Mail", color: "brightCyan" },
     }
 }
 
