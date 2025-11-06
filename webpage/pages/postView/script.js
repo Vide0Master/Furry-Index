@@ -50,7 +50,7 @@ export async function render(params) {
 
     const postDataBlock = new Elem("post-data-block", container.element);
 
-    new UserCard(postDataBlock.element, PData.owner, "default", ["shrinkName"])
+    new UserCard(postDataBlock.element, PData.owner, "default", { shrinkName: true })
 
     if (!PData.visible) {
         new Elem("visible-field", postDataBlock.element).text = Language.lang.postView.hiddenLabel;

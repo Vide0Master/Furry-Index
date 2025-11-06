@@ -106,3 +106,31 @@ body {
         font-size: 40px;
     }
 }
+
+.BT-info-cont {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow-y: auto;
+
+    .info-block {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-shrink: 0;
+
+        .label {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .text {
+            
+        }
+
+        &.acc {
+            flex-direction: row;
+            align-items: center;
+        }
+    }
+}

@@ -55,37 +55,3 @@ footer {
 
     .label {}
 }
-
-.internal-overlay {
-    .BT-info-cont {
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-        overflow-y: auto;
-
-        background-color: color-mix(in srgb, var(--background) 90%, transparent 10%);
-        padding: 20px;
-        border-radius: 20px;
-
-        .info-block {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex-shrink: 0;
-
-            .label {
-                font-size: 25px;
-                font-weight: bold;
-            }
-
-            .text {
-                max-width: 700px;
-            }
-
-            &.acc {
-                flex-direction: row;
-                align-items: center;
-            }
-        }
-    }
-}

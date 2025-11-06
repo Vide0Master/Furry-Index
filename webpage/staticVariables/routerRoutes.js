@@ -16,6 +16,8 @@ const routes = [
     { path: "/admin/appeals", module: "/pages/adminReports/script.js" },
     { path: "/news", module: "/pages/news/script.js" },
     { path: "/users", module: "/pages/users/script.js" },
+    { path: "/info", module: "/pages/info/script.js" },
+    { path: "/info/:specific", module: "/pages/info/script.js" },
 ]
 
 export default routes
