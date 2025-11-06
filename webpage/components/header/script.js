@@ -58,6 +58,14 @@ export default class Header {
         this.adminPanel = new DropdownList(adminPages, navRow.element, Language.lang.header.admin.label, () => { this.adminPanel.selectOption("placeholder") }, null)
         this.adminPanel.icon.iconName = "shield"
 
+        this.legal = new DropdownList([
+            { name: Language.lang.header.legal.tos, value: "link:/info/terms-of-service" },
+            { name: Language.lang.header.legal.pp, value: "link:/info/privacy-policy" },
+            { name: Language.lang.header.legal.cg, value: "link:/info/content-guidelines" },
+            { name: Language.lang.header.legal.bg, value: "link:/info/behaviuor-gudelines" },
+        ], navRow.element, Language.lang.header.legal.label, () => { this.legal.selectOption("placeholder") }, null)
+        this.legal.icon.iconName = "shield"
+
         UserLabel.append(this.element)
 
         this.checkUserLoginState()

@@ -26,18 +26,6 @@ githubLink.textElem.element.remove()
 new Image("/icons/github-mark.svg", "github-icon", githubLink.element)
 new Elem("gthb-link-text", githubLink.element).text = "GitHub"
 
-const policyes = new Elem("policies-cont", Footer.element)
-new Link(Language.lang.register.TOS, () => {
-    const overlay = new Overlay()
-    const regCont = processText(Language.lang.TOS, overlay.element)
-    new Button("OK", regCont.element, "info-block", () => { overlay.kill() })
-}, policyes.element, false, null, "file")
-new Link(Language.lang.register.PP, () => {
-    const overlay = new Overlay()
-    const regCont = processText(Language.lang.PP, overlay.element)
-    new Button("OK", regCont.element, "info-block", () => { overlay.kill() })
-}, policyes.element, false, null, "file")
-
 new Link(Language.lang.keyRedeem.label, () => {
     const overlay = new Overlay()
     const redeemWindow = new Elem("key-redeem-window", overlay.element)

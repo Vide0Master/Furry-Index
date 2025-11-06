@@ -13,9 +13,16 @@ export default class MessageBlock extends Elem {
     constructor(parent, data, handler) {
         super("message-block-cont", parent)
 
-        new UserCard(this.element, data.user, "messageHeader")
+        const hasAvatar = data.user.avatarID
 
-        const textRow = new Elem("text", this.element)
+        if (hasAvatar)
+            new UserCard(this.element, data.user, "avatarOnly", { messageHeader: true })
+
+        const msgBlock = new Elem("msg-block", this)
+
+        new UserCard(msgBlock, data.user, "usernameOnly", { shrinkRoles: true })
+
+        const textRow = new Elem("text", msgBlock)
         if (data.deleted) {
             textRow.text = `${Language.lang.elements.messages.messageElem.deleted.label} ${Language.lang.elements.messages.messageElem.deleted[data.deleted]}`
             textRow.addClass("deleted")
@@ -23,10 +30,10 @@ export default class MessageBlock extends Elem {
             textRow.text = data.text
         }
 
-        const specialsRow = new Elem("specials-row", this.element)
+        const specialsRow = new Elem("specials-row", msgBlock)
         specialsRow.switchVisible(false)
 
-        const timeRow = new Elem("time-row", this.element)
+        const timeRow = new Elem("time-row", msgBlock)
 
         const editedIcon = new Icon("edit", timeRow.element, "edited-icon", "10x10")
         editedIcon.title = `${Language.lang.elements.messages.messageElem.editedAt} ${formatDate(data.editedAt)}`
@@ -40,7 +47,7 @@ export default class MessageBlock extends Elem {
 
             this.editIcon = new Icon("edit", controlRow.element, "edit", "10x10")
             this.editIcon.addEvent("click", () => {
-                const editAlert = new Alert.Input(null, Language.lang.elements.messages.messageElem.editMessage, async (v) => {
+                new Alert.Input(null, Language.lang.elements.messages.messageElem.editMessage, async (v) => {
                     await API("PUT", handler, {
                         msgID: data.id,
                         newText: v

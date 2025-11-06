@@ -1,78 +1,78 @@
 .message-block-cont {
-    color: var(--message-font);
     display: flex;
-    flex-direction: column;
-    border-radius: 10px;
+    flex-direction: row;
+    gap: 5px;
+    align-items: end;
     width: fit-content;
-
     flex-shrink: 0;
 
-    .user-row {
+    .msg-block {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 5px;
+        flex-direction: column;
+        border-radius: 5px;
+        overflow: hidden;
 
-        .avatar-cont {
-            max-height: 20px;
-            max-width: 20px;
-            border-radius: 3px;
-            border: 1px solid var(--message-font);
-        }
-    }
-
-    .text {
-        padding: 5px;
-        background-color: var(--message-bg);
-        max-width: 25vw;
-
-        text-wrap: wrap;
-        word-break: break-word;
-
-        @media (max-width: 700px) {
-            max-width: unset;
+        .internal-user-card {
+            padding: 5px;
+            background-color: var(--background-s);
+            border-bottom: 1px solid var(--outline);
+            border-radius: 0;
+            width: 100%;
         }
 
-        &.deleted {
-            color: color-mix(in srgb, var(--message-font) 50%, var(--message-bg) 50%);
+        .text {
+            padding: 5px;
+            background-color: var(--background-s);
+            max-width: 25vw;
+
+            text-wrap: wrap;
+            word-break: break-word;
+
+            border-bottom: 1px solid var(--outline);
+
+            @media (max-width: 700px) {
+                max-width: unset;
+            }
+
+            &.deleted {
+                color: color-mix(in srgb, var(--font-main) 50%, var(--background-s) 50%);
+            }
         }
-    }
 
-    .time-row {
-        background-color: var(--message-bg);
-        padding: 5px;
-        font-size: 10px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 5px;
-
-        border-top: 1px solid var(--background-s);
-
-        .edited-icon {
-            background-color: var(--message-font);
-        }
-
-        .sent-at {}
-
-        .control-row {
-            margin-left: auto;
-
+        .time-row {
+            background-color: var(--background-s);
+            padding: 5px;
+            font-size: 10px;
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 3px;
+            gap: 5px;
 
-            .icon-elem {
-                cursor: pointer;
-            }
+            border-top: 1px solid var(--background-s);
 
-            .edit {
-                background-color: var(--ok-color);
-            }
+            .edited-icon {}
 
-            .rm {
-                background-color: var(--nok-color);
+            .sent-at {}
+
+            .control-row {
+                margin-left: auto;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 3px;
+
+                .icon-elem {
+                    cursor: pointer;
+                }
+
+                .edit {
+                    background-color: var(--ok-color);
+                }
+
+                .rm {
+                    background-color: var(--nok-color);
+                }
             }
         }
     }

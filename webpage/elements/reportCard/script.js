@@ -14,7 +14,7 @@ export default class ReportCard extends Elem {
         if (data.author === "anon") {
             new Elem("reporter-anon", topLine).text = Language.lang.elements.reportCard.anon
         } else if (typeof data.author === "object") {
-            new UserCard(topLine, data.author, undefined, ["shrinkName"])
+            new UserCard(topLine, data.author, undefined, { shrinkName: true })
         }
 
         const topLnSideBlock = new Elem("side-block", topLine)

@@ -183,6 +183,67 @@ const LANG = {
             ]
         }
     ],
+    CG: [
+        {
+            "label": "Furry Index Content Policy",
+            "text": [
+                "This article describes overall content gudelines.",
+                "What is allowed, what is disallowed and how to correctly mark your content."
+            ]
+        },
+        {
+            "label": "Good things to post",
+            "text": [
+                "- Any art made buy you, may it be digital or tradition.",
+                "- Any comissioned artwork (with strict mention of author).",
+                "- Any art that owner of it permissioned you to post.",
+                "- Comics or image / video sequences via image group / video group / comic post type.",
+                "- Memes are allowed if context artwork made specifically for it.",
+                "- YCH auctions / comission auctions."
+            ],
+        },
+        {
+            "label": "Bad things to post",
+            "text": [
+                "- Low quality arts that are less than 500 by 500 pixels. Pixel-art is only exception.",
+                "- Reuploads and reminders of posts. For auctions it is allowed, until we develop full auction feature.",
+                "- Screen captures from videos, games, movies. In game artwork or scenes designed to observe without user interface is allowed.",
+                "- Advertismets are not allowed. Except if small part of art is mentioning product or art have *artistic value.",
+                "- AI generated / assisted content in not allowed. You are allowed to post artwork that is fully made by you, using AI images as referrence is not prohibited, but art that is traced over AI is not allowed.",
+                "- Underage artists content are not allowed to post.",
+                "- Images with third party watermarks. Only exceptions is your own watermarks like Patreon, SubscribeStar, etc.",
+                "- Previusly deleted content.",
+                "- Humans are not allowed, unless image is somewhat furry-centric."
+            ]
+        },
+        {
+            "label": "DNP content",
+            "text": [
+                "DNP stands for \"Do not post\", and it means exactly that, do not post anything listed here.",
+                "- Paid content which author didn't gave permission to publish.",
+                "- Real life pornography, NO exceptions.",
+                "- NSFW arts with **generally underage characters"
+            ]
+        },
+        {
+            "label": "Special mentions",
+            "text": [
+                "* - Artistic value refert to high quality artwork made for art purpose first.",
+                "** - Generally underage characters refers to any character that looks childish and / or is uder age of maturity."
+            ]
+        }
+    ],
+    BG: [
+        {
+            "label": "Furry Index Behaviour Policy",
+            "text": [
+                "- Be nice and kind to anyone.",
+                "- Obey current and future rules and policies",
+                "- Follow guidelines",
+                "- No polics, unless it's comical / ironcal."
+            ]
+        }
+    ],
     pageTitle: {
         main: "Main",
         posts: "Posts",
@@ -220,6 +281,13 @@ const LANG = {
             label: "Admin panel",
             appeals: "Reports",
             news: "News",
+        },
+        legal: {
+            label: "Help & legal",
+            tos: "Terms of Service",
+            pp: "Privacy policy",
+            cg: "Content policy",
+            bg: "Behaviour policy"
         }
     },
     login: {
